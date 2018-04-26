@@ -1,7 +1,7 @@
 ## CellTrails: Inference of Temporal Gene Expression Dynamics of Branching Biological Processes from Single-cell Expression Data
-### _Daniel Christian Ellwanger and Stefan Heller_
+_Daniel Christian Ellwanger and Stefan Heller_
 
-### Department of Otolaryngology - Head & Neck Surgery, and Institute for Stem Cell Biology and Regenerative Medicine, Stanford University School of Medicine, Stanford, CA 94305, USA
+Department of Otolaryngology - Head & Neck Surgery, and Institute for Stem Cell Biology and Regenerative Medicine, Stanford University School of Medicine, Stanford, CA 94305, USA
 
 Contact: elldc.dev@gmail.com // hellers@stanford.edu
 
