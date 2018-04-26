@@ -1,14 +1,17 @@
 ---
 title: "CellTrails: Inference of Temporal Gene Expression Dynamics of Branching Biological Processes from Single-cell Expression Data"
-subtitle: Daniel Christian Ellwanger and Stefan Heller
-author: 
-- Department of Otolaryngology - Head & Neck Surgery, and Institute for Stem Cell Biology and Regenerative Medicine, Stanford University School of Medicine, Stanford, CA 94305, USA
-tags: [nothing, nothingness]
+shorttitle: "CellTrails: Single-cell Data Analysis"
+author:
+- name: Daniel Christian Ellwanger
+  affiliation: Department of Otolaryngology - Head & Neck Surgery, and Institute for Stem Cell Biology and Regenerative Medicine, Stanford University School of Medicine, Stanford, CA 94305, USA
+- name: Stefan Heller
+  affiliation: Department of Otolaryngology - Head & Neck Surgery, and Institute for Stem Cell Biology and Regenerative Medicine, Stanford University School of Medicine, Stanford, CA 94305, USA
+  email: 
+- elldc.dev@gmail.com
+- hellers@stanford.edu
+package: CellTrails
+tags: [Trajectory reconstruction, Dimensionality reduction, Clustering, Single-cell, Machine learning]
 abstract: |
-  Contact: elldc.dev@gmail.com // hellers@stanford.edu
-  
-  `r format(Sys.time(), '%d %B %Y')`
-
   High-throughput single-cell technologies facilitate the generation of -omic readouts from thousands of cells captured at different cellular maturation stages during development, or other normal or pathological processes with unprecedented resolution. A single snapshot of an asynchronously developing specimen, for example, constitutes a time series in which individual cells represent distinct time points along a continuum. However, recoding of valuable cell-specific information, such as a cell's developmental age, its location in a tissue, or its functional phenotype is limited during sample preparation, and remains hidden in high dimensional cellular expression profiles. This formulates the computational challenge to infer the latent internal time axis of the biological process from the obtained expression matrix alone, while considering common parameters of single-cell measurements, such as noise, dropouts and redundancy. In other words, biological samples need to be placed by means of hidden information onto a non-linear trajectory, which might constitute of branching processes towards distinct functional cell types.
 
   This manual describes the practical use of the _CellTrails_ implementation, an unsupervised algorithm for the _de novo_ chronological ordering, visualization and analysis of single-cell expression data. _CellTrails_ makes use of a geometrically motivated concept of lower-dimensional manifold learning, which exhibits a multitude of virtues that counteract intrinsic noise of single cell data caused by drop-outs, technical variance, and redundancy of predictive variables. _CellTrails_ enables the reconstruction of branching trajectories and provides an intuitive graphical representation of expression patterns along all branches simultaneously. It allows the user to define and infer the expression dynamics of individual and multiple pathways towards distinct phenotypes.
@@ -19,14 +22,18 @@ abstract: |
   
   __Ellwanger DC, Scheibinger M, Dumont RA, Barr-Gillespie PG, and Heller S. "Transcriptional dynamics of hair-bundle morphogenesis revealed with CellTrails". _Cell Reports_ Date;Issue.__
 
-output:
-  html_document:
+output: 
+  BiocStyle::html_document2:
     toc: true
     toc_depth: 2
     toc_float: true
     theme: cosmo
     fig_width: 4.5
     fig_height: 3.5
+vignette: |
+  %\VignetteIndexEntry{CellTrails Vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 
 references:
 - id: vdmaaten2008
@@ -391,9 +398,9 @@ citation("CellTrails")
 ```
 --> 
 
-<!-- ---------------------------------- -->
+<!-- ---------------------------------- 
 # INSTALLATION
-<!-- ---------------------------------- -->
+<!-- ---------------------------------- 
 *CellTrails* is an extension for _R_[^1], which is a free software environment for statistical computing and graphics. A simple yet efficient way to work with _R_ consists in writing source code with your favorite text editor and sending it to the _R_ console. It is suggested to use a development environment, such as _Rstudio_[^2], or a rich text editor with _R_ functionalities, such as _Emacs_[^3], which greatly eases the work. 
 
 The *CellTrails* implementation imports various useful _R_ packages, which need to be installed first. This can be done from within an active _R_ session:
@@ -415,11 +422,12 @@ Before ready to use, the *CellTrails* libraries must be loaded into the _R_ envi
 ```{r, eval=TRUE, message=FALSE, warning=FALSE}
 library(CellTrails)
 ```
+-->
 
 <!-- ---------------------------------- -->
 # EXAMPLE DATASET
 <!-- ---------------------------------- -->
-The *CellTrails* package comes with an example dataset (of class `Biobase::ExpressionSet`), which can be loaded with the function `data`.
+The *CellTrails* package comes with an example dataset (of class `ExpressionSet` from the `r Biocpkg("Biobase")` package), which can be loaded with the function `data`.
 
 ```{r, eval=T}
 # Load example data
@@ -428,7 +436,7 @@ data("gga_e15_utricle")
 
 This dataset contains transcript expression profiles of 183 genes expressed during sensory hair cell bundle maturation and function, which were quantified in the chicken utricle sensory epithelium at embryonic day 15 using multiplex RT-qPCR. Experimental metadata was generated during tissue preparation (cell origin) and cell sorting (uptake of FM1-43 dye indicating cell maturity). This data set is the foundation used for the development of *CellTrails*. If you use this dataset for your research, please cite:
 
-Ellwanger DC, Scheibinger M, Dumont RA, Barr-Gillespie PG, and Heller S. "Transcriptional dynamics of hair-bundle morphogenesis revealed with CellTrails". *Cell Reports* Date;Issue. doi: 
+Ellwanger DC, Scheibinger M, Dumont RA, Barr-Gillespie PG, and Heller S. "Transcriptional dynamics of hair-bundle morphogenesis revealed with CellTrails". *Journal* Date;Issue. doi: 
 
 <!-- ---------------------------------- -->
 # QUICKSTART GUIDE
@@ -530,10 +538,10 @@ In the following those steps will be illustrated in detail.
 <!-- ---------------------------------- -->
 # CONTAINER CREATION
 <!-- ---------------------------------- -->
-*CellTrails* organizes its data in a container called `CellTrailsSet`. This class extends the class `ExpressionSet` from the `Biobase` package [@biobase] and provides all attributes required for smooth and user-friendly data processing. In the following, it is described how to initialize, manipulate and display an object of this class.
+*CellTrails* organizes its data in a container called `CellTrailsSet`. This class extends the class `ExpressionSet` from the `r Biocpkg("Biobase")` package [@biobase] and provides all attributes required for smooth and user-friendly data processing. In the following, it is described how to initialize, manipulate and display an object of this class.
 
 ## INITIALIZATION: ExpressionSet
-The class `ExpressionSet` is part of the `Biobase` package, which provides base functions for _Bioconductor_[^5]. It allows for intuitive organizing of quantitative expression data and experimental metadata. To make best use of *CellTrails* (and other _Bioconductor_ packages), it is recommended to store individual datasets in a `ExpressionSet` object. For further details on this class, please refer to _An Introduction to Bioconductor's ExpressionSet Class_[^6] by Seth Falcon, Martin Morgan, and Robert Gentleman.
+The class `ExpressionSet` is part of the `r Biocpkg("Biobase")` package, which provides base functions for _Bioconductor_[^5]. It allows for intuitive organizing of quantitative expression data and experimental metadata. To make best use of *CellTrails* (and other _Bioconductor_ packages), it is recommended to store individual datasets in a `ExpressionSet` object. For further details on this class, please refer to _An Introduction to Bioconductor's ExpressionSet Class_[^6] by Seth Falcon, Martin Morgan, and Robert Gentleman.
 
 A ``CellTrailsSet`` can be initialized from an `ExpressionSet` object as follows:
 
@@ -616,7 +624,7 @@ The _assayData_, _featureData_ and _phenoData_ sections correspond to informatio
 * _trailNames_: Names of user-defined trails, i.e. paths between landmarks (branch or end points) along the trajectory.
 
 ### Plot
-There are several ways to visualize the data contained in a `CellTrailsSet` object using the function `plot(object, type, ...)`. The function returns a `ggplot` object[^7] [@ggplot2], which can be adapted by the user's needs and preferences. Detailed information on each plot type is provided in the function's documentation (call `?plot.CellTrailsSet`). The available plot types are:
+There are several ways to visualize the data contained in a `CellTrailsSet` object using the function `plot(object, type, ...)`. The function returns a `ggplot` object[^7] [@ggplot2] from the `r CRANpkg("ggplot2")` package, which can be adapted by the user's needs and preferences. Detailed information on each plot type is provided in the function's documentation (call `?plot.CellTrailsSet`). The available plot types are:
 
 ##### type
 
@@ -800,7 +808,7 @@ enrichment.test(deMarkers, nMarkers, deGenes, nGenes)
               n_genes-n_genes_de+n_marker_de), ncol=2)-->
 Since the enrichment is not significant (with an odds ratio < 1), we argue that cells were not properly separated by maturity in the original space.
 
-To block the cell cycle effects, *CellTrails* expects a design matrix modeling the cell cycle stage as the explanatory factor for each cell. As the cell-cycle stage of each cell is not known in this data set, we need to predict cell cycle phases. In this example, we use the classifier `cyclon` from the *scran* package [@scran][^8]. To be able to run the algrithm properly, gene symbols were translated to Ensembl identifiers using Bioconductors' annotation database interface package *AnnotationDbi* [@annotationdbi][^9] and the mouse annotation data package *org.Mm.eg.db* [@orgmmegdb][^10]. Please note that these packages are not part of *CellTrails* and may needed to be installed first (see footnotes for details).
+To block the cell cycle effects, *CellTrails* expects a design matrix modeling the cell cycle stage as the explanatory factor for each cell. As the cell-cycle stage of each cell is not known in this data set, we need to predict cell cycle phases. In this example, we use the classifier `cyclon` from the `r Biocpkg("scran")` package [@scran][^8]. To be able to run the algrithm properly, gene symbols were translated to Ensembl identifiers using Bioconductors' annotation database interface package `r Biocpkg("AnnotationDbi")` [@annotationdbi][^9] and the mouse annotation data package `r Biocpkg("org.Mm.eg.db")` [@orgmmegdb][^10]. Please note that these packages are not part of *CellTrails* and may needed to be installed first (see footnotes for details).
 
 ```{r, eval=TRUE, message=FALSE, warning=FALSE}
 # Run cyclone
@@ -887,7 +895,7 @@ c("Odds ratio" = or, "P-value" = p)
 Besides cell cycle, technical confounders may also be relevant to be accounted for. Those can occur, for example, if cells were processed on different plates or if cells were pooled from multiple sequencing runs. In this case, a design matrix with the respective explanatory variables can be constructed and passed to `embedSamples`.
 
 ## USING ALTERNATIVE DIMENSIONALITY REDUCTION METHODS
-If the user prefers to use an alternative approach for dimensionality reduction, the latent space can be set to a `CellTrailsSet` object with `latentSpace<-`. The latent space has to be a numerical matrix; rows represent samples and columns the components of the latent space. *CellTrails* uses by default spectral embedding, but the framework also operates well with any other spectral dimensionality reduction method, such as PCA (available in *CellTrails* via function `pca`) and diffusion maps (available via the *destiny* package [@destiny][^11]):
+If the user prefers to use an alternative approach for dimensionality reduction, the latent space can be set to a `CellTrailsSet` object with `latentSpace<-`. The latent space has to be a numerical matrix; rows represent samples and columns the components of the latent space. *CellTrails* uses by default spectral embedding, but the framework also operates well with any other spectral dimensionality reduction method, such as PCA (available in *CellTrails* via function `pca`) and diffusion maps (available via the `r Biocpkg("destiny")` package [@destiny][^11]):
 
 ```{r, eval=TRUE}
 # Create CellTrailsSet object
@@ -1017,7 +1025,7 @@ plot(ctset, type="trajectoryFit", rev=TRUE)
 ## GRAPH LAYOUT
 
 *CellTrails* portrays a computed trajectory as collection of trails that can be found in a landscape shaped by individual gene expression dynamics. To generate such a topographic trail map - the *CellTrails* map - a two-dimensional spatiotemporal ordination of the expression matrix has to be computed. This can be done by any graph layout algorithm using the structural information from the trajectory graph, which is composed of nodes (=samples) and edges (=chronological relation between samples). 
-We found that the freely available graph visualization software _yEd_[^12] has great capabilities to visualize and analyze a trajectory graph. An optimal layout is planar, i.e. it exhibits no crossing edges or overlapping nodes.
+We found that the freely available graph visualization software _yEd_[^12] (http://www.yworks.com/products/yed) has great capabilities to visualize and analyze a trajectory graph. An optimal layout is planar, i.e. it exhibits no crossing edges or overlapping nodes.
 
 Therefore, *CellTrails* enables to export and import the trajectory graph structure using the common _graphml_ file format. This file format can be interpreted by most third-party graph analysis applications, allowing the user to subject the trajectory graph to a wide range of (tree) layout algorithms. In particular, the exported file has additional ygraph attributes best suited to be used with _yEd_, which is freely available for all major platforms (Windows, Mac OS, and Linux).
 
@@ -1397,7 +1405,7 @@ sort(all_rmsd[zscores > 1.65])
 ```
 
 ## PARALLELIZATION
-In the case one wants to compare a large number of features (e.g. from an RNA-Seq experiment), the computation can be significantly sped up by parallel computing. In this example, we use the package _doSNOW_[^13], but any other package may also be used for this purpose.
+In the case one wants to compare a large number of features (e.g. from an RNA-Seq experiment), the computation can be significantly sped up by parallel computing. In this example, we use the package `r CRANpkg("doSNOW")`[^13], but any other package may also be used for this purpose.
 
 ```{r, eval=FALSE}
 library(doSNOW)
@@ -1741,5 +1749,5 @@ sessionInfo()
 [^9]: _AnnotationDbi_: https://doi.org/doi:10.18129/B9.bioc.AnnotationDbi
 [^10]: _org.Mm.eg.db_: https://doi.org/doi:10.18129/B9.bioc.org.Mm.eg.db
 [^11]: _destiny_: https://bioconductor.org/packages/release/bioc/html/destiny.html 
-[^12]: http://www.yworks.com/products/yed
+[^12]: _yEd_: http://www.yworks.com/products/yed
 [^13]: _doSNOW_: https://cran.r-project.org/package=doSNOW

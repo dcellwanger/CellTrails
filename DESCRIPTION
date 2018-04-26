@@ -42,9 +42,11 @@ Imports:
   viridis,
   utils
 Suggests: 
+  BiocStyle,
   destiny, 
   scran, 
-  knitr
+  knitr,
+  rmarkdown
 RoxygenNote: 6.0.1
 biocViews: 
   Clustering,
