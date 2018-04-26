@@ -14,3 +14,28 @@ Contact: elldc.dev@gmail.com // hellers@stanford.edu
   We confirmed that _CellTrails_ can be applied to analysis of single-cell RNA-Seq datasets. We are pleased that you consider using _CellTrails_ in your research. A detailed theoretical description of the algorithm and its application to biological uses has been published in:
   
   __Ellwanger DC, Scheibinger M, Dumont RA, Barr-Gillespie PG, and Heller S. "Transcriptional dynamics of hair-bundle morphogenesis revealed with CellTrails". _Journal_ Date;Issue.__
+
+<!-- ---------------------------------- -->
+## INSTALLATION
+<!-- ---------------------------------- -->
+*CellTrails* is an extension for _R_ (https://www.r-project.org), which is a free software environment for statistical computing and graphics. A simple yet efficient way to work with _R_ consists in writing source code with your favorite text editor and sending it to the _R_ console. It is suggested to use a development environment, such as _Rstudio_ (https://www.rstudio.com/), or a rich text editor with _R_ functionalities, such as _Emacs_ (https://www.gnu.org/software/emacs/), which greatly eases the work. 
+
+The *CellTrails* package can be installed from this repository directly using the `devtools` package within an active _R_ session.
+
+``` 
+if(!require("devtools")) {
+  install.packages("devtools")
+} 
+if(require("devtools")) {
+  install_github("elldc/CellTrails")
+} else {
+ stop("Could not load package 'devtools'.")
+}
+```
+
+Before ready to use, the *CellTrails* library must be loaded into the _R_ environment:
+```
+library(CellTrails)
+```
+
+__Please, refer to the [vignette](https://github.com/elldc/CellTrails/blob/master/vignettes/vignette.html) (needs to be downloaded) for a detailed explanation and instruction on how to use CellTrails.__
