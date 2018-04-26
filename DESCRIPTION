@@ -1,0 +1,77 @@
+Package: CellTrails
+Type: Package
+Title: Reconstruction, visualization and analysis of branching trajectories
+Version: 0.99.0
+Author: Daniel Christian Ellwanger [aut,cre]
+Authors@R: person(given="Daniel", family="Ellwanger", 
+  role=c("aut", "cre"), email="elldc.dev@gmail.com")
+Maintainer: Daniel Christian Ellwanger <elldc.dev@gmail.com>
+Description: CellTrails is an unsupervised algorithm for the de novo 
+  chronological ordering, visualization and analysis of single-cell expression 
+  data. CellTrails makes use of a geometrically motivated concept of 
+  lower-dimensional manifold learning, which exhibits a multitude of virtues that 
+  counteract intrinsic noise of single cell data caused by drop-outs, technical 
+  variance, and redundancy of predictive variables. CellTrails enables the 
+  reconstruction of branching trajectories and provides an intuitive graphical 
+  representation of expression patterns along all branches simultaneously. It allows 
+  the user to define and infer the expression dynamics of individual and multiple 
+  pathways towards distinct phenotypes.
+License: Artistic-2.0 | file LICENSE
+Encoding: UTF-8
+LazyData: true
+VignetteBuilder: knitr
+Depends: R (>= 3.4), Biobase
+Imports: 
+  cba,
+  dendextend,
+  depth,
+  dtw,
+  EnvStats,
+  ggplot2,
+  ggrepel,
+  grDevices,
+  graphics,
+  igraph,
+  maptree,
+  methods,
+  mgcv,
+  reshape2,
+  Rtsne,
+  stats,
+  splines,
+  viridis,
+  utils
+Suggests: 
+  destiny, 
+  scran, 
+  knitr
+RoxygenNote: 6.0.1
+biocViews: 
+  Clustering,
+  DataRepresentation,
+  DifferentialExpression,
+  DimensionReduction,
+  GeneExpression,
+  Sequencing,
+  SingleCell,
+  Software,
+  TimeCourse
+Collate: 
+  'AllClasses.R'
+  'AllGenerics.R'
+  'accessor-methods.R'
+  'cluster-methods.R'
+  'constructor-methods.R'
+  'data-sets.R'
+  'diffexp-methods.R'
+  'dimred-methods.R'
+  'export-methods.R'
+  'filter-methods.R'
+  'fitting-methods.R'
+  'import-methods.R'
+  'imputation-methods.R'
+  'layout-methods.R'
+  'plot-methods.R'
+  'show-methods.R'
+  'trajectory-methods.R'
+  'utility-methods.R'
