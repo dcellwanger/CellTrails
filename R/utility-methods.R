@@ -1,6 +1,7 @@
 #' Pretty string from array
 #'
-#' Computes radial basis function
+#' Generates short representation of long
+#' character vectors
 #' @param x A character vector
 #' @return String
 #' @details Returns pretty print of character vector
