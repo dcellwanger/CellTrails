@@ -38,5 +38,4 @@ Before ready to use, the *CellTrails* library must be loaded into the _R_ enviro
 library(CellTrails)
 ```
 
-__Please, refer to the [vignette](https://github.com/elldc/CellTrails/blob/master/vignettes/vignette.html) (needs to be downloaded) and for a detailed explanation and instruction on how to use CellTrails.__
 __Please, refer to the [vignette](https://github.com/elldc/CellTrails/blob/master/vignettes/vignette.html) (needs to be downloaded) for a detailed explanation and instruction on how to use CellTrails.__
