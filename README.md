@@ -38,6 +38,6 @@ Before ready to use, the *CellTrails* library must be loaded into the _R_ enviro
 library(CellTrails)
 ```
 
-We also recommend to download and install the graph visualization software _yEd_[^12] (http://www.yworks.com/products/yed). It provides great capabilities to visualize and analyze a trajectory graph produced by *CellTrails*.
+We also recommend to download and install the graph visualization software _yEd_ (http://www.yworks.com/products/yed). It provides great capabilities to visualize and analyze a trajectory graph produced by *CellTrails*.
 
 __Please, refer to the [vignette](https://github.com/elldc/CellTrails/blob/master/vignettes/vignette.html) (needs to be downloaded) for a detailed explanation and instruction on how to use CellTrails.__
