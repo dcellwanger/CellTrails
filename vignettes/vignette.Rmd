@@ -26,7 +26,6 @@ output:
     toc: true
     toc_depth: 2
     toc_float: true
-    theme: cosmo
     fig_width: 4.5
     fig_height: 3.5
 vignette: |
@@ -437,7 +436,7 @@ library(CellTrails)
 -->
 
 <!-- ---------------------------------- -->
-# EXAMPLE DATASET
+# Example Dataset
 <!-- ---------------------------------- -->
 The *CellTrails* package comes with an example dataset (of class `ExpressionSet` from the `r Biocpkg("Biobase")` package), which can be loaded with the function `data`.
 
@@ -451,7 +450,7 @@ This dataset contains transcript expression profiles of 183 genes expressed duri
 Ellwanger DC, Scheibinger M, Dumont RA, Barr-Gillespie PG, and Heller S. "Transcriptional dynamics of hair-bundle morphogenesis revealed with CellTrails". *Journal* Date;Issue. doi: 
 
 <!-- ---------------------------------- -->
-# QUICKSTART GUIDE
+# Quickstart Guide
 <!-- ---------------------------------- -->
 The following illustrates the typical sequence of steps performed during a *CellTrails* analysis. Shown is the signature of each function as provided in the *CellTrails* package documentation (call `?name_of_function`):
 
@@ -485,7 +484,8 @@ ctset <- embedSamples(ctset, design=NULL)
 ctspec <- findSpectrum(ctset, frac=100)
 plot(ctspec)
 ctset <- reduceDimensions(ctset, ctspec)
-plot(ctset, type="latentSpace", feature_name, pheno_type, viz, perplexity=30, seed=1101)
+plot(ctset, type="latentSpace", feature_name, pheno_type, viz, perplexity=30, 
+     seed=1101)
 plot(ctset, type="latentSpace", pheno_type, viz, perplexity=30, seed=1101)
 
 # -------------------------------
@@ -501,7 +501,8 @@ plot(ctset, type="stateExpression", feature_name)
 # State Trajectory Graph
 ctset <- connectStates(ctset, l=10)
 plot(ctset, type="stateTrajectoryGraph", feature_name, component, seed=1101)
-plot(ctset, type="stateTrajectoryGraph", pheno_type, component, point_size=3, label_offset=2, seed=1101)
+plot(ctset, type="stateTrajectoryGraph", pheno_type, component, point_size=3, 
+     label_offset=2, seed=1101)
 
 ctset <- selectTrajectory(ctset, component)
 
@@ -548,11 +549,11 @@ contrastTrailExpr(ctset, feature_name, trail_names, score)
 In the following those steps will be illustrated in detail.
 
 <!-- ---------------------------------- -->
-# CONTAINER CREATION
+# Container
 <!-- ---------------------------------- -->
 *CellTrails* organizes its data in a container called `CellTrailsSet`. This class extends the class `ExpressionSet` from the `r Biocpkg("Biobase")` package [@biobase] and provides all attributes required for smooth and user-friendly data processing. In the following, it is described how to initialize, manipulate and display an object of this class.
 
-## INITIALIZATION: ExpressionSet
+## From ExpressionSet
 The class `ExpressionSet` is part of the `r Biocpkg("Biobase")` package, which provides base functions for [_Bioconductor_](http://bioconductor.org). It allows for intuitive organizing of quantitative expression data and experimental metadata. To make best use of *CellTrails* (and other _Bioconductor_ packages), it is recommended to store individual datasets in a `ExpressionSet` object. For further details on this class, please refer to its [vignette](http://bioconductor.org/packages/release/bioc/vignettes/Biobase/inst/doc/ExpressionSetIntroduction.pdf) [@biocvig].
 
 A ``CellTrailsSet`` can be initialized from an `ExpressionSet` object as follows:
@@ -564,9 +565,9 @@ class(gga_e15_utricle)
 ctset <- as.CellTrailsSet(gga_e15_utricle)
 ```
 
-Please note, that function `as.ExpressionSet` enables to (back) coerce any `CellTrailsSet` object into an `ExpressionSet`.
+*Please note*, that function `as.ExpressionSet` enables to (back) coerce any `CellTrailsSet` object into an `ExpressionSet`.
 
-## INITIALIZATION: Matrix
+## From Matrix
 The minimal requirement to initialize a `CellTrailsSet` object is a numerical matrix containing quantitative expression measurements. Here, features (e.g., genes or transcripts) are represented by rows and samples (e.g., single cells) are represented by columns. We recommend assigning meaningful row and column names.
 
 ```{r, eval=TRUE}
@@ -594,7 +595,7 @@ featureData(ctset) <- new("AnnotatedDataFrame", data=feature_info)
 phenoData(ctset) <- new("AnnotatedDataFrame", data=sample_info)
 ```
 
-## MANIPULATION
+## Manipulation
 All required manipulations to reconstruct a trajectory, and to extract and analyze expression dynamics are implicitly performed by the functions provided in this package. However, if needed, the data stored in a `CellTrailsSet` object can be directly accessed. Here are some examples on indexing a `CellTrailsSet` object:
 
 ```{r, eval=TRUE}
@@ -608,7 +609,7 @@ ctset[, 3][1:5]
 
 For further details, please refer to the class documentation (call `?CellTrailsSet`) and the next section on displaying a `CellTrailsSet` object. 
 
-## DISPLAY
+## Display
 A *CellTrailsSet* object can be inspected by using the functions `show` and `plot`.
 
 ### Show
@@ -621,7 +622,7 @@ ctset
 
 The _assayData_, _featureData_ and _phenoData_ sections correspond to information that is provided by `ExpressionSet`, while _mapData_ and _trailData_ denote `CellTrailsSet` specific details. All attributes as listed below can be accessed via the respective function.
 
-##### mapData
+**mapData**
 
 * _trajectoryFeatures_: Lists the names of the features designated to be used for trajectory reconstruction. By default, all features are listed here. However, it is suggested to filter relevant (e.g. highly variable) features for sample clustering and trajectory reconstruction.
 * _latentSpace_: The representation of the samples in the computed latent space.
@@ -631,14 +632,14 @@ The _assayData_, _featureData_ and _phenoData_ sections correspond to informatio
 * _trajectoryFit_: Statistics on the trajectory fit.
 * _trajectoryLayout_: The two-dimensional coordinates of each sample along the trajectory. This layout is used to draw the reconstructed trajectory.
 
-##### trailData
+**trailData**
 
 * _trailNames_: Names of user-defined trails, i.e. paths between landmarks (branch or end points) along the trajectory.
 
 ### Plot
 There are several ways to visualize the data contained in a `CellTrailsSet` object using the function `plot(object, type, ...)`. The function returns a `ggplot` object [@ggplot2] from the `r CRANpkg("ggplot2")` package, which can be adapted by the user's needs and preferences. Detailed information on each plot type is provided in the function's documentation (call `?plot.CellTrailsSet`). The available plot types are:
 
-##### type
+**type**
 
 * _stateSize_: Barplot showing the absolute number of samples per state.
 * _stateExpression_: Violin plots showing the expression distribution of a feature per state. Each point displays the feature's expression value in a single sample.
@@ -651,11 +652,11 @@ There are several ways to visualize the data contained in a `CellTrailsSet` obje
 * _dynamic_: Shows the expression of a feature as a function of pseudotime along a given trail. Points represent single samples colorized by state and the line is the fitted dynamic. If multiple features are selected, then only their fitted dynamics are shown.
 
 <!-- ---------------------------------- -->
-#FEATURE SELECTION
+#Feature Selection
 <!-- ---------------------------------- -->
 After setting up a `CellTrailsSet` object, *CellTrails* is ready to reconstruct the trajectory. An expression matrix from an single-cell RNA-Seq experiment contains hundreds of features that bear no or little information about a cell's progress through the trajectory of interest. These non-relevant features not only increase the computational runtime of the manifold learning, but they also impair the accuracy of downstream analysis results. *CellTrails* assumes that key features show high expression variability during a cell's progression along the biological process under study. Therefore, *CellTrails* enables to unbiasedly filter the informative features. 
 
-**Please note**, that the feature selection step is optional for single-cell RT-qPCR data, because genes were handpicked by an expert in its field and/or are based on literature evidence.
+*Please note*, that the feature selection step is optional for single-cell RT-qPCR data, because genes were handpicked by an expert in its field and/or are based on literature evidence.
 
 A freshly initialized `CellTrailsSet` instance assumes that all features are used for trajectory reconstruction:
 
@@ -674,9 +675,9 @@ dim(ctset_sim)
 length(trajectoryFeatures(ctset_sim)) 
 ```
 
-**Please note**, that the following functions only filter the features used for dimensionality reduction, state detection and trajectory reconstruction; all quantified features are still available for donwstream analyses, such as cluster analysis and inference of gene expression dynamics.
+*Please note*, that the following functions only filter the features used for dimensionality reduction, state detection and trajectory reconstruction; all quantified features are still available for donwstream analyses, such as cluster analysis and inference of gene expression dynamics.
 
-## FILTER BY DETECTION LEVEL
+## By Detection Level
 This function determines trajectory features that are present in a disproportionate small number of samples. It removes features that are not expressed or that do not sufficiently reach the technological limit of detection. The detection level is defined as the fraction of samples in which a feature is detected, i.e. the relative number of samples having a feature's expression value greater than 0. If a threshold >= 1 is selected, its value is automatically converted to a relative fraction of the total sample count. The empirical cumulative distribution function of all samples and the fraction of removed features is shown.
 
 ```{r, eval=TRUE}
@@ -690,7 +691,7 @@ dim(ctset_sim)
 length(trajectoryFeatures(ctset_sim)) 
 ```
 
-## FILTER BY COEFFICIENT OF VARIATION
+## By Coefficient of Variation
 This function determines trajectory features with a narrow standard deviation (sd) with respect to its average expression (mean). This filter removes features with high expression and low variance, such as housekeeping genes. The coefficient of variation is computed by CoV(x) = sd(x)/mean(x). Features with a CoV(x) greater than a given threshold remain labeled as trajectory feature in the `CellTrailsSet` object. The empirical cumulative distribution function of all samples and the fraction of removed features is shown.
 
 ```{r, eval=TRUE}
@@ -704,9 +705,9 @@ dim(ctset_sim)
 length(trajectoryFeatures(ctset_sim)) 
 ```
 
-Please note, that the function allows to block nuisance factors, such as batch, gender or cell cycle effects, for the filtering of proper features. Please refer to section _MANIFOLD LEARNING/BLOCKING UNINFORMATIVE SUBSTRUCTURES_ to see an example on how to set the parameter `design`, respectively.
+*Please note*, that the function allows to block nuisance factors, such as batch, gender or cell cycle effects, for the filtering of proper features. Please refer to section _MANIFOLD LEARNING/BLOCKING UNINFORMATIVE SUBSTRUCTURES_ to see an example on how to set the parameter `design`, respectively.
 
-## FILTER BY FANO FACTOR
+## By Fano Factor
 This function identifies the most variable features while considering their average expression level. Features are placed into 20 bins based on their mean expression. For each bin, the distribution of Fano factors, which is a windowed version of the index of dispersion (IOD = variance / mean), is computed and standardized (*Z*-score(x) = x/sd(x) - mean(x)/sd(x)). Highly variable features with a *Z*-score greater than a given threshold remain labeled as trajectory feature in the `CellTrailsSet` object. The parameter `min_expr` defines the minimum average expression level of a feature to be considered for this filter. The Fano factor and the average expression is shown for each feature; filtered features are highlighted. 
 
 ```{r, eval=TRUE}
@@ -720,14 +721,14 @@ dim(ctset_sim)
 length(trajectoryFeatures(ctset_sim)) 
 ```
 
-Please note, that the function allows to block nuisance factors, such as batch, gender or cell cycle effects, for the filtering of proper features. Please refer to section _MANIFOLD LEARNING/BLOCKING UNINFORMATIVE SUBSTRUCTURES_ to see an example on how to set the parameter `design`, respectively.
+*Please note*, that the function allows to block nuisance factors, such as batch, gender or cell cycle effects, for the filtering of proper features. Please refer to section _MANIFOLD LEARNING/BLOCKING UNINFORMATIVE SUBSTRUCTURES_ to see an example on how to set the parameter `design`, respectively.
 
 <!-- ---------------------------------- -->
-#MANIFOLD LEARNING
+# Manifold Learning
 <!-- ---------------------------------- -->
 The samples' expression profiles are shaped by many factors, such as developmental age, tissue region of origin, cell cycle stage, as well as extrinsic sources such as status of signaling receptors, and environmental stressors, but also technical noise. In other words, a single dimension, despite just containing feature expression information, represents an underlying combination of multiple dependent and independent, relevant and non-relevant factors, whereat each factor's individual contribution is non-uniform. To obtain a better resolution and to extract underlying information, *CellTrails* aims to find a meaningful low-dimensional structure - a manifold - that represents samples mainly by their latent temporal relation.
 
-## SPECTRAL EMBEDDING
+## Spectral Embedding
 *CellTrails* aims to decipher the temporal relation between samples by computing a novel data representation which amplifies trajectory information in its first *n* dimensions. For this purpose, *CellTrails* employs spectral graph theory. Due to their locality-preserving character, spectral embedding techniques are advantageous because these consider the data's manifold structure, are insensitive to outliers and noise, are not susceptible to short-circuiting, and emphasize naturally occurring clusters in the data [@belkin2003; @sussman2012]. In a nutshell, *CellTrails* assumes that two samples that have a high statistical dependency are represented in close proximity along a trajectory. *CellTrails* captures the intrinsic data geometry as a weighted graph (nodes = samples, edges = statistical dependencies between pairs of samples) by means of fuzzy mutual information and uses spectral graph decomposition to unfold the manifold revealing the hidden trajectory information.
 
 The spectral embedding is performed using the function `embedSamples` and results in an eigenspace representation of the original expression data.
@@ -741,7 +742,7 @@ ctset <- embedSamples(ctset)
 dim(latentSpace(ctset))
 ```
 
-## DIMENSIONALITY REDUCTION
+## Dimensionality Reduction
 *CellTrails* assumes that the expression vectors are lying on or near a manifold with a low dimensionality that is embedded in the higher-dimensional space. The number of dimensions can be reduced, which lowers noise (i.e. truncates non-relevant dimensions), while the geometry of the trajectory is emphasized.
 
 The function `findSpectrum` helps to identify the intrisic dimensionality of the data. It determines the most informative dimensions based on the eigenvalues (spectrum) of the eigenspace. Components of the latent space are ranked by their information content. In the following example, *CellTrails* identifies 9 relevant components for the E15 chicken utricle dataset using a linear fit on the eigengaps of the first 100 eigenvalues, as can be visualized by the respective plot function.
@@ -759,21 +760,27 @@ ctset <- reduceDimensions(ctset, ctspec)
 dim(latentSpace(ctset))
 ```
 
-We suggest to assess the resulting Scree plot (eigengaps versus spectrum size) for whether the estimation of the unknown intrinsic dimensionality was reasonable. Otherwise, we recommend to adjust the parameter `frac` accordingly. Please note that considering too few components of the latent space may result in loss of information, while selecting lower ranked components could increase noise.
+We suggest to assess the resulting Scree plot (eigengaps versus spectrum size) for whether the estimation of the unknown intrinsic dimensionality was reasonable. Otherwise, we recommend to adjust the parameter `frac` accordingly. 
 
-*CellTrails* allows us to visualize the truncated latent space. *CellTrails'* plot function with the parameter `type="latentSpace"` uses t-distributed stochastic neighbor embedding [@vdmaaten2008] to illustrate the arrangement of the samples in the (in this example: 9-dimensional) latent space in a two-dimensional plot. To reduce computational time, a previously computed tSNE can be re-used. Points denote individual cells, the colorization indicates either a metadata label (here: FM1-43 dye uptake) or expression of a single feature (here: gene *MYO7A*). Please note, that empty points denote a missing label or missing expression value (non-detects). The optional parameters `seed` and `perplexity` are passed to the Barnes-Hut implementation of t-distributed stochastic neighbor embedding.
+*Please note*, that considering too few components of the latent space may result in loss of information, while selecting lower ranked components could increase noise.
+
+*CellTrails* allows us to visualize the truncated latent space. *CellTrails'* plot function with the parameter `type="latentSpace"` uses t-distributed stochastic neighbor embedding [@vdmaaten2008] to illustrate the arrangement of the samples in the (in this example: 9-dimensional) latent space in a two-dimensional plot. To reduce computational time, a previously computed tSNE can be re-used. Points denote individual cells, the colorization indicates either a metadata label (here: FM1-43 dye uptake) or expression of a single feature (here: gene *MYO7A*). 
+
+*Please note*, that empty points denote a missing label or missing expression value (non-detects). The optional parameters `seed` and `perplexity` are passed to the Barnes-Hut implementation of t-distributed stochastic neighbor embedding.
 
 ```{r, eval=TRUE}
 # Plot latent space w/ FM1-34 uptake
-gp <- plot(ctset, type="latentSpace", pheno_type="FM143", seed=1101, perplexity=30) 
+gp <- plot(ctset, type="latentSpace", pheno_type="FM143", seed=1101, 
+           perplexity=30) 
 gp
 
 # Plot latent space w/ MYO7A
 # Re-use previous tSNE result to reduce computation time
-plot(ctset, type="latentSpace", feature_name="MYO7A", viz=gp) #parameter viz contains previous tSNE result
+# Parameter viz contains previous tSNE result
+plot(ctset, type="latentSpace", feature_name="MYO7A", viz=gp) 
 ```
 
-## BLOCKING UNINFORMATIVE SUBSTRUCTURES
+## Blocking Uninformative Substructures
 Single-cell measurements are susceptible to the influence of confounders, such as batch, gender or cell cycle effects. Blocking these nuisance factors during manifold learning may be necessary to significantly improve the result of downstream data analyses, such as reconstruction of the temporal trajectory. Therefore, the function `embedSamples` can account for confounding effects via the parameter `design`, as will be demonstrated on the example of single-cell RNA-Seq data of murine T helper 2 cell (T~h~2) differentiation [@mahata2014]. In a nutshell, Buettner *et al.* [@buettner2015] identified cell cycle effects as major confounder in this dataset and applied a single-cell latent variable model (scLVM) approach to account for this factor. They unbiasedly identified then two cell populations, namely a group of partially and a group of fully differentiated cells. The normalized, log transformed and filtered scRNA-Seq data can be obtained from the supplementary materials of this article (Table S5 and S7); further, a curated list of T~h~2 marker genes, the scLVM 'corrected' expression matrix, and a binary cluster assignment for each cell can be downloaded.
 
 Let's assume the numeric expression matrix (here called `th2`) and the list of marker genes are already organized in a `Biobase::ExpressionSet` container. Here, the expression matrix consists of 7,063 genes (116 of which are marker genes) which have been detected in more than 2 of all 81 cells.
@@ -820,11 +827,14 @@ enrichment.test(deMarkers, nMarkers, deGenes, nGenes)
               n_genes-n_genes_de+n_marker_de), ncol=2)-->
 Since the enrichment is not significant (with an odds ratio < 1), we argue that cells were not properly separated by maturity in the original space.
 
-To block the cell cycle effects, *CellTrails* expects a design matrix modeling the cell cycle stage as the explanatory factor for each cell. As the cell-cycle stage of each cell is not known in this data set, we need to predict cell cycle phases. In this example, we use the classifier `cyclon` from the `r Biocpkg("scran")` package [@scran]. To be able to run the algrithm properly, gene symbols were translated to Ensembl identifiers using Bioconductors' annotation database interface package `r Biocpkg("AnnotationDbi")` [@annotationdbi] and the mouse annotation data package `r Biocpkg("org.Mm.eg.db")` [@orgmmegdb]. Please note that these packages are not part of *CellTrails* and may needed to be installed first (see footnotes for details).
+To block the cell cycle effects, *CellTrails* expects a design matrix modeling the cell cycle stage as the explanatory factor for each cell. As the cell-cycle stage of each cell is not known in this data set, we need to predict cell cycle phases. In this example, we use the classifier `cyclon` from the `r Biocpkg("scran")` package [@scran]. To be able to run the algrithm properly, gene symbols were translated to Ensembl identifiers using Bioconductors' annotation database interface package `r Biocpkg("AnnotationDbi")` [@annotationdbi] and the mouse annotation data package `r Biocpkg("org.Mm.eg.db")` [@orgmmegdb].
+
+*Please note*, that these packages are not part of *CellTrails* and may needed to be installed first (see footnotes for details).
 
 ```{r, eval=TRUE, message=FALSE, warning=FALSE}
 # Run cyclone
-mcm <- readRDS(system.file("exdata", "mouse_cycle_markers.rds", package="scran"))
+mcm <- readRDS(system.file("exdata", "mouse_cycle_markers.rds", 
+                           package="scran"))
 set.seed(1101)
 cellCycle <- scran::cyclone(x=exprs(th2), 
                             pairs=mcm, 
@@ -902,11 +912,11 @@ c("Odds ratio" = or, "P-value" = p)
 ```
 -->
 
-**Please note**, that the differential gene expression analysis using the *CellTrails* derived clusters was performed on the actual expression matrix and not the cell-cycle 'corrected' expression values. In contrast to scLVM, *CellTrails* blocks the nuisance variables for manifold learning only and keeps the original expression values for downstream analysis. This is due to the fact that the manipulated expression matrix does not represent the actual transcript levels measured in each cell, nor does it account for the uncertainty of estimation of the blocking factor terms. By this means, *CellTrails* protects against confounding effects without discarding information.
+*Please note*, that the differential gene expression analysis using the *CellTrails* derived clusters was performed on the actual expression matrix and not the cell-cycle 'corrected' expression values. In contrast to scLVM, *CellTrails* blocks the nuisance variables for manifold learning only and keeps the original expression values for downstream analysis. This is due to the fact that the manipulated expression matrix does not represent the actual transcript levels measured in each cell, nor does it account for the uncertainty of estimation of the blocking factor terms. By this means, *CellTrails* protects against confounding effects without discarding information.
 
 Besides cell cycle, technical confounders may also be relevant to be accounted for. Those can occur, for example, if cells were processed on different plates or if cells were pooled from multiple sequencing runs. In this case, a design matrix with the respective explanatory variables can be constructed and passed to `embedSamples`.
 
-## USING ALTERNATIVE DIMENSIONALITY REDUCTION METHODS
+## Alternative Dimensionality Reduction Methods
 If the user prefers to use an alternative approach for dimensionality reduction, the latent space can be set to a `CellTrailsSet` object with `latentSpace<-`. The latent space has to be a numerical matrix; rows represent samples and columns the components of the latent space. *CellTrails* uses by default spectral embedding, but the framework also operates well with any other spectral dimensionality reduction method, such as PCA (available in *CellTrails* via function `pca`) and diffusion maps (available via the `r Biocpkg("destiny")` package [@destiny]):
 
 ```{r, eval=TRUE}
@@ -937,10 +947,10 @@ ctset2 <- reduceDimensions(ctset2, ctspec2)
 ctset2
 ```
 
-**Please note** that the function `latentSpace<-` accepts any numerical matrix. Therefore, any latent space with an already reduced number of dimensions can be assigned to a *CellTrailsSet* object with this function; eigenvalues are only required to determine the intrinsic dimensionality of the data set. 
+*Please note*, that the function `latentSpace<-` accepts any numerical matrix. Therefore, any latent space with an already reduced number of dimensions can be assigned to a *CellTrailsSet* object with this function; eigenvalues are only required to determine the intrinsic dimensionality of the data set. 
 
 <!-- ---------------------------------- -->
-#CLUSTERING
+# Clustering
 <!-- ---------------------------------- -->
 To identify cellular subpopulations, *CellTrails* performs hierarchical clustering via minimization of a square error criterion [@ward1963] in the lower-dimensional space. To determine the number of clusters, *CellTrails* conducts an unsupervised *post-hoc* analysis. Here, it is assumed that differential expression of assayed features determines distinct cellular stages. Hierarchical clustering generates a cluster dendrogram. *CellTrails* makes use of this information and identifies the maximal fragmentation of the data space, i.e. the lowest cutting height in the clustering dendrogram that ensures that the resulting clusters contain at least a certain fraction of samples. Then, processing from this height towards the root, *CellTrails* iteratively joins siblings if they do not have at least a certain number of differentially expressed features. Statistical significance is tested by means of a two-sample non-parametric linear rank test accounting for censored values [@peto1972]. The null hypothesis is rejected using the Benjamini-Hochberg [@benjamini1995] procedure for a given significance level. The number of clusters can impact the outcome of the trajectory reconstruction and, therefore, this step might require some parameter tuning depending on the input data (for more information on the parameters call `?findStates`).
 
@@ -979,16 +989,18 @@ plot(ctset, type="stateExpression", feature_name="OTOA")
 The violin plots (vertically mirrored density curves) indicate that state *S4* harbors cells that express supporting cell markers. Individual points represents expression levels of single cells.
 
 <!-- ---------------------------------- -->
-#SAMPLE ORDERING
+# Sample Ordering
 <!-- ---------------------------------- -->
 *CellTrails* assumes that the arrangement of samples in the computed latent space constitutes a trajectory. *CellTrails* aims to place single samples along a maximum parsimony tree, which resembles a branching developmental continuum. Distances between samples in the latent space are computed using the Euclidean metric. 
 
-## STATE TRAJECTORY GRAPH
+## State Trajectory Graph
 To avoid overfitting and to facilitate the accurate identification of bifurcations, *CellTrails* simplifies the problem. Analogous to the idea of a 'broken-stick regression', *CellTrails* groups the data and performs linear fits to separate trajectory segments, which are determined by the branching chronology of states. This leaves the optimization problem of finding the minimum number of associations between states that maximize the total parsimony. In theory, this problem can be solved by any minimum spanning tree algorithm. *CellTrails* adapts this concept by assuming that adjacent states should be located nearby and, therefore, share a relative high number of neighboring cells.
 
 Each state defines a submatrix of samples that is composed of a distinct set of data vectors, i.e. each state is a distinct set of samples represented in the lower-dimensional space. For each state, *CellTrails* identifies the *l*-nearest neighbors to each state's data vector and takes note of their state memberships and distances. This results in two vectors of length *l* times the state size. Subsequently, *CellTrails*  removes spurious neighbors (outliers/false-positive neighbors), which are statistically too distal. For each state *CellTrails* calculates the relative frequency on how often a state occurs in the neighborhood of a given state, which is referred to as the interface cardinality scores. 
 
-*CellTrails* implements a greedy algorithm to find the tree maximizing the total interface cardinality score, similar to Kruskal's minimum spanning tree algorithm [@kruskal1956]. The graph construction has a relaxed requirement (number of edges < number of nodes) compared to a tree (number of edges = number of nodes - 1), which may result in a graph having multiple tree components (= forest) indicating potentially independent trajectories or isolated nodes. Please note that the function `connectStates` can be adjusted, such that the resulting number of components may be lower or higher by increasing or decreasing the parameter `l`, respectively.
+*CellTrails* implements a greedy algorithm to find the tree maximizing the total interface cardinality score, similar to Kruskal's minimum spanning tree algorithm [@kruskal1956]. The graph construction has a relaxed requirement (number of edges < number of nodes) compared to a tree (number of edges = number of nodes - 1), which may result in a graph having multiple tree components (= forest) indicating potentially independent trajectories or isolated nodes. 
+
+*Please note*, that the function `connectStates` can be adjusted, such that the resulting number of components may be lower or higher by increasing or decreasing the parameter `l`, respectively.
 
 In our E15 chicken utricle dataset, we identified two components, as indicated by the `stateTrajectoryGraph` attribute of the `CellTrailsSet` object: one tree with 10 states connected by 9 edges, and one isolated state.
 
@@ -1007,13 +1019,16 @@ ctset
 The *CellTrails* plot function enables the visualization of the inferred state trajectory graph. If the graph is a forest, the parameter `component` can be used to define which tree should be shown. Let's have a look at the FM1-43 uptake and the _CALB2_ expression in component 1:
 
 ```{r, eval=TRUE}
-plot(ctset, type="stateTrajectoryGraph", component=1, pheno_type="FM143", point_size=1.5, label_offset=4, seed=1101)
-plot(ctset, type="stateTrajectoryGraph", component=1, feature_name="CALB2", point_size=3, label_offset=2, seed=1101)
+plot(ctset, type="stateTrajectoryGraph", component=1, pheno_type="FM143", 
+     point_size=1.5, label_offset=4, seed=1101)
+
+plot(ctset, type="stateTrajectoryGraph", component=1, feature_name="CALB2", 
+     point_size=3, label_offset=2, seed=1101)
 ```
 
 The optional parameters `seed`, `point_size` and `label_offset` are useful to adjust the graph layout, the size of the points and the relative position of the point labels, respectively.
 
-## ALIGNING SAMPLES ONTO THE TRAJECTORY
+## Aligning Samples Onto the Trajectory
 For the sake of simplicity and performance, it makes sense to conduct subsequent steps for each component individually. In this case, we select the tree formed by graph component 1 with 896 cells (listed as *trajectorySamples*) for our continuing E15 chicken utricle analysis.
 
 ```{r, eval=TRUE}
@@ -1032,9 +1047,9 @@ plot(ctset, type="trajectoryFit", rev=TRUE)
 ```
 
 <!-- ---------------------------------- -->
-#CELLTRAILS MAPS
+# CellTrails Maps
 <!-- ---------------------------------- -->
-## GRAPH LAYOUT
+## Graph Layout
 
 *CellTrails* portrays a computed trajectory as collection of trails that can be found in a landscape shaped by individual gene expression dynamics. To generate such a topographic trail map - the *CellTrails* map - a two-dimensional spatiotemporal ordination of the expression matrix has to be computed. This can be done by any graph layout algorithm using the structural information from the trajectory graph, which is composed of nodes (=samples) and edges (=chronological relation between samples). 
 We found that the freely available graph visualization software _yEd_ (http://www.yworks.com/products/yed) has great capabilities to visualize and analyze a trajectory graph. An optimal layout is planar, i.e. it exhibits no crossing edges or overlapping nodes.
@@ -1075,20 +1090,25 @@ Let's run the algorithm to compute the layout:
 knitr::include_graphics(path="img/yEd_4.gif") #, dpi=300 system.file("doc", "yEd_4.gif", package="CellTrails")) #
 ```
 
-**Please note** that edge crossings (i.e. two or more edges overlap) are not useful and if they occur we sugget to re-run the layouter with different parameters before saving the layout. Finally, the file can be saved: _File_ > _Save_ and reimported to the `CellTrailsSet` object. 
+*Please note*, that edge crossings (i.e. two or more edges overlap) are not useful and if they occur we sugget to re-run the layouter with different parameters before saving the layout. Finally, the file can be saved: _File_ > _Save_ and reimported to the `CellTrailsSet` object. 
 
 ```{r, eval=FALSE}
 # Trajectory Graph Layout: Import
-ctset <- read.ygraphml(ctset, file='your/file/path/yourFileName.graphml', adjust=TRUE)
+ctset <- read.ygraphml(ctset, 
+                       file='your/file/path/yourFileName.graphml', 
+                       adjust=TRUE)
 ```
 
 The parameter `adjust` indicates if edge lengths need to be adjusted, such that they correspond to the inferred pseudotime.
 
-The export function `write.ygraphml` colorizes automatically nodes by their assigned state. However, it is possible to colorize nodes by any phenotype or feature expression data stored in the `CellTrailsSet` object. For example, we could colorize the nodes by the recorded FM1-43 dye intensity to get an idea where the trajectory might start and end (a high FM1-43 dye indicates mature cells). Please note that nodes with a missing phenotype information are not colorized.
+The export function `write.ygraphml` colorizes automatically nodes by their assigned state. However, it is possible to colorize nodes by any phenotype or feature expression data stored in the `CellTrailsSet` object. For example, we could colorize the nodes by the recorded FM1-43 dye intensity to get an idea where the trajectory might start and end (a high FM1-43 dye indicates mature cells). 
+
+*Please note*, that nodes with a missing phenotype information are not colorized.
 
 ```{r, eval=FALSE}
 # Trajectory Graph Layout: Export
-write.ygraphml(ctset, file='your/file/path/yourFileName.graphml', pheno_type="FM143")
+write.ygraphml(ctset, file='your/file/path/yourFileName.graphml', 
+               pheno_type="FM143")
 ```
 
 Let's open the colorized trajectory graph again in _yEd_.
@@ -1111,7 +1131,9 @@ We save the file and import it to *CellTrails* again. This time we set the param
 
 ```{r, eval=FALSE}
 # Trajectory Graph Layout: Import
-ctset <- read.ygraphml(ctset, file='your/file/path/yourFileName.graphml', adjust=FALSE)
+ctset <- read.ygraphml(ctset, 
+                       file='your/file/path/yourFileName.graphml', 
+                       adjust=FALSE)
 ```
 
 **Sidenote**. It is not a requirement to use yEd. The trajectory layout can also be defined by the user otherwise. The minimum requirement is, that the coordinates of each sample are stored in a `data.frame` whose row names correspond to the sample names. The sampleNames can be pulled from the `CellTrailsSet` object using the function `sampleNames`. The layout can then be set using the accessor function `trajectoryLayout`. For this tutorial, the *CellTrails* package comes with a list named `trajLayouts` which contains processed layouts for each dataset included in this package.
@@ -1131,7 +1153,7 @@ par(mar=c(0,0,0,0))
 plot(trajectoryLayout(ctset), pch=20, cex=.25, axes=FALSE)
 ```
 
-## PLOT MAPS
+## Plot Maps
 After generating the layout, a two-dimensional visualization of the trajectory can be drawn. Here, the line represents the trajectory and individual points represent the samples. This plot type either colorizes individual samples by a metadata label (parameter `pheno_type`) or it shows the topography of a given feature's expression landscape (defined by parameter `feature_name`). When metadata are being visualized, the grey line represents the trajectory and the individual points represent the cells. Cells that do not have a specific metadata label or value are not shown. Let's visualize how the cellular FM1-43 uptake distributes along the trajectory:
 
 ```{r, eval=TRUE}
@@ -1156,7 +1178,7 @@ We can also visualize the standard error of the predicted expression surface usi
 plot(ctset, type="map", feature_name="TMC2", map_type="se")
 ```
 
-Please note, that it is also possible to show the expression of single samples only. This can be achieved by setting the parameter `map_type` to `single`, respectively.
+*Please note*, that it is also possible to show the expression of single samples only. This can be achieved by setting the parameter `map_type` to `single`, respectively.
 
 ```{r, eval=TRUE}
 plot(ctset, type="map", feature_name="TMC2", map_type="single")
@@ -1166,7 +1188,10 @@ If needed this plot can also be exported to _yEd_ using setting the parameter `p
 
 ```{r, eval=FALSE}
 # Trajectory Graph Layout: Export
-write.ygraphml(ctset, file='your/file/path/yourFileName.graphml', feature_name="TMC2", label="NAME")
+write.ygraphml(ctset, 
+               file='your/file/path/yourFileName.graphml', 
+               feature_name="TMC2", 
+               label="NAME")
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
@@ -1174,9 +1199,9 @@ knitr::include_graphics(path="img/yEd_9.gif") #, dpi=300 system.file("doc", "yEd
 ```
 
 <!-- ---------------------------------- -->
-#ANALYSIS OF DYNAMICS
+# Expression Dynamics
 <!-- ---------------------------------- -->
-## TRAIL IDENTIFICATION
+## Trail Definition
 In this part of the tutorial, *CellTrails* is used to infer expression dynamics of features along an individual trail. A trail denotes a path between two landmarks, namely branching points (_B_) and end points. The latter are referred to as trail heads (_H_). For this purpose, *CellTrails* implements a convenient `plot` function (with parameter `type=trailblazing`), which displays the available landmark points on the trajectory map:
 
 ```{r, eval=TRUE}
@@ -1188,7 +1213,7 @@ In this part of the tutorial, *CellTrails* is used to infer expression dynamics 
 # ctset <- connectStates(ctset) # Connect states
 # ctset <- selectTrajectory(ctset, component=1) # Select trajectory
 # ctset <- fitTrajectory(ctset) # Align samples to trajectory
-# trajectoryLayout(ctset, adjust=TRUE) <- trajLayouts$gga_e15_utricle # Set layout
+# trajectoryLayout(ctset, adjust=TRUE) <- trajLayouts$gga_e15_utricle # Layout
 
 # Trail Identification
 plot(ctset, type="trailblazing")
@@ -1208,9 +1233,11 @@ plot(ctset, type="trail", trail_name="TrS")
 plot(ctset, type="trail", trail_name="TrES")
 ```
 
-These plots show the trajectory map and highlight the defined trails along with its corresponding pseudotime. Please note that trails can be renamed with `trailNames<-` and removed with `removeTrail`, respectively.
+These plots show the trajectory map and highlight the defined trails along with its corresponding pseudotime. 
 
-## DEFINING SUBTRAILS
+*Please note*, that trails can be renamed with `trailNames<-` and removed with `removeTrail`, respectively.
+
+## Defining Subtrails
 It might be needed to define subtrails if trails overlap. This is neccessary if the dynamics of one trail are subdynamics of another trail. Because pseudotime mirrors the location of each datapoint in the latent space, a significant gap in pseudotime could indicate separate cell populations. However, these populations have only subtle gene expression profile differences and were linearly aligned in the latent space. Since pseudotime can also be interpreted as a function of transcriptional change, one can argue that these populations undergo the same expression program (for the selected features), with the small but distinct difference that samples ordered at the terminal end of the longer trail up- or down-regulate additional features late during their maturation. Thus, trails can overlap, while one trail is a subtrail of the longer trail.
 
 The _U_ landmarks that are needed to define a subtrail can be determined by the user, as demonstrated in the following.
@@ -1219,7 +1246,10 @@ First, we want to give a rational for selecting a specific node. As described in
 
 ```{r, eval=FALSE}
 # Trajectory Graph Layout: Export
-write.ygraphml(ctset, file='your/file/path/yourFileName.graphml', pheno_type="STATE", label="NAME")
+write.ygraphml(ctset, 
+               file='your/file/path/yourFileName.graphml', 
+               pheno_type="STATE", 
+               label="NAME")
 ```
 
 Then we open the graphml file in _yEd_. The gap in the purple colored population is obvious:
@@ -1238,7 +1268,9 @@ After saving the layout, it can be reimported to *CellTrails* and the landmark c
 
 ```{r, eval=FALSE}
 # Trajectory Graph Layout: Import
-ctset <- read.ygraphml(ctset, file='your/file/path/yourFileName.graphml', adjust=FALSE)
+ctset <- read.ygraphml(ctset, 
+                       file='your/file/path/yourFileName.graphml', 
+                       adjust=FALSE)
 ```
 ```{r, eval=TRUE, echo=FALSE}
 ctset <- addLandmark(ctset, sample_name="Cell-8-57")
@@ -1262,8 +1294,11 @@ tStates <- trailStates(ctset, trail_name="TrES")
 
 # Lagged pseudotime values per state
 tPtime_tStates <- split(tPtime, tStates)
-tPtime_tStates_diff <- lapply(tPtime_tStates, function(x){y <- diff(x); y[-length(y)]})
-bp <- boxplot(tPtime_tStates_diff, horizontal=TRUE, ylab="State", xlab="Pseudotime delta", las=2)
+tPtime_tStates_diff <- lapply(tPtime_tStates, 
+                              function(x){y <- diff(x); y[-length(y)]})
+
+bp <- boxplot(tPtime_tStates_diff, horizontal=TRUE, 
+              ylab="State", xlab="Pseudotime delta", las=2)
 ```
 
 The boxplot statistics indicate that there is a strong outlier in state _S9_ (which is termed state _i_ in the original *CellTrails* article). We can use the function `trailSamples` to extract the two samples which are separated by this gap.
@@ -1298,21 +1333,26 @@ ctset <- addTrail(ctset, from="B3", to="U1", name="TrES*")
 plot(ctset, type="trail", trail_name="TrES*")
 ```
 
-**Please note** that the trajectory graph can also be exported having all landmarks highlighted. This is particulary helpful if user-defined landmarks need to be changed.
+*Please note*, that the trajectory graph can also be exported having all landmarks highlighted. This is particulary helpful if user-defined landmarks need to be changed.
 
 ```{r, eval=FALSE}
 # Export Trajectory Graph Layout with sample names
-write.ygraphml(ctset, file='your/file/path/yourFileName.graphml', pheno_type="LANDMARK", label="NAME")
+write.ygraphml(ctset, 
+               file='your/file/path/yourFileName.graphml', 
+               pheno_type="LANDMARK", 
+               label="NAME")
 
 # Export Trajectory Graph Layout with landmark ids
-write.ygraphml(ctset, file='your/file/path/yourFileName.graphml', pheno_type="LANDMARK")
+write.ygraphml(ctset, 
+               file='your/file/path/yourFileName.graphml', 
+               pheno_type="LANDMARK")
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
 knitr::include_graphics(path="img/yEd_13.gif") #, dpi=300 system.file("doc", "yEd_13.gif", package="CellTrails"))
 ```
 
-## INFERENCE OF DYNAMICS
+## Inference of Dynamics
 *CellTrails* defines pseudotime as the geodesic distance of each node of the trail from the start node; it is scaled between 0 and 100% for each trail. To learn the expression level of a feature as a function of pseudotime, *CellTrails* used generalized additive models (GAM) with a single smoothing term with five basis dimensions. Here, for each feature, *CellTrails* introduces prior weights for each observation to lower the confounding effect of missing data to the maximum-likelihood-based fitting process.
 
 Feature expression as a function of pseudotime along an individual trail can be plotted with the `plot` function with parameter `type="dynamic"`. This results in the fitted dynamic function (= black line) and the individual expression per sample (= points represent samples colored by their state membership). For example, the expression of the calcium buffer _CALB2_ during extrastriolar hair cell development can be displayed as follows: 
@@ -1326,7 +1366,7 @@ Feature expression as a function of pseudotime along an individual trail can be 
 # ctset <- connectStates(ctset) # Connect states
 # ctset <- selectTrajectory(ctset, component=1) # Select trajectory
 # ctset <- fitTrajectory(ctset) # Align samples to trajectory
-# trajectoryLayout(ctset, adjust=TRUE) <- trajLayouts$gga_e15_utricle # Set layout
+# trajectoryLayout(ctset, adjust=TRUE) <- trajLayouts$gga_e15_utricle # Layout
 # ctset <- addTrail(ctset, from="B3", to="H1", name="TrES") # Define trail TrES
 
 plot(ctset, type="dynamic", feature_name="CALB2", trail_name="TrES")
@@ -1345,7 +1385,7 @@ range(fit$expression)
 predict(fit$gam, newdata=data.frame(x=c(0, .25, .5, .75, 1)))
 ```
 
-## DYNAMIC COMPARISON: WITHIN TRAILS
+## Dynamic Comparison: Within Trails
 *CellTrails* allows the analysis and comparison of the expression of multiple features along a single trail. For example, the expression dynamics of the acting crosslinkers *FSCN1* and *FSCN2* can be displayed in a single plot as follows:
 
 ```{r, eval=TRUE}
@@ -1357,10 +1397,12 @@ predict(fit$gam, newdata=data.frame(x=c(0, .25, .5, .75, 1)))
 # ctset <- connectStates(ctset) # Connect states
 # ctset <- selectTrajectory(ctset, component=1) # Select trajectory
 # ctset <- fitTrajectory(ctset) # Align samples to trajectory
-# trajectoryLayout(ctset, adjust=TRUE) <- trajLayouts$gga_e15_utricle # Set layout
+# trajectoryLayout(ctset, adjust=TRUE) <- trajLayouts$gga_e15_utricle # Layout
 # ctset <- addTrail(ctset, from="B3", to="H1", name="TrES") # Define trail TrES
 
-plot(ctset, type="dynamic", feature_name=c("FSCN1", "FSCN2"), trail_name="TrES")
+plot(ctset, type="dynamic", 
+     feature_name=c("FSCN1", "FSCN2"), 
+     trail_name="TrES")
 ```
 
 By using the fitting function `fitDynamic`, the similarity/correspondence between curves can be quantified. This allows a quantitative assessment of the observed anticorrelation seen in the plot above between _FSCN1_ and _FSCN2_:
@@ -1373,7 +1415,7 @@ fscn2_fit <- fitDynamic(ctset, trail_name="TrES", feature_name="FSCN2")
 cor(fscn1_fit$expression, fscn2_fit$expression)
 ```
 
-## DYNAMIC COMPARISON: BETWEEN TRAILS
+## Dynamic Comparison: Between Trails
 Genes have non-uniform expression rates and each trail has a distinct set of upregulated features, but also contains unequal numbers of samples. Since pseudotime is computed based on expression differences between individual samples, the pseudotime axis may be distorted, leading to stretched or compressed sections of longitudinal expression data that make comparisons of such trails challenging. To align different trails, despite these differences, *CellTrails* employs a strategy that has long been known in speech recognition, called dynamic time warping [@sakoe1978]. Feature expression dynamics are modeled analogous to how dynamic time warping is used to align phonetic dynamics present in speech. Innate non-linear variation in the length of individual phonemes (i.e. states) is appropriately modeled, which results in stretching and shrinking of word (i.e. trail) segments. This allows the computation of intertrail alignment warps of individual expression time series that are similar but locally out of phase. The overall dissimilarity between two expression time series can be estimated by the root-mean-square deviation (_RMSD_), the total deviation (_TD_), the area between curves (_ABC_), or Pearson's correlation coefficient (_COR_) over all aligned elements. The warp and the corresponding quantitative score can be computed using the function `contrastTrailExpr`.
 
 ```{r, eval=TRUE}
@@ -1385,22 +1427,26 @@ Genes have non-uniform expression rates and each trail has a distinct set of upr
 # ctset <- connectStates(ctset) # Connect states
 # ctset <- selectTrajectory(ctset, component=1) # Select trajectory
 # ctset <- fitTrajectory(ctset) # Align samples to trajectory
-# trajectoryLayout(ctset, adjust=TRUE) <- trajLayouts$gga_e15_utricle # Set layout
+# trajectoryLayout(ctset, adjust=TRUE) <- trajLayouts$gga_e15_utricle # Layout
 # ctset <- addTrail(ctset, from="B3", to="H9", name="TrS") # Define trail TrS
 # ctset <- addTrail(ctset, from="B3", to="H1", name="TrES") # Define trail TrES
 
 # Compare ATOH1 dynamic
 # Root-mean-square deviation
-contrastTrailExpr(ctset, feature_name="ATOH1", trail_names=c("TrS", "TrES"), score="RMSD")
+contrastTrailExpr(ctset, feature_name="ATOH1", 
+                  trail_names=c("TrS", "TrES"), score="RMSD")
 
 # Total deviation
-contrastTrailExpr(ctset, feature_name="ATOH1", trail_names=c("TrS", "TrES"), score="TD")
+contrastTrailExpr(ctset, feature_name="ATOH1", 
+                  trail_names=c("TrS", "TrES"), score="TD")
 
 # Area between curves
-contrastTrailExpr(ctset, feature_name="ATOH1", trail_names=c("TrS", "TrES"), score="ABC")
+contrastTrailExpr(ctset, feature_name="ATOH1", 
+                  trail_names=c("TrS", "TrES"), score="ABC")
 
 # Pearson's correlation coefficient
-contrastTrailExpr(ctset, feature_name="ATOH1", trail_names=c("TrS", "TrES"), score="COR")
+contrastTrailExpr(ctset, feature_name="ATOH1", 
+                  trail_names=c("TrS", "TrES"), score="COR")
 ```
 
 To identify features that differ between two trails, we can compute the divergence for all features and analyze the *Z*-score distribution as derived by `scale`:
@@ -1408,7 +1454,8 @@ To identify features that differ between two trails, we can compute the divergen
 ```{r, eval=TRUE}
 # Compare TrS and TrES dynamics
 # Root-mean-square deviation
-all_rmsd <- contrastTrailExpr(ctset, trail_names=c("TrS", "TrES"), score="RMSD")
+all_rmsd <- contrastTrailExpr(ctset, 
+                              trail_names=c("TrS", "TrES"), score="RMSD")
 
 # Identify highly differing features
 all_rmsd <- all_rmsd[all_rmsd > 0]
@@ -1416,7 +1463,7 @@ zscores <- scale(log(all_rmsd))
 sort(all_rmsd[zscores > 1.65])
 ```
 
-## PARALLELIZATION
+## Parallelization
 In the case one wants to compare a large number of features (e.g. from an RNA-Seq experiment), the computation can be significantly sped up by parallel computing. In this example, we use the package `r CRANpkg("doSNOW")`, but any other package may also be used for this purpose.
 
 ```{r, eval=FALSE}
@@ -1429,19 +1476,22 @@ registerDoSNOW(cpu.cl)
 fnames <- featureNames(ctset)
 all_rmsd <- foreach(i=seq_along(fnames), .combine=rbind)  %dopar%  {
   g <- fnames[i]
-  CellTrails::contrastTrailExpr(ctset, feature_name=g, trail_names=c("TrES", "TrS"), score="RMSD")
+  CellTrails::contrastTrailExpr(ctset, 
+                                feature_name=g, 
+                                trail_names=c("TrES", "TrS"), 
+                                score="RMSD")
 }
 stopCluster(cpu.cl)
 all_rmsd <- all_rmsd[, 1]
 names(all_rmsd) <- fnames
 ```
 
-**Please note**, that the advantage in computation time increases with the number of features; for a small number of features the parallel computing approach may be slower than simply calling `contrastTrailExpr` with `feature_name = featureNames(ctset)` due to its overhead.
+*Please note*, that the advantage in computation time increases with the number of features; for a small number of features the parallel computing approach may be slower than simply calling `contrastTrailExpr` with `feature_name = featureNames(ctset)` due to its overhead.
 
 <!-- ---------------------------------- -->
-#APPENDIX
+# Appendix
 <!-- ---------------------------------- -->
-##PROTOCOLS
+## Protocols
 The following protocols describe how this package can be used to perform the data analysis shown in the original *CellTrails* article.
 
 ### Chicken E15 Utricle Data
@@ -1488,29 +1538,31 @@ sort(rmsd_all[scale(log(rmsd_all)) > 1.65])
 # -------------------------------
 # Visualizations
 # -------------------------------
-# Plot spectrum (similar to Figure 1E)
+# Plot spectrum
 plot(ctspec) 
 
-# Plot size of clusters (similar to Figure 2D)
+# Plot size of clusters (similar to Figure 2E)
 plot(ctset, type="stateSize")
 
 # Plot expression distribution
 plot(ctset, type="stateExpression", feature_name="TECTA")
 
-# Plot latent space
+# Plot latent space (similar to Figure S4F)
 ggp <- plot(ctset, type="latentSpace", pheno_type="state"); ggp
 plot(ctset, type="latentSpace", pheno_type="FM143", viz=ggp)
 plot(ctset, type="latentSpace", feature_name="TECTA", viz=ggp)
 
 # Plot state trajectory graph (similar to Figure 1G)
-plot(ctset, type="stateTrajectoryGraph", component=1, pheno_type="FM143", point_size=1.5, label_offset=4)
-plot(ctset, type="stateTrajectoryGraph", component=1, pheno_type="ORIGIN", point_size=1.5, label_offset=4)
+plot(ctset, type="stateTrajectoryGraph", component=1, pheno_type="FM143", 
+     point_size=1.5, label_offset=4)
+plot(ctset, type="stateTrajectoryGraph", component=1, pheno_type="ORIGIN", 
+     point_size=1.5, label_offset=4)
 plot(ctset, type="stateTrajectoryGraph", component=1, feature_name="CALB2")
 
-# Plot trajectory fit (similar to Figure 2F)
+# Plot trajectory fit (similar to Figure 2E)
 plot(ctset, type="trajectoryFit", rev=TRUE)
 
-# Plot CellTrails maps (similar to Figure 3)
+# Plot CellTrails maps (similar to Figure 3 and Table S2)
 plot(ctset, type="map", pheno_type="ORIGIN")
 plot(ctset, type="map", pheno_type="FM143")
 plot(ctset, type="map", feature_name="LOXHD1")
@@ -1534,14 +1586,20 @@ plot(ctset, type="trail", trail_name="TrS")
 plot(ctset, type="trail", trail_name="TrES")
 plot(ctset, type="trail", trail_name="TrES*")
 
-# Plot single dynamics (similar to Figure 4B)
+# Plot single dynamics (similar to Figure 4B,G and Table S2)
 plot(ctset, type="dynamic", feature_name="CALB2", trail_name="TrES")
 plot(ctset, type="dynamic", feature_name="ATP2B2", trail_name="TrES")
 
 # Compare dynamics (similar to Figure 6A)
-plot(ctset, type="dynamic", feature_name=c("TECTA", "OTOA", "ATOH1", "POU4F3", "MYO7A", "CALB2", "SYN3", "SKOR2", "ATP2B2", "LOXHD1", "MYO3A", "TMC2", "TNNC2"), trail_name="TrES")
+plot(ctset, type="dynamic", feature_name=c("TECTA", "OTOA", "ATOH1", "POU4F3", 
+                                           "MYO7A", "CALB2", "SYN3", "SKOR2", 
+                                           "ATP2B2", "LOXHD1", "MYO3A", "TMC2", 
+                                           "TNNC2"), trail_name="TrES")
 
-plot(ctset, type="dynamic", feature_name=c("TECTA", "OTOA", "ATOH1", "POU4F3", "MYO7A", "CALB2", "SYN3", "SKOR2", "ATP2B2", "LOXHD1", "MYO3A", "TMC2", "TNNC2"), trail_name="TrS")
+plot(ctset, type="dynamic", feature_name=c("TECTA", "OTOA", "ATOH1", "POU4F3", 
+                                           "MYO7A", "CALB2", "SYN3", "SKOR2", 
+                                           "ATP2B2", "LOXHD1", "MYO3A", "TMC2", 
+                                           "TNNC2"), trail_name="TrS")
 ```
 
 ### Mouse P1 Utricle Data
@@ -1586,7 +1644,7 @@ trajectoryLayout(ctset, adjust=TRUE) <- trajLayouts$mmu_p1_utricle
 ctset <- addTrail(ctset, from="H1", to="H3", name="Tr1")
 ctset <- addTrail(ctset, from="H1", to="H2", name="Tr2")
 
-# Inter-trail comparison (similar to Figure 5H)
+# Inter-trail comparison
 rmsd_all <- contrastTrailExpr(ctset, trail_names=c("Tr1", "Tr2"))
 rmsd_all <- rmsd_all[rmsd_all > 0]
 sort(rmsd_all[scale(log(rmsd_all)) > 1.65])
@@ -1599,7 +1657,8 @@ registerDoSNOW(cpu.cl)
 fnames <- featureNames(ctset)
 all_rmsd <- foreach(i=seq_along(fnames), .combine=rbind)  %dopar%  {
   g <- fnames[i]
-  CellTrails::contrastTrailExpr(ctset, feature_name=g, trail_names=c("Tr1", "Tr2"), score="RMSD")
+  CellTrails::contrastTrailExpr(ctset, feature_name=g, 
+                                trail_names=c("Tr1", "Tr2"), score="RMSD")
 }
 stopCluster(cpu.cl)
 all_rmsd <- all_rmsd[, 1]
@@ -1628,7 +1687,8 @@ ggp <- plot(ctset, type="latentSpace", pheno_type="gate"); ggp
 plot(ctset, type="latentSpace", feature_name="Myo7a", viz=ggp)
 
 # Plot state trajectory graph
-plot(ctset, type="stateTrajectoryGraph", component=1, pheno_type="gate", point_size=2, label_offset=5)
+plot(ctset, type="stateTrajectoryGraph", component=1, pheno_type="gate", 
+     point_size=2, label_offset=5)
 plot(ctset, type="stateTrajectoryGraph", component=1, feature_name="Sox2")
 
 # Plot CellTrails maps (similar to Figure 7C-E)
@@ -1656,7 +1716,7 @@ plot(ctset, type="dynamic", feature_name="AI593442", trail_name="Tr1")
 plot(ctset, type="dynamic", feature_name=c("Fscn1", "Fscn2"), trail_name="Tr2")
 ```
 
-## RUNTIME
+## Runtime
 In this section, we illustrate that a *CellTrails* analysis can be performed in a reasonable period of time. The elapsed computational runtime of each function was measured on a MacBook Pro (Early 2015) with a 3.1 GHz Intel Core i7 processor, 16 GB 1867 MHz DDR3 RAM, and an Intel Iris Graphics 6100 1536 MB graphics card.
 
 ### Protocol: Chicken E15 Utricle Data
@@ -1733,9 +1793,9 @@ df <- data.frame(f)
 knitr::kable(df, col.names=c("Function", "Elapsed time (seconds)"), align=c("l", "r"))
 ```
 
-Total time: about 10 to 11 minutes. Let's assume that computing the layout takes about two minutes (starting *yEd*, running the layouter, saving the file), then the total runtime is up to 15 minutes. Please note that the runtime of `contrastTrailExpr` can be reduced to about 4 minutes (241.95s) from about 10 minutes using parallel computing.
+Total time: about 10 to 11 minutes. Let's assume that computing the layout takes about two minutes (starting *yEd*, running the layouter, saving the file), then the total runtime is up to 15 minutes. Of note, the runtime of `contrastTrailExpr` can be reduced to about 4 minutes (241.95s) from about 10 minutes using parallel computing.
 
-## SESSION INFO
+## Session Info
 We used _yEd_ version 3.14.4.
 In the following we provide the information about the _R_ session and the system used to compile this document:
 
@@ -1744,7 +1804,7 @@ sessionInfo()
 ```
 
 <!-- ---------------------------------- -->
-##REFERENCES
+## References
 <!-- ---------------------------------- -->
 
 <!-- ---------------------------------- -->
