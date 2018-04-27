@@ -763,9 +763,21 @@ dim(latentSpace(ctset))
 We suggest to assess the resulting Scree plot (eigengaps versus spectrum size) for whether the estimation of the unknown intrinsic dimensionality was reasonable. Otherwise, we recommend to adjust the parameter `frac` accordingly. 
 
 *Please note*, that considering too few components of the latent space may result in loss of information, while selecting lower ranked components could increase noise.
+<<<<<<< HEAD
 
 *CellTrails* allows us to visualize the truncated latent space. *CellTrails'* plot function with the parameter `type="latentSpace"` uses t-distributed stochastic neighbor embedding [@vdmaaten2008] to illustrate the arrangement of the samples in the (in this example: 9-dimensional) latent space in a two-dimensional plot. To reduce computational time, a previously computed tSNE can be re-used. Points denote individual cells, the colorization indicates either a metadata label (here: FM1-43 dye uptake) or expression of a single feature (here: gene *MYO7A*). 
 
+=======
+<<<<<<< HEAD
+
+*CellTrails* allows us to visualize the truncated latent space. *CellTrails'* plot function with the parameter `type="latentSpace"` uses t-distributed stochastic neighbor embedding [@vdmaaten2008] to illustrate the arrangement of the samples in the (in this example: 9-dimensional) latent space in a two-dimensional plot. To reduce computational time, a previously computed tSNE can be re-used. Points denote individual cells, the colorization indicates either a metadata label (here: FM1-43 dye uptake) or expression of a single feature (here: gene *MYO7A*). 
+
+=======
+
+*CellTrails* allows us to visualize the truncated latent space. *CellTrails'* plot function with the parameter `type="latentSpace"` uses t-distributed stochastic neighbor embedding [@vdmaaten2008] to illustrate the arrangement of the samples in the (in this example: 9-dimensional) latent space in a two-dimensional plot. To reduce computational time, a previously computed tSNE can be re-used. Points denote individual cells, the colorization indicates either a metadata label (here: FM1-43 dye uptake) or expression of a single feature (here: gene *MYO7A*). 
+
+>>>>>>> 74707c50e8924fcf52ace4ca40baece11142a215
+>>>>>>> 06b54eae0e86729f3ece106c92b2a34d441f5bb8
 *Please note*, that empty points denote a missing label or missing expression value (non-detects). The optional parameters `seed` and `perplexity` are passed to the Barnes-Hut implementation of t-distributed stochastic neighbor embedding.
 
 ```{r, eval=TRUE}
