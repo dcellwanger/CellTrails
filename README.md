@@ -40,4 +40,4 @@ library(CellTrails)
 
 We also recommend to download and install the graph visualization software _yEd_ (http://www.yworks.com/products/yed). It provides great capabilities to visualize and analyze a trajectory graph produced by *CellTrails*.
 
-__Please, refer to the [vignette](https://github.com/elldc/CellTrails/blob/master/vignettes/vignette.html) (needs to be downloaded) for a detailed explanation and instruction on how to use CellTrails.__
+__Please, refer to the [vignette](https://elldc.github.io/CellTrails/) for a detailed explanation and instruction on how to use CellTrails.__
