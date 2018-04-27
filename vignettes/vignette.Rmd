@@ -19,7 +19,7 @@ abstract: |
   
   We confirmed that _CellTrails_ can be applied to analysis of single-cell RNA-Seq datasets. We are pleased that you consider using _CellTrails_ in your research. A detailed theoretical description of the algorithm and its application to biological uses has been published in:
   
-  __Ellwanger DC, Scheibinger M, Dumont RA, Barr-Gillespie PG, and Heller S. "Transcriptional dynamics of hair-bundle morphogenesis revealed with CellTrails". _Cell Reports_ Date;Issue.__
+  __Ellwanger DC, Scheibinger M, Dumont RA, Barr-Gillespie PG, and Heller S. "Transcriptional dynamics of hair-bundle morphogenesis revealed with CellTrails". Journal_ Date;Issue.__
 
 output: 
   BiocStyle::html_document2:
@@ -35,6 +35,19 @@ vignette: |
   %\VignetteEncoding{UTF-8}
 
 references:
+- id: biocvig
+  title: 'An Introduction to Bioconductor’s ExpressionSet Class.'
+  author:
+  - family: Falcon
+    given: S.
+  - family: Morgan
+    given: M.
+  - family: Gentleman
+    given: R.
+  issued:
+    year: 2007
+  URL: http://bioconductor.org/packages/release/bioc/vignettes/Biobase/inst/doc/ExpressionSetIntroduction.pdf
+  
 - id: vdmaaten2008
   title: 'Visualizing high-dimensional data using t-SNE.'
   author:
@@ -540,7 +553,7 @@ In the following those steps will be illustrated in detail.
 *CellTrails* organizes its data in a container called `CellTrailsSet`. This class extends the class `ExpressionSet` from the `r Biocpkg("Biobase")` package [@biobase] and provides all attributes required for smooth and user-friendly data processing. In the following, it is described how to initialize, manipulate and display an object of this class.
 
 ## INITIALIZATION: ExpressionSet
-The class `ExpressionSet` is part of the `r Biocpkg("Biobase")` package, which provides base functions for _Bioconductor_[^5]. It allows for intuitive organizing of quantitative expression data and experimental metadata. To make best use of *CellTrails* (and other _Bioconductor_ packages), it is recommended to store individual datasets in a `ExpressionSet` object. For further details on this class, please refer to _An Introduction to Bioconductor's ExpressionSet Class_[^6] by Seth Falcon, Martin Morgan, and Robert Gentleman.
+The class `ExpressionSet` is part of the `r Biocpkg("Biobase")` package, which provides base functions for [_Bioconductor_](http://bioconductor.org). It allows for intuitive organizing of quantitative expression data and experimental metadata. To make best use of *CellTrails* (and other _Bioconductor_ packages), it is recommended to store individual datasets in a `ExpressionSet` object. For further details on this class, please refer to its [vignette](http://bioconductor.org/packages/release/bioc/vignettes/Biobase/inst/doc/ExpressionSetIntroduction.pdf) [@biocvig].
 
 A ``CellTrailsSet`` can be initialized from an `ExpressionSet` object as follows:
 
@@ -623,7 +636,7 @@ The _assayData_, _featureData_ and _phenoData_ sections correspond to informatio
 * _trailNames_: Names of user-defined trails, i.e. paths between landmarks (branch or end points) along the trajectory.
 
 ### Plot
-There are several ways to visualize the data contained in a `CellTrailsSet` object using the function `plot(object, type, ...)`. The function returns a `ggplot` object[^7] [@ggplot2] from the `r CRANpkg("ggplot2")` package, which can be adapted by the user's needs and preferences. Detailed information on each plot type is provided in the function's documentation (call `?plot.CellTrailsSet`). The available plot types are:
+There are several ways to visualize the data contained in a `CellTrailsSet` object using the function `plot(object, type, ...)`. The function returns a `ggplot` object [@ggplot2] from the `r CRANpkg("ggplot2")` package, which can be adapted by the user's needs and preferences. Detailed information on each plot type is provided in the function's documentation (call `?plot.CellTrailsSet`). The available plot types are:
 
 ##### type
 
@@ -807,7 +820,7 @@ enrichment.test(deMarkers, nMarkers, deGenes, nGenes)
               n_genes-n_genes_de+n_marker_de), ncol=2)-->
 Since the enrichment is not significant (with an odds ratio < 1), we argue that cells were not properly separated by maturity in the original space.
 
-To block the cell cycle effects, *CellTrails* expects a design matrix modeling the cell cycle stage as the explanatory factor for each cell. As the cell-cycle stage of each cell is not known in this data set, we need to predict cell cycle phases. In this example, we use the classifier `cyclon` from the `r Biocpkg("scran")` package [@scran][^8]. To be able to run the algrithm properly, gene symbols were translated to Ensembl identifiers using Bioconductors' annotation database interface package `r Biocpkg("AnnotationDbi")` [@annotationdbi][^9] and the mouse annotation data package `r Biocpkg("org.Mm.eg.db")` [@orgmmegdb][^10]. Please note that these packages are not part of *CellTrails* and may needed to be installed first (see footnotes for details).
+To block the cell cycle effects, *CellTrails* expects a design matrix modeling the cell cycle stage as the explanatory factor for each cell. As the cell-cycle stage of each cell is not known in this data set, we need to predict cell cycle phases. In this example, we use the classifier `cyclon` from the `r Biocpkg("scran")` package [@scran]. To be able to run the algrithm properly, gene symbols were translated to Ensembl identifiers using Bioconductors' annotation database interface package `r Biocpkg("AnnotationDbi")` [@annotationdbi] and the mouse annotation data package `r Biocpkg("org.Mm.eg.db")` [@orgmmegdb]. Please note that these packages are not part of *CellTrails* and may needed to be installed first (see footnotes for details).
 
 ```{r, eval=TRUE, message=FALSE, warning=FALSE}
 # Run cyclone
@@ -894,7 +907,7 @@ c("Odds ratio" = or, "P-value" = p)
 Besides cell cycle, technical confounders may also be relevant to be accounted for. Those can occur, for example, if cells were processed on different plates or if cells were pooled from multiple sequencing runs. In this case, a design matrix with the respective explanatory variables can be constructed and passed to `embedSamples`.
 
 ## USING ALTERNATIVE DIMENSIONALITY REDUCTION METHODS
-If the user prefers to use an alternative approach for dimensionality reduction, the latent space can be set to a `CellTrailsSet` object with `latentSpace<-`. The latent space has to be a numerical matrix; rows represent samples and columns the components of the latent space. *CellTrails* uses by default spectral embedding, but the framework also operates well with any other spectral dimensionality reduction method, such as PCA (available in *CellTrails* via function `pca`) and diffusion maps (available via the `r Biocpkg("destiny")` package [@destiny][^11]):
+If the user prefers to use an alternative approach for dimensionality reduction, the latent space can be set to a `CellTrailsSet` object with `latentSpace<-`. The latent space has to be a numerical matrix; rows represent samples and columns the components of the latent space. *CellTrails* uses by default spectral embedding, but the framework also operates well with any other spectral dimensionality reduction method, such as PCA (available in *CellTrails* via function `pca`) and diffusion maps (available via the `r Biocpkg("destiny")` package [@destiny]):
 
 ```{r, eval=TRUE}
 # Create CellTrailsSet object
@@ -1024,7 +1037,7 @@ plot(ctset, type="trajectoryFit", rev=TRUE)
 ## GRAPH LAYOUT
 
 *CellTrails* portrays a computed trajectory as collection of trails that can be found in a landscape shaped by individual gene expression dynamics. To generate such a topographic trail map - the *CellTrails* map - a two-dimensional spatiotemporal ordination of the expression matrix has to be computed. This can be done by any graph layout algorithm using the structural information from the trajectory graph, which is composed of nodes (=samples) and edges (=chronological relation between samples). 
-We found that the freely available graph visualization software _yEd_[^12] (http://www.yworks.com/products/yed) has great capabilities to visualize and analyze a trajectory graph. An optimal layout is planar, i.e. it exhibits no crossing edges or overlapping nodes.
+We found that the freely available graph visualization software _yEd_ (http://www.yworks.com/products/yed) has great capabilities to visualize and analyze a trajectory graph. An optimal layout is planar, i.e. it exhibits no crossing edges or overlapping nodes.
 
 Therefore, *CellTrails* enables to export and import the trajectory graph structure using the common _graphml_ file format. This file format can be interpreted by most third-party graph analysis applications, allowing the user to subject the trajectory graph to a wide range of (tree) layout algorithms. In particular, the exported file has additional ygraph attributes best suited to be used with _yEd_, which is freely available for all major platforms (Windows, Mac OS, and Linux).
 
@@ -1404,7 +1417,7 @@ sort(all_rmsd[zscores > 1.65])
 ```
 
 ## PARALLELIZATION
-In the case one wants to compare a large number of features (e.g. from an RNA-Seq experiment), the computation can be significantly sped up by parallel computing. In this example, we use the package `r CRANpkg("doSNOW")`[^13], but any other package may also be used for this purpose.
+In the case one wants to compare a large number of features (e.g. from an RNA-Seq experiment), the computation can be significantly sped up by parallel computing. In this example, we use the package `r CRANpkg("doSNOW")`, but any other package may also be used for this purpose.
 
 ```{r, eval=FALSE}
 library(doSNOW)
@@ -1533,7 +1546,7 @@ plot(ctset, type="dynamic", feature_name=c("TECTA", "OTOA", "ATOH1", "POU4F3", "
 
 ### Mouse P1 Utricle Data
 
-In the following, we provide a protocol to analyze the publicly-available dataset containing single-cell RNASeq measurements of 14,313 genes in 120 cells from P1 mouse utricles (*GEO*[^4] accession code: GSE71982). Experimental metadata was generated during cell sorting (GFP and tdTomato fluorescence indicating major cell types). The processed data (`mmu_p1_utricle.rda`) can be downloaded as `Biobase::ExpressionSet` from here. 
+In the following, we provide a protocol to analyze the publicly-available dataset containing single-cell RNASeq measurements of 14,313 genes in 120 cells from P1 mouse utricles ([*GEO*](https://www.ncbi.nlm.nih.gov/geo/) accession code: GSE71982). Experimental metadata was generated during cell sorting (GFP and tdTomato fluorescence indicating major cell types). The processed data (`mmu_p1_utricle.rda`) can be downloaded as `Biobase::ExpressionSet` from here. 
 
 If you use this dataset for your research, please cite:
 
@@ -1737,16 +1750,4 @@ sessionInfo()
 <!-- ---------------------------------- -->
 <!-- FOOTNOTES ------------------------ --> 
 <!-- ---------------------------------- -->
-[^1]: _R_: https://www.r-project.org
-[^2]: _Rstudio_: https://www.rstudio.com/
-[^3]: _Emacs_: https://www.gnu.org/software/emacs/
-[^4]: _GEO_: https://www.ncbi.nlm.nih.gov/geo
-[^5]: _Bioconductor_: http://bioconductor.org
-[^6]: http://bioconductor.org/packages/release/bioc/vignettes/Biobase/inst/doc/ExpressionSetIntroduction.pdf
-[^7]: _ggplot2_: http://ggplot2.org
-[^8]: _scran_: https://doi.org/doi:10.18129/B9.bioc.scran
-[^9]: _AnnotationDbi_: https://doi.org/doi:10.18129/B9.bioc.AnnotationDbi
-[^10]: _org.Mm.eg.db_: https://doi.org/doi:10.18129/B9.bioc.org.Mm.eg.db
-[^11]: _destiny_: https://bioconductor.org/packages/release/bioc/html/destiny.html 
-[^12]: _yEd_: http://www.yworks.com/products/yed
-[^13]: _doSNOW_: https://cran.r-project.org/package=doSNOW
+[^1]: http://www.yworks.com/products/yed
