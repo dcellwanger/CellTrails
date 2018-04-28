@@ -205,7 +205,7 @@
   }
 }
 
-#' Denoises expression using linear regression
+#' Denoises expression
 #'
 #' Blocks factors in expression matrix
 #' @param x A numeric expression vector
