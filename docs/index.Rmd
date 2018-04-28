@@ -1618,7 +1618,7 @@ Burns JC, Kelly MC, Hoa M, Morell RJ, Kelley MW. "Single-cell RNA-Seq resolves c
 load("mmu_p1_utricle.rda")
 
 # Create Container
-ctset <- as.CellTrailsSet(mmu_P1_utricle)
+ctset <- as.CellTrailsSet(mmu_p1_utricle)
 
 # Feature Selection
 ctset <- filterFeaturesByDL(ctset, threshold=2)
