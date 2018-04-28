@@ -21,7 +21,8 @@ Encoding: UTF-8
 LazyData: true
 VignetteBuilder: knitr
 Depends: R (>= 3.4), Biobase
-Imports: 
+Imports:
+  BiocStyle,
   cba,
   dendextend,
   depth,
@@ -42,7 +43,6 @@ Imports:
   viridis,
   utils
 Suggests: 
-  BiocStyle,
   destiny, 
   scran, 
   knitr,
