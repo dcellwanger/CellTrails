@@ -22,14 +22,14 @@ abstract: |
   __Ellwanger DC, Scheibinger M, Dumont RA, Barr-Gillespie PG, and Heller S. "Transcriptional dynamics of hair-bundle morphogenesis revealed with CellTrails". Journal_ Date;Issue.__
 
 output: 
-  BiocStyle::html_document2:
+  BiocStyle::html_document:
     toc: true
     toc_depth: 2
     toc_float: true
     fig_width: 4.5
     fig_height: 3.5
 vignette: |
-  %\VignetteIndexEntry{CellTrails Vignette}
+  %\VignetteIndexEntry{Workflow}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 
