@@ -35,7 +35,7 @@ if(require("devtools")) {
 }
 ```
 
-**If you are using MacOS**, please note that _CellTrails_ makes use of a library, which depends on _XQuartz_. If your system does not have _XQuartz_ installed yet, you can download it from http://xquartz.org.
+**If you are using Mac OS X**, please note that _CellTrails_ makes use of a library, which depends on _XQuartz_, a version of the X.Org X Window System that runs on OS X. If your system does not have _XQuartz_ installed yet, you need to download it from http://xquartz.org.
 
 **We also recommend** to download and install the graph visualization software _yEd_ (http://www.yworks.com/products/yed). It provides great capabilities to visualize and analyze a trajectory graph produced by *CellTrails*.
 
