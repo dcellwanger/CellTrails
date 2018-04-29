@@ -35,11 +35,13 @@ if(require("devtools")) {
 }
 ```
 
+**If you are using MacOS**, please note that _CellTrails_ makes use of a library, which depends on _XQuartz_. If your system does not have _XQuartz_ installed yet, you can download it from http://xquartz.org.
+
+**We also recommend** to download and install the graph visualization software _yEd_ (http://www.yworks.com/products/yed). It provides great capabilities to visualize and analyze a trajectory graph produced by *CellTrails*.
+
 Before ready to use, the *CellTrails* library must be loaded into the _R_ environment:
 ```
 library(CellTrails)
 ```
-
-We also recommend to download and install the graph visualization software _yEd_ (http://www.yworks.com/products/yed). It provides great capabilities to visualize and analyze a trajectory graph produced by *CellTrails*.
 
 __Please, refer to the [vignette](https://elldc.github.io/CellTrails/) for a detailed explanation and instruction on how to use CellTrails.__
