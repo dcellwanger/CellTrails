@@ -88,7 +88,6 @@ setClass("CellTrailsSet",
 )
 
 # setMethod("initialize", "CellTrailsSet", function(.Object, ...) {
-#   print("BLUBB")
 #   #.Object <- new("CellTrailsSet") #callNextMethod()
 #   if(class(assayData) == "ExpressionSet") {
 #     .Object@assayData = assayData@assayData

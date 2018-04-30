@@ -434,26 +434,17 @@ library(CellTrails)
 ```
 -->
 
-
-
-
-<!-- ---------------------------------- -->
-# Example Dataset
-<!-- ---------------------------------- -->
-The *CellTrails* package comes with an example dataset (of class `ExpressionSet` from the `r Biocpkg("Biobase")` package), which can be loaded with the function `data`.
-
-```{r, eval=T}
-# Load example data
-data("gga_e15_utricle")
-```
-
-This dataset contains transcript expression profiles of 183 genes expressed during sensory hair cell bundle maturation and function, which were quantified in the chicken utricle sensory epithelium at embryonic day 15 using multiplex RT-qPCR. Experimental metadata was generated during tissue preparation (cell origin) and cell sorting (uptake of FM1-43 dye indicating cell maturity). This data set is the foundation used for the development of *CellTrails*. If you use this dataset for your research, please cite:
-
-Ellwanger DC, Scheibinger M, Dumont RA, Barr-Gillespie PG, and Heller S. "Transcriptional dynamics of hair-bundle morphogenesis revealed with CellTrails". *Journal* Date;Issue. doi: 
-
 <!-- ---------------------------------- -->
 # Quickstart Guide
 <!-- ---------------------------------- -->
+Before ready to use, the *CellTrails* libraries must be loaded into the _R_ environment:
+
+```{r, eval=TRUE, message=FALSE, warning=FALSE}
+library(CellTrails)
+```
+
+**Please note**, that we recommend to use *CellTrails* with filtered and log-normalized expression data without spike-in controls.
+
 The following illustrates the typical sequence of steps performed during a *CellTrails* analysis. Shown is the signature of each function as provided in the *CellTrails* package documentation (call `?name_of_function`):
 
 ```{r eval=FALSE}
@@ -551,9 +542,25 @@ contrastTrailExpr(ctset, feature_name, trail_names, score)
 In the following those steps will be illustrated in detail.
 
 <!-- ---------------------------------- -->
+# Example Dataset
+<!-- ---------------------------------- -->
+The *CellTrails* package comes with an example dataset (of class `ExpressionSet` from the `r Biocpkg("Biobase")` package), which can be loaded with the function `data`.
+
+```{r, eval=T}
+# Load example data
+data("gga_e15_utricle")
+```
+
+This dataset contains transcript expression profiles of 183 genes expressed during sensory hair cell bundle maturation and function, which were quantified in the chicken utricle sensory epithelium at embryonic day 15 using multiplex RT-qPCR. Experimental metadata was generated during tissue preparation (cell origin) and cell sorting (uptake of FM1-43 dye indicating cell maturity). This data set is the foundation used for the development of *CellTrails*. If you use this dataset for your research, please cite:
+
+Ellwanger DC, Scheibinger M, Dumont RA, Barr-Gillespie PG, and Heller S. "Transcriptional dynamics of hair-bundle morphogenesis revealed with CellTrails". *Journal* Date;Issue. doi: 
+
+<!-- ---------------------------------- -->
 # Container
 <!-- ---------------------------------- -->
-*CellTrails* organizes its data in a container called `CellTrailsSet`. This class extends the class `ExpressionSet` from the `r Biocpkg("Biobase")` package [@biobase] and provides all attributes required for smooth and user-friendly data processing. In the following, it is described how to initialize, manipulate and display an object of this class.
+*CellTrails* organizes its data in a container called `CellTrailsSet`. This class extends the class `ExpressionSet` from the `r Biocpkg("Biobase")` package [@biobase] and provides all attributes required for smooth and user-friendly data processing.
+
+In the following, it is described how to initialize, manipulate and display an object of this class.
 
 ## From ExpressionSet
 The class `ExpressionSet` is part of the `r Biocpkg("Biobase")` package, which provides base functions for [_Bioconductor_](http://bioconductor.org). It allows for intuitive organizing of quantitative expression data and experimental metadata. To make best use of *CellTrails* (and other _Bioconductor_ packages), it is recommended to store individual datasets in a `ExpressionSet` object. For further details on this class, please refer to its [vignette](http://bioconductor.org/packages/release/bioc/vignettes/Biobase/inst/doc/ExpressionSetIntroduction.pdf) [@biocvig].

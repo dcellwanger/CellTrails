@@ -27,7 +27,7 @@ if(!require("devtools")) {
   install.packages("devtools")
 } 
 if(require("devtools")) {
-  install_github("elldc/CellTrails", build_vignettes=TRUE)
+  install_github("dcellwanger/CellTrails", build_vignettes=TRUE)
 } else {
   stop("Could not load package 'devtools'.")
 }
