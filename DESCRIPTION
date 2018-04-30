@@ -4,8 +4,8 @@ Title: Reconstruction, visualization and analysis of branching trajectories
 Version: 0.99.0
 Author: Daniel Christian Ellwanger [aut,cre]
 Authors@R: person(given="Daniel", family="Ellwanger", 
-  role=c("aut", "cre"), email="elldc.dev@gmail.com")
-Maintainer: Daniel Christian Ellwanger <elldc.dev@gmail.com>
+  role=c("aut", "cre"), email="dc.ellwanger.dev@gmail.com")
+Maintainer: Daniel Christian Ellwanger <dc.ellwanger.dev@gmail.com>
 Description: CellTrails is an unsupervised algorithm for the de novo 
   chronological ordering, visualization and analysis of single-cell expression 
   data. CellTrails makes use of a geometrically motivated concept of 
