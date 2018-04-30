@@ -152,7 +152,7 @@ contrastTrailExpr(ctset, feature_name, trail_names, score)
 <!-- ---------------------------------- -->
 # Detailed Tutorial
 <!-- ---------------------------------- -->
-**Each step of an typical _CellTrails_ analysis workflow is illustrated, described and explained in detail in this [tutorial](https://elldc.github.io/CellTrails/).**
+**Each step of an typical _CellTrails_ analysis workflow is illustrated, described and explained in detail in this [tutorial](https://dcellwanger.github.io/CellTrails/).**
 
 <!-- ---------------------------------- -->
 # Example Dataset
@@ -168,5 +168,5 @@ This dataset contains transcript expression profiles of 183 genes expressed duri
 
 Ellwanger DC, Scheibinger M, Dumont RA, Barr-Gillespie PG, and Heller S. "Transcriptional dynamics of hair-bundle morphogenesis revealed with CellTrails". *Journal* Date;Issue. doi: 
 
-The protocol used to analyze this dataset with *CellTrails* can be obtained [here](https://elldc.github.io/CellTrails/#101_protocols).
+The protocol used to analyze this dataset with *CellTrails* can be obtained [here](https://dcellwanger.github.io/CellTrails/#101_protocols).
 
