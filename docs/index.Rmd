@@ -7,7 +7,6 @@ author:
   email: "elldc.dev@gmail.com"
 - name: "Stefan Heller"
   affiliation: "Department of Otolaryngology - Head & Neck Surgery, and Institute for Stem Cell Biology and Regenerative Medicine, Stanford University School of Medicine, Stanford, CA 94305, USA"
-  email: "hellers@stanford.edu"
 package: "CellTrails"
 tags: ["Trajectory reconstruction", "Dimensionality reduction", "Clustering", "Single-cell", "Machine learning"]
 abstract: |

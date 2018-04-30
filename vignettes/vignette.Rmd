@@ -7,7 +7,6 @@ author:
   email: "elldc.dev@gmail.com"
 - name: "Stefan Heller"
   affiliation: "Department of Otolaryngology - Head & Neck Surgery, and Institute for Stem Cell Biology and Regenerative Medicine, Stanford University School of Medicine, Stanford, CA 94305, USA"
-  email: "hellers@stanford.edu"
 package: "CellTrails"
 tags: ["Trajectory reconstruction", "Dimensionality reduction", "Clustering", "Single-cell", "Machine learning"]
 abstract: |
@@ -40,6 +39,12 @@ knitr::opts_chunk$set(echo=TRUE) #, fig.width=4.5, fig.height=3.5, dpi=300 fig.a
 ```
 
 <!-- ---------------------------------- -->
+# Prerequisites
+<!-- ---------------------------------- -->
+
+We recommend to download and install the graph visualization software yEd (http://www.yworks.com/products/yed). It provides great capabilities to visualize and analyze a trajectory graph produced by _CellTrails_.
+
+<!-- ---------------------------------- -->
 # Quickstart Guide
 <!-- ---------------------------------- -->
 Before ready to use, the *CellTrails* libraries must be loaded into the _R_ environment:
@@ -47,8 +52,6 @@ Before ready to use, the *CellTrails* libraries must be loaded into the _R_ envi
 ```{r, eval=TRUE, message=FALSE, warning=FALSE}
 library(CellTrails)
 ```
-
-**We recommend to download and install the graph visualization software yEd (http://www.yworks.com/products/yed). It provides great capabilities to visualize and analyze a trajectory graph produced by _CellTrails_.**
 
 The following illustrates the typical workflow of a *CellTrails* analysis. Shown is the signature of each function as provided in the *CellTrails* package documentation (call `?name_of_function`):
 
