@@ -6,7 +6,7 @@ setClassUnion("igraphOrNULL", members=c("igraph", "NULL"))
 setClassUnion("listOrNULL", members=c("list", "NULL"))
 setClassUnion("dfOrNULL", members=c("data.frame", "NULL"))
 
-#' @import stats methods
+#' @import stats methods BiocStyle
 NULL
 
 ###############################################################################
