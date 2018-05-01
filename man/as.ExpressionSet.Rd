@@ -35,7 +35,5 @@ dat2 <- as.ExpressionSet(ctset)
 dat2
 }
 \seealso{
-\code{\link[Biobase]{ExpressionSet}}
-
 ExpressionSet
 }

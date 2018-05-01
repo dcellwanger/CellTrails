@@ -38,9 +38,6 @@ pca_result <- pca(ctset)
 latentSpace(ctset) <- pca_result$princomp
 eigenvalues(ctset) <- pca_result$variance
 }
-\seealso{
-\code{\link[CellTrails]{CellTrailsSet}}
-}
 \author{
 Daniel C. Ellwanger
 }

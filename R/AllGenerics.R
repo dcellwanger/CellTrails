@@ -20,7 +20,7 @@ NULL
 #' trajectory reconstruction. If the parameter \code{threshold} fullfills
 #' \code{threshold} \eqn{>= 1} it becomes converted to a relative fraction of
 #' the total sample count.
-#' @seealso \code{\link[CellTrails]{CellTrailsSet}}
+# #' @seealso \code{\link[CellTrails]{CellTrailsSet}}
 #' @examples
 #' # Simulate example data
 #' dat <- simulate_exprs(n_features=15000, n_samples=100)
@@ -50,9 +50,9 @@ setMethod("filterFeaturesByDL", "CellTrailsSet", function(ctset, threshold){
 #' numeric value between 0 and 1
 #' @param design A numeric matrix describing the factors that should be blocked
 #' @return An updated \code{CellTrailsSet} object
-#' @seealso \code{\link[CellTrails]{CellTrailsSet}}
-#' \code{\link[CellTrails]{trajectoryFeatures}}
-#' \code{\link[stats]{model.matrix}}
+# #' @seealso \code{\link[CellTrails]{CellTrailsSet}}
+# #' \code{\link[CellTrails]{trajectoryFeatures}}
+# #' \code{\link[stats]{model.matrix}}
 #' @details For each trajectory feature \emph{x} listed in the CellTrailsSet
 #' object the coefficient of variation is computed by
 #' \eqn{CoV(x) = sd(x) / mean(x)}. Features with a CoV(x) greater
@@ -98,9 +98,9 @@ setMethod("filterFeaturesByCOV", "CellTrailsSet",
 #' @param design A numeric matrix describing the factors that should be blocked
 #' for filter procedure (default: 0)
 #' @return An updated \code{CellTrailsSet} object
-#' @seealso \code{\link[CellTrails]{CellTrailsSet}}
-#' \code{\link[CellTrails]{trajectoryFeatures}}
-#' \code{\link[stats]{model.matrix}}
+# #' @seealso \code{\link[CellTrails]{CellTrailsSet}}
+# #' \code{\link[CellTrails]{trajectoryFeatures}}
+# #' \code{\link[stats]{model.matrix}}
 #' @details To identify the most variable features an unsupervised strategy
 #' that controls for the relationship between a features’s average expression
 #' intensity and its expression variability is applied. Features are placed
@@ -215,8 +215,8 @@ setMethod("filterFeaturesByFF", "CellTrailsSet", function(ctset,
 #' The method throws a warning if selected trajectory features generate samples
 #' with zero entropy (e.g., the
 #' samples exclusively contain non-detects, that is all expression values are zero).
-#' @seealso \code{\link[CellTrails]{CellTrailsSet}}
-#' \code{\link[stats]{model.matrix}}
+# #' @seealso \code{\link[CellTrails]{CellTrailsSet}}
+# #' \code{\link[stats]{model.matrix}}
 #' @examples
 #' # Generate example data
 #' dat <- exDat()
@@ -258,7 +258,7 @@ setMethod("embedSamples", "CellTrailsSet", function(ctset, design){
 #' segement plot showing the lagged differences between ordered eigenvalues
 #' (eigengaps). A linear fit is calucated on a fraction of top ranked values
 #' to identify informative eigenvectors.
-#' @seealso \code{\link[CellTrails]{CellTrailsSet}}
+# #' @seealso \code{\link[CellTrails]{CellTrailsSet}}
 #' @examples
 #' # Generate example data
 #' dat <- exDat()
@@ -271,7 +271,9 @@ setMethod("embedSamples", "CellTrailsSet", function(ctset, design){
 #'
 #' # Find spectrum
 #' spectr <- findSpectrum(ctset, frac=25)
+#' \dontrun{
 #' plot(spectr)
+#' }
 #' @docType methods
 #' @aliases findSpectrum,CellTrailsSet-method
 #' @export
@@ -300,9 +302,9 @@ setMethod("findSpectrum", "CellTrailsSet", function(ctset, frac){
 #' object were not embedded yet (ie. the \code{CellTrailsSet} object does not contain a
 #' latent space matrix object; function call \code{latentSpace}
 #' returns NULL; see \code{embedSamples}).
-#' @seealso \code{\link[CellTrails]{latentSpace}}
-#' \code{\link[CellTrails]{embedSamples}}
-#' \code{\link[CellTrails]{findSpectrum}}
+# #' @seealso \code{\link[CellTrails]{latentSpace}}
+# #' \code{\link[CellTrails]{embedSamples}}
+# #' \code{\link[CellTrails]{findSpectrum}}
 #' @examples
 #' # Generate example data
 #' dat <- exDat()
@@ -321,7 +323,9 @@ setMethod("findSpectrum", "CellTrailsSet", function(ctset, frac){
 #' ctset
 #'
 #' dim(latentSpace(ctset))
+#' \dontrun{
 #' plot(ctset, type="latentSpace", feature_name="feature_1")
+#' }
 #' @docType methods
 #' @aliases reduceDimensions,CellTrailsSet-method
 #' @export
@@ -358,8 +362,8 @@ setMethod("reduceDimensions", "CellTrailsSet", function(ctset, ctspec){
 #' the factors that should be blocked and
 #' their values per sample. It is suggested to construct a design matrix with
 #' \code{model.matrix}.
-#' @seealso \code{\link[CellTrails]{CellTrailsSet}}
-#' \code{\link[stats]{model.matrix}}
+# #' @seealso \code{\link[CellTrails]{CellTrailsSet}}
+# #' \code{\link[stats]{model.matrix}}
 #' @examples
 #' # Generate example data
 #' dat <- exDat()
@@ -369,10 +373,11 @@ setMethod("reduceDimensions", "CellTrailsSet", function(ctset, ctspec){
 #'
 #' # Principal component analysis
 #' pca_result <- pca(ctset)
-#'
+#' \dontrun{
 #' barplot(pca_result$variance[seq_len(10)], ylab="Variance",
 #'         names.arg=colnames(pca_result$princomp)[seq_len(10)], las=2)
 #' plot(pca_result$princomp, xlab="PC1", ylab="PC2")
+#' }
 #' @docType methods
 #' @aliases pca,CellTrailsSet-method
 #' @export
@@ -427,8 +432,8 @@ setMethod("pca", "CellTrailsSet", function(ctset, do_scaling, design){
 #' number of samples. If the user intends to use the non-truncated latent space
 #' this message can be ignored, otherwise it is
 #' suggested to reduce the dimensionality (see \code{reduceDimensions}).
-#' @seealso \code{\link[CellTrails]{embedSamples}}
-#' \code{\link[CellTrails]{reduceDimensions}}
+# #' @seealso \code{\link[CellTrails]{embedSamples}}
+# #' \code{\link[CellTrails]{reduceDimensions}}
 #' @examples
 #' # Generate example data
 #' dat <- exDat()
@@ -449,7 +454,9 @@ setMethod("pca", "CellTrailsSet", function(ctset, do_scaling, design){
 #' ctset <- findStates(ctset, max_pval=1e-3, min_feat=4)
 #' ctset
 #'
+#' \dontrun{
 #' plot(ctset, type="stateSize")
+#' }
 #' @references Ward, J.H. (1963). Hierarchical Grouping to Optimize
 #' an Objective Function. Journal of the American Statistical
 #' Association, 58, 236-244.
@@ -599,7 +606,7 @@ setMethod("findStates", "CellTrailsSet", function(ctset, min_size, min_feat,
 #' An error is thrown if the states have not been defined yet;
 #' function \code{findStates}
 #' needs to be called first.
-#' @seealso \code{\link[CellTrails]{findStates}}
+# #' @seealso \code{\link[CellTrails]{findStates}}
 #' @examples
 #' # Generate example data
 #' dat <- exDat()
@@ -623,10 +630,12 @@ setMethod("findStates", "CellTrailsSet", function(ctset, min_size, min_feat,
 #' ctset <- connectStates(ctset, l=20)
 #' ctset
 #'
+#' \dontrun{
 #' plot(ctset, type = "stateTrajectoryGraph",
 #'     feature_name="feature_1", component=1)
 #' plot(ctset, type="stateTrajectoryGraph", pheno_type="age",
 #'     component=1, point_size=2)
+#' }
 #' @references Kruskal, J.B. (1956). On the shortest
 #' spanning subtree of a graph and the traveling salesman problem.
 #' Proc Amer Math Soc 7, 48-50.
@@ -664,7 +673,7 @@ setMethod("connectStates", "CellTrailsSet", function(ctset, l){
 #' function \code{connectStates}
 #' needs to be called first. An error is thrown if an unknown
 #' component (number) is selected.
-#' @seealso \code{\link[CellTrails]{connectStates}}
+# #' @seealso \code{\link[CellTrails]{connectStates}}
 #' @examples
 #' # Generate example data
 #' dat <- exDat()
@@ -744,8 +753,8 @@ setMethod("selectTrajectory", "CellTrailsSet", function(ctset, component){
 #' An error is thrown if an trajectory graph component was not
 #' computed or selected yet; functions \code{connectStates}
 #' and \code{selectTrajectory} need to be run first.
-#' @seealso \code{\link[CellTrails]{connectStates}}
-#' \code{\link[CellTrails]{selectTrajectory}}
+# #' @seealso \code{\link[CellTrails]{connectStates}}
+# #' \code{\link[CellTrails]{selectTrajectory}}
 #' @examples
 #' # Generate example data
 #' dat <- exDat()
@@ -774,7 +783,9 @@ setMethod("selectTrajectory", "CellTrailsSet", function(ctset, component){
 #' # Align samples to trajectory
 #' ctset <- fitTrajectory(ctset)
 #'
+#' \dontrun{
 #' plot(ctset, type="trajectoryFit")
+#' }
 #' @references Bedall, F.K., and Zimmermann, H. (1979).
 #' Algorithm AS143. The mediancentre. Appl Statist 28, 325-328.
 #' @docType methods
@@ -879,8 +890,8 @@ setMethod("fitTrajectory", "CellTrailsSet", function(ctset){
 #' \cr \cr
 #' An error is thrown if the trajectory has not been computed yet; function
 #' \code{fitTrajectory} needs to be called first.
-#' @seealso \code{\link[CellTrails]{fitTrajectory}}
-#' \code{\link[CellTrails]{read.ygraphml}}
+# #' @seealso \code{\link[CellTrails]{fitTrajectory}}
+# #' \code{\link[CellTrails]{read.ygraphml}}
 #' @examples
 #' # Generate example data
 #' dat <- exDat()
@@ -957,7 +968,7 @@ setMethod("write.ygraphml", "CellTrailsSet", function(object, file, feature_name
 #' edge lengths between two nodes (samples)
 #' will then correspond to the inferred pseudotime that separates two samples
 #' along the trajectory.
-#' @seealso \code{\link[CellTrails]{write.ygraphml}}
+# #' @seealso \code{\link[CellTrails]{write.ygraphml}}
 #' @examples
 #' # Generate example data
 #' dat <- exDat()
@@ -1028,7 +1039,7 @@ setMethod("read.ygraphml", "CellTrailsSet", function(ctset, file, adjust){
 #' \emph{j} in state \emph{h} is weighted by the relative fraction of
 #' non-detects of feature \emph{j} in state \emph{h}; detected values are
 #' always assigned weight = 1.
-#' @seealso \code{\link[CellTrails]{addTrail}} \code{\link[mgcv]{gamObject}}
+# #' @seealso \code{\link[CellTrails]{addTrail}} \code{\link[mgcv]{gamObject}}
 #' @examples
 #' # Generate example data
 #' dat <- exDat()
@@ -1245,7 +1256,7 @@ setMethod("contrastTrailExpr", "CellTrailsSet", function(ctset,
 #' ordered top \emph{frac} eigenvalues (eigengaps) and the linear fit.
 #' Values above the linear fit are highlighted and corresponding eigenvalues
 #' were considered to be part of the informative spectrum.
-#' @seealso \code{\link[ggplot2]{ggplot2-package}}
+# #' @seealso \code{\link[ggplot2]{ggplot2-package}}
 #' @examples
 #' # Generate example data
 #' dat <- exDat()
@@ -1260,8 +1271,10 @@ setMethod("contrastTrailExpr", "CellTrailsSet", function(ctset,
 #' spectr <- findSpectrum(ctset, frac=25)
 #'
 #' #Plot
+#' \dontrun{
 #' ggp <- plot(spectr)
 #' ggp
+#' }
 #' @method plot CellTrailsSpectrum
 #' @export
 #' @author Daniel C. Ellwanger
@@ -1360,7 +1373,7 @@ plot.CellTrailsSpectrum <- function(x, ...) {
 #'   smoothing term with four basis dimension and prior weights as defined in function
 #'   \code{fitDynamic}.}
 #' }
-#' @seealso \code{\link[ggplot2]{ggplot2-package}}
+# #' @seealso \code{\link[ggplot2]{ggplot2-package}}
 #' @examples
 #' # Generate example data
 #' dat <- exDat()
@@ -1401,6 +1414,7 @@ plot.CellTrailsSpectrum <- function(x, ...) {
 #' ctset <- addTrail(ctset, from="H1", to="H4", name="Tr2") # Define trail
 #'
 #' # Plot state sizes
+#' \dontrun{
 #' plot(ctset, type="stateSize")
 #'
 #' # Plot gene expression per state
@@ -1433,6 +1447,7 @@ plot.CellTrailsSpectrum <- function(x, ...) {
 #' # Plot expression dynamics
 #' plot(ctset, type="dynamic", feature_name="feature_3", trail_name="Tr1")
 #' plot(ctset, type="dynamic", feature_name=c("feature_1", "feature_10"), trail_name="Tr2")
+#' }
 #' @method plot CellTrailsSet
 #' @export
 #' @author Daniel C. Ellwanger

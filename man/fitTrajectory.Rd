@@ -73,15 +73,13 @@ ctset <- selectTrajectory(ctset, component=1)
 # Align samples to trajectory
 ctset <- fitTrajectory(ctset)
 
+\dontrun{
 plot(ctset, type="trajectoryFit")
+}
 }
 \references{
 Bedall, F.K., and Zimmermann, H. (1979).
 Algorithm AS143. The mediancentre. Appl Statist 28, 325-328.
-}
-\seealso{
-\code{\link[CellTrails]{connectStates}}
-\code{\link[CellTrails]{selectTrajectory}}
 }
 \author{
 Daniel C. Ellwanger

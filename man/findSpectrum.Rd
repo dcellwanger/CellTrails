@@ -38,10 +38,9 @@ ctset <- embedSamples(ctset)
 
 # Find spectrum
 spectr <- findSpectrum(ctset, frac=25)
+\dontrun{
 plot(spectr)
 }
-\seealso{
-\code{\link[CellTrails]{CellTrailsSet}}
 }
 \author{
 Daniel C. Ellwanger

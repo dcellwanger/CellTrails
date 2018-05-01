@@ -8,7 +8,7 @@
 exDat()
 }
 \value{
-An \code{\link[Biobase]{ExpressionSet}}
+An \code{ExpressionSet}
 }
 \description{
 This method serves to generate the example data used to
@@ -23,10 +23,6 @@ resulting expression matrix is then log2-scaled. The expression data consist of
 \examples{
 # Generate example data
 exDat
-}
-\seealso{
-\code{\link[Biobase]{ExpressionSet}}
-\code{\link[CellTrails]{simulate_exprs}}
 }
 \author{
 Daniel C. Ellwanger

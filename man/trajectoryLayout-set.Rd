@@ -66,9 +66,6 @@ ctset <- fitTrajectory(ctset)
 trajectoryLayout(ctset, adjust=TRUE) <- trajLayouts$example
 
 }
-\seealso{
-\code{\link[CellTrails]{CellTrailsSet}}
-}
 \author{
 Daniel C. Ellwanger
 }

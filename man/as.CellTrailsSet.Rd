@@ -53,9 +53,5 @@ ctset2
 ctset3 <- as.CellTrailsSet(dat_sce)
 }
 \seealso{
-\ code{\link[CellTrails]{CellTrailsSet}}
-\code{\link[Biobase]{ExpressionSet}}
-\code{\link[SingleCellExperiment]{SingleCellExperiment}}
-
 ExpressionSet
 }

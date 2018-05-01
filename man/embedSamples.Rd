@@ -106,10 +106,6 @@ Sussman, D.L., Tang, M., Fishkind, D.E., and Priebe, C.E.
 (2012). A Consistent Adjacency Spectral Embedding for Stochastic Blockmodel
 Graphs. J Am Stat Assoc 107, 1119-1128.
 }
-\seealso{
-\code{\link[CellTrails]{CellTrailsSet}}
-\code{\link[stats]{model.matrix}}
-}
 \author{
 Daniel C. Ellwanger
 }

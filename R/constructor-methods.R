@@ -43,7 +43,7 @@ NULL
 #' contains additional phenoData information from the CellTrails
 #' analysis (e.g., the determined states, the pseudotime
 #' along each trail).
-#' @seealso \code{\link[Biobase]{ExpressionSet}}
+# #' @seealso \code{\link[Biobase]{ExpressionSet}}
 #' @examples
 #' # Generate example data
 #' dat <- exDat()
@@ -90,7 +90,7 @@ setMethod("as.ExpressionSet", "CellTrailsSet", function(object){
 #' contains additional \code{colData} information from the CellTrails
 #' analysis (e.g., the determined states, the pseudotime
 #' along each trail).
-#' @seealso \code{\link[SingleCellExperiment]{SingleCellExperiment}}
+# #' @seealso \code{\link[SingleCellExperiment]{SingleCellExperiment}}
 #' @examples
 #' # Generate example data
 #' dat <- exDat()
@@ -144,9 +144,9 @@ setMethod("as.SingleCellExperiment", "CellTrailsSet", function(object){
 #' log-normalized expression data without spike-in controls. To properly coerce
 #' a \code{SingleCellExperiment} into a \code{CellTrailsSet} a \code{logcounts}
 #' assay needs to be defined (see examples).
-#' @seealso\ code{\link[CellTrails]{CellTrailsSet}}
-#' \code{\link[Biobase]{ExpressionSet}}
-#' \code{\link[SingleCellExperiment]{SingleCellExperiment}}
+# #' @seealso\ code{\link[CellTrails]{CellTrailsSet}}
+# #' \code{\link[Biobase]{ExpressionSet}}
+# #' \code{\link[SingleCellExperiment]{SingleCellExperiment}}
 #' @examples
 #' # Generate example data
 #' dat_num <- simulate_exprs(10, 100)

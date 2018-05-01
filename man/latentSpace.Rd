@@ -35,9 +35,6 @@ ctset <- embedSamples(ctset)
 # Get latent space
 latentSpace(ctset)
 }
-\seealso{
-\code{\link[CellTrails]{CellTrailsSet}}
-}
 \author{
 Daniel C. Ellwanger
 }

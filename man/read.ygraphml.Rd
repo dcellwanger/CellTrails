@@ -74,9 +74,6 @@ write.ygraphml(ctset, file="yourFilePath")
 ctset <- read.ygraphml(ctset, file="yourFilePath")
 }
 }
-\seealso{
-\code{\link[CellTrails]{write.ygraphml}}
-}
 \author{
 Daniel C. Ellwanger
 }

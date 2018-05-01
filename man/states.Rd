@@ -43,9 +43,6 @@ ctset <- findStates(ctset, max_pval=1e-3, min_feat=4)
 # Get state assignments
 states(ctset)
 }
-\seealso{
-\code{\link[CellTrails]{CellTrailsSet}}
-}
 \author{
 Daniel C. Ellwanger
 }

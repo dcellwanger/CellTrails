@@ -51,12 +51,9 @@ ctset <- reduceDimensions(ctset, spectr)
 ctset
 
 dim(latentSpace(ctset))
+\dontrun{
 plot(ctset, type="latentSpace", feature_name="feature_1")
 }
-\seealso{
-\code{\link[CellTrails]{latentSpace}}
-\code{\link[CellTrails]{embedSamples}}
-\code{\link[CellTrails]{findSpectrum}}
 }
 \author{
 Daniel C. Ellwanger

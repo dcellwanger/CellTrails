@@ -60,11 +60,6 @@ ctset <- filterFeaturesByFF(ctset, threshold=1.7, min_expr=0)
 
 length(trajectoryFeatures(ctset))
 }
-\seealso{
-\code{\link[CellTrails]{CellTrailsSet}}
-\code{\link[CellTrails]{trajectoryFeatures}}
-\code{\link[stats]{model.matrix}}
-}
 \author{
 Daniel C. Ellwanger
 }

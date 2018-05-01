@@ -85,9 +85,6 @@ fit <- fitDynamic(ctset, feature_name="feature_3", trail_name="Tr1")
 
 summary(fit)
 }
-\seealso{
-\code{\link[CellTrails]{addTrail}} \code{\link[mgcv]{gamObject}}
-}
 \author{
 Daniel C. Ellwanger
 }

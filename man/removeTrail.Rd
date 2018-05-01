@@ -69,9 +69,6 @@ trailNames(ctset)
 ctset <- removeTrail(ctset, name="Tr1")
 trailNames(ctset)
 }
-\seealso{
-\code{\link[CellTrails]{CellTrailsSet}} \code{\link[CellTrails]{trailNames}}
-}
 \author{
 Daniel C. Ellwanger
 }

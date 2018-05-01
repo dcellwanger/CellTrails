@@ -33,9 +33,6 @@ ctset <- as.CellTrailsSet(dat)
 # Get trajectory features
 trajectoryFeatures(ctset)
 }
-\seealso{
-\code{\link[CellTrails]{CellTrailsSet}}
-}
 \author{
 Daniel C. Ellwanger
 }

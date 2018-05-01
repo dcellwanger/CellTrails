@@ -56,10 +56,6 @@ ctset <- fitTrajectory(ctset)
 # Get trajectory fit
 trajectoryFit(ctset)
 }
-\seealso{
-\code{\link[CellTrails]{CellTrailsSet}}
-\code{\link[igraph]{igraph}}
-}
 \author{
 Daniel C. Ellwanger
 }

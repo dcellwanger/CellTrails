@@ -44,9 +44,6 @@ ctset <- as.CellTrailsSet(dat)
 # Set trajectory features
 trajectoryFeatures(ctset) <- Biobase::featureNames(ctset)[1:10]
 }
-\seealso{
-\code{\link[CellTrails]{CellTrailsSet}}
-}
 \author{
 Daniel C. Ellwanger
 }

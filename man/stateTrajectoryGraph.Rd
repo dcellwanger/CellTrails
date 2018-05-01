@@ -49,10 +49,6 @@ ctset <- connectStates(ctset, l=20)
 # Get state trajectory graph
 stateTrajectoryGraph(ctset)
 }
-\seealso{
-\code{\link[CellTrails]{CellTrailsSet}}
-\code{\link[igraph]{igraph}}
-}
 \author{
 Daniel C. Ellwanger
 }

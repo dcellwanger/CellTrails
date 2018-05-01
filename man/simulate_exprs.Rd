@@ -32,9 +32,6 @@ resulting expression matrix is log2-scaled.
 # Matrix with 100 genes and 50 cells
 dat <- simulate_exprs(n_features=100, n_samples=50)
 }
-\seealso{
-\code{\link[stats]{NegBinomial}} and \code{\link[stats]{GammaDist}}
-}
 \author{
 Daniel C. Ellwanger
 }

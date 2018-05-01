@@ -59,10 +59,9 @@ ctset <- addLandmark(ctset, sample_name="C3_sample_10")
 
 # Remove landmark
 ctset <- removeLandmark(ctset, sample_name="C3_sample_10")
+\dontrun{
 plot(ctset, type="trailblazing")
 }
-\seealso{
-\code{\link[CellTrails]{CellTrailsSet}}
 }
 \author{
 Daniel C. Ellwanger

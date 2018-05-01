@@ -56,11 +56,9 @@ trajectoryLayout(ctset, adjust=TRUE) <- trajLayouts$example
 
 # Add user-defined landmark
 ctset <- addLandmark(ctset, sample_name="C3_sample_10")
-
+\dontrun{
 plot(ctset, type="trailblazing")
 }
-\seealso{
-\code{\link[CellTrails]{CellTrailsSet}}
 }
 \author{
 Daniel C. Ellwanger

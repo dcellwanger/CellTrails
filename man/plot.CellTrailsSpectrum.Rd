@@ -38,11 +38,10 @@ ctset <- embedSamples(ctset)
 spectr <- findSpectrum(ctset, frac=25)
 
 #Plot
+\dontrun{
 ggp <- plot(spectr)
 ggp
 }
-\seealso{
-\code{\link[ggplot2]{ggplot2-package}}
 }
 \author{
 Daniel C. Ellwanger

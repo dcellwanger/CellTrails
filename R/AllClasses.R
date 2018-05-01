@@ -56,8 +56,8 @@ NULL
 #' @aliases CellTrailsSet-class
 # #' @exportClass CellTrailsSet
 #' @export
-#' @seealso \code{\link[Biobase]{ExpressionSet}} \code{\link[Biobase]{eSet}}
-#' \code{\link[igraph]{igraph}}
+# #' @seealso \code{\link[Biobase]{ExpressionSet}} \code{\link[Biobase]{eSet}}
+# #' \code{\link[igraph]{igraph}}
 #' @author Daniel C. Ellwanger
 setClass("CellTrailsSet",
          contains = "ExpressionSet",

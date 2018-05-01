@@ -35,9 +35,6 @@ ctset <- as.CellTrailsSet(dat)
 pca_result <- pca(ctset)
 latentSpace(ctset) <- pca_result$princomp
 }
-\seealso{
-\code{\link[CellTrails]{CellTrailsSet}}
-}
 \author{
 Daniel C. Ellwanger
 }

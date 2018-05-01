@@ -53,9 +53,6 @@ ctset <- selectTrajectory(ctset, component=1)
 # Get trajectory samples
 trajectorySamples(ctset)
 }
-\seealso{
-\code{\link[CellTrails]{CellTrailsSet}}
-}
 \author{
 Daniel C. Ellwanger
 }

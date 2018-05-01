@@ -154,6 +154,7 @@ ctset <- addTrail(ctset, from="H1", to="H3", name="Tr1") # Define trail
 ctset <- addTrail(ctset, from="H1", to="H4", name="Tr2") # Define trail
 
 # Plot state sizes
+\dontrun{
 plot(ctset, type="stateSize")
 
 # Plot gene expression per state
@@ -187,13 +188,11 @@ plot(ctset, type="trail", trail_name="Tr1")
 plot(ctset, type="dynamic", feature_name="feature_3", trail_name="Tr1")
 plot(ctset, type="dynamic", feature_name=c("feature_1", "feature_10"), trail_name="Tr2")
 }
+}
 \references{
 van der Maaten, L.J.P. & Hinton, G.E., 2008. Visualizing
 High-Dimensional Data Using t-SNE. Journal of Machine Learning Research,
 9, pp.2579-2605.
-}
-\seealso{
-\code{\link[ggplot2]{ggplot2-package}}
 }
 \author{
 Daniel C. Ellwanger

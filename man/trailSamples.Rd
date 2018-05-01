@@ -62,9 +62,6 @@ ctset <- addTrail(ctset, from="H1", to="H3", name="Tr1") # Define trail
 # Get trail samples
 trailSamples(ctset, trail_name="Tr1")
 }
-\seealso{
-\code{\link[CellTrails]{CellTrailsSet}}
-}
 \author{
 Daniel C. Ellwanger
 }

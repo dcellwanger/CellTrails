@@ -48,14 +48,11 @@ ctset <- as.CellTrailsSet(dat)
 
 # Principal component analysis
 pca_result <- pca(ctset)
-
+\dontrun{
 barplot(pca_result$variance[seq_len(10)], ylab="Variance",
         names.arg=colnames(pca_result$princomp)[seq_len(10)], las=2)
 plot(pca_result$princomp, xlab="PC1", ylab="PC2")
 }
-\seealso{
-\code{\link[CellTrails]{CellTrailsSet}}
-\code{\link[stats]{model.matrix}}
 }
 \author{
 Daniel C. Ellwanger

@@ -61,9 +61,6 @@ ctset <- selectTrajectory(ctset, component=1)
 stateTrajectoryGraph(ctset)
 trajectorySamples(ctset)
 }
-\seealso{
-\code{\link[CellTrails]{connectStates}}
-}
 \author{
 Daniel C. Ellwanger
 }

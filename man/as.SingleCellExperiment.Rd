@@ -34,6 +34,3 @@ ctset <- as.CellTrailsSet(dat)
 dat2 <- as.ExpressionSet(ctset)
 dat2
 }
-\seealso{
-\code{\link[SingleCellExperiment]{SingleCellExperiment}}
-}

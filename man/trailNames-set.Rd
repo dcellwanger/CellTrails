@@ -70,9 +70,6 @@ trailNames(ctset)
 trailNames(ctset) <- c("TrA", "TrB")
 trailNames(ctset)
 }
-\seealso{
-\code{\link[CellTrails]{CellTrailsSet}}
-}
 \author{
 Daniel C. Ellwanger
 }

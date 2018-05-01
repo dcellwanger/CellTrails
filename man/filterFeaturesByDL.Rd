@@ -47,8 +47,6 @@ length(trajectoryFeatures(ctset))
 }
 \seealso{
 \code{trajectoryFeatures}
-
-\code{\link[CellTrails]{CellTrailsSet}}
 }
 \author{
 Daniel C. Ellwanger

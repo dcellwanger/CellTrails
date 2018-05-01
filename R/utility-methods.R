@@ -25,7 +25,7 @@
 
 #' Checks if feature name exists
 #'
-#' @param x A \code{\link{CellTrailsSet}} object
+#' @param x A \code{CellTrailsSet} object
 #' @param feature_name Name of feature
 #' @import Biobase
 #' @keywords internal
@@ -241,7 +241,7 @@
 #' @details RNA-Seq counts are generated using the Negative Binomial Distribution.
 #' Distribution parameters for each feature are sampled from a Gamma distribution. The
 #' resulting expression matrix is log2-scaled.
-#' @seealso \code{\link[stats]{NegBinomial}} and \code{\link[stats]{GammaDist}}
+# #' @seealso \code{\link[stats]{NegBinomial}} and \code{\link[stats]{GammaDist}}
 #' @examples
 #' # Matrix with 100 genes and 50 cells
 #' dat <- simulate_exprs(n_features=100, n_samples=50)
@@ -266,13 +266,13 @@ simulate_exprs <- function(n_features, n_samples, prefix_sample="", seed=1101) {
 #'
 #' This method serves to generate the example data used to
 #' demonstrate the usage of individual functions of this package
-#' @return An \code{\link[Biobase]{ExpressionSet}}
+#' @return An \code{ExpressionSet}
 #' @details RNA-Seq counts are generated using the Negative Binomial Distribution.
 #' Distribution parameters for each feature are sampled from a Gamma distribution. The
 #' resulting expression matrix is then log2-scaled. The expression data consist of
 #' 25 features and 100 samples
-#' @seealso \code{\link[Biobase]{ExpressionSet}}
-#' \code{\link[CellTrails]{simulate_exprs}}
+# #' @seealso \code{\link[Biobase]{ExpressionSet}}
+# #' \code{\link[CellTrails]{simulate_exprs}}
 #' @examples
 #' # Generate example data
 #' exDat
@@ -311,7 +311,7 @@ exDat <- function() {
 #' @details Hypergeometric or one-tailed Fisher exact test is useful for enrichment analyses.
 #' For example, one needs to estimate which features are enriched among
 #' a set of instances sampled from a population.
-#' @seealso \code{\link[stats]{Hypergeometric}} and \code{\link[stats]{fisher.test}}
+# #' @seealso \code{\link[stats]{Hypergeometric}} and \code{\link[stats]{fisher.test}}
 #' @examples
 #' # Population has 13 of total 52 instances positive for a given feature
 #' # Sample has 1 of total 5 instances positive for a given feature

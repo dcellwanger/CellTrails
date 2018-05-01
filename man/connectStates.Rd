@@ -107,18 +107,17 @@ ctset <- findStates(ctset, max_pval=1e-3, min_feat=4)
 ctset <- connectStates(ctset, l=20)
 ctset
 
+\dontrun{
 plot(ctset, type = "stateTrajectoryGraph",
     feature_name="feature_1", component=1)
 plot(ctset, type="stateTrajectoryGraph", pheno_type="age",
     component=1, point_size=2)
 }
+}
 \references{
 Kruskal, J.B. (1956). On the shortest
 spanning subtree of a graph and the traveling salesman problem.
 Proc Amer Math Soc 7, 48-50.
-}
-\seealso{
-\code{\link[CellTrails]{findStates}}
 }
 \author{
 Daniel C. Ellwanger

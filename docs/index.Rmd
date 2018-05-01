@@ -1631,7 +1631,7 @@ plot(ctset, type="dynamic", feature_name=c("TECTA", "OTOA", "ATOH1", "POU4F3",
 
 ### Mouse P1 Utricle Data
 
-In the following, we provide a protocol to analyze the publicly-available dataset containing single-cell RNASeq measurements of 14,313 genes in 120 cells from P1 mouse utricles ([*GEO*](https://www.ncbi.nlm.nih.gov/geo/) accession code: GSE71982). Experimental metadata was generated during cell sorting (GFP and tdTomato fluorescence indicating major cell types). The processed data (`mmu_p1_utricle.rda`) can be downloaded as `Biobase::ExpressionSet` from [here](https://github.com/elldc/CellTrails/raw/master/docs/mmu_P1_utricle.rda). 
+In the following, we provide a protocol to analyze the publicly-available dataset containing single-cell RNASeq measurements of 14,313 genes in 120 cells from P1 mouse utricles ([*GEO*](https://www.ncbi.nlm.nih.gov/geo/) accession code: GSE71982). Experimental metadata was generated during cell sorting (GFP and tdTomato fluorescence indicating major cell types). The processed data (`mmu_p1_utricle.rda`) can be downloaded as `Biobase::ExpressionSet` from [here](https://github.com/elldc/CellTrails/raw/master/docs/mmu_p1_utricle.rda). 
 
 If you use this dataset for your research, please cite:
 

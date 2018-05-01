@@ -52,9 +52,6 @@ ctset <- selectTrajectory(ctset, component=1)
 # Get trajectory states
 trajectoryStates(ctset)
 }
-\seealso{
-\code{\link[CellTrails]{CellTrailsSet}}
-}
 \author{
 Daniel C. Ellwanger
 }

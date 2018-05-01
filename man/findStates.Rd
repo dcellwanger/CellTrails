@@ -83,7 +83,9 @@ ctset <- reduceDimensions(ctset, spectr)
 ctset <- findStates(ctset, max_pval=1e-3, min_feat=4)
 ctset
 
+\dontrun{
 plot(ctset, type="stateSize")
+}
 }
 \references{
 Ward, J.H. (1963). Hierarchical Grouping to Optimize
@@ -98,10 +100,6 @@ Benjamini, Y., and Hochberg, Y. (1995).
 Controlling the false discovery rate: a practical and powerful
 approach to multiple testing. Journal of the Royal Statistical
 Society Series B 57, 289–300.
-}
-\seealso{
-\code{\link[CellTrails]{embedSamples}}
-\code{\link[CellTrails]{reduceDimensions}}
 }
 \author{
 Daniel C. Ellwanger

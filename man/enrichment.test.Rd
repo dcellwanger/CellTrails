@@ -45,9 +45,6 @@ a set of instances sampled from a population.
 # Test for significance of enrichment in sample
 enrichment.test(sample_true=1, sample_size=5, pop_true=13, pop_size=52, method="fisher")
 }
-\seealso{
-\code{\link[stats]{Hypergeometric}} and \code{\link[stats]{fisher.test}}
-}
 \author{
 Daniel C. Ellwanger
 }

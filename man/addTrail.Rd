@@ -75,9 +75,6 @@ trajectoryLayout(ctset, adjust=TRUE) <- trajLayouts$example
 # Define trail
 ctset <- addTrail(ctset, from="H1", to="H3", name="Tr1") # Define trail
 }
-\seealso{
-\code{\link[CellTrails]{CellTrailsSet}} \code{\link[CellTrails]{fitTrajectory}}
-}
 \author{
 Daniel C. Ellwanger
 }

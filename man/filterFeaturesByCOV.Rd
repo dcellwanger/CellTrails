@@ -49,11 +49,6 @@ ctset <- filterFeaturesByCOV(ctset, threshold=0.5)
 
 length(trajectoryFeatures(ctset))
 }
-\seealso{
-\code{\link[CellTrails]{CellTrailsSet}}
-\code{\link[CellTrails]{trajectoryFeatures}}
-\code{\link[stats]{model.matrix}}
-}
 \author{
 Daniel C. Ellwanger
 }

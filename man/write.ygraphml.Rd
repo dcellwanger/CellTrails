@@ -88,10 +88,6 @@ write.ygraphml(ctset, file="yourFilePath",
 write.ygraphml(ctset, file="yourFilePath",
               pheno_type="age", label="state")}
 }
-\seealso{
-\code{\link[CellTrails]{fitTrajectory}}
-\code{\link[CellTrails]{read.ygraphml}}
-}
 \author{
 Daniel C. Ellwanger
 }

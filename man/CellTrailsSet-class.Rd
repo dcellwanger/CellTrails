@@ -60,10 +60,6 @@ coordinates of the CellTrails maps}
 \item{\code{trails}}{Object of class \code{list}, containing trails information}
 }}
 
-\seealso{
-\code{\link[Biobase]{ExpressionSet}} \code{\link[Biobase]{eSet}}
-\code{\link[igraph]{igraph}}
-}
 \author{
 Daniel C. Ellwanger
 }
