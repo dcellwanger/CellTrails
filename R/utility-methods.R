@@ -31,7 +31,7 @@
 #' @keywords internal
 #' @author Daniel C. Ellwanger
 .checkFeatureNameExists <- function(x, feature_name) {
-  if(!feature_name %in% featureNames(x)) {
+  if(!all(feature_name %in% featureNames(x))) {
     stop("Feature '", feature_name, "' is not contained in data set.")
   }
 }
@@ -90,13 +90,15 @@
     pval <- 1
   } else {
     if((n.x + n.y) == (length(x) + length(y))) { #no censored values
-      pval <- suppressWarnings(wilcox.test(x, y, alternative=alternative, exact=FALSE)$p.value)
+      pval <- suppressWarnings(wilcox.test(x, y, alternative=alternative,
+                                           exact=FALSE)$p.value)
     } else {
       pval <- twoSampleLinearRankTestCensored(x=x, x.censored=x.censored,
                                               y=y, y.censored=y.censored,
                                               test="peto-peto",
                                               censoring.side="left",
-                                              variance="permutation", alternative=alternative)$p.value
+                                              variance="permutation",
+                                              alternative=alternative)$p.value
     }
   }
   res <- list()
@@ -148,7 +150,7 @@
 #' @author Daniel C. Ellwanger
 .color_hue <- function(n) {
   hues = seq(15, 375, length = n + 1)
-  hcl(h = hues, l = 65, c = 100)[1:n]
+  hcl(h = hues, l = 65, c = 100)[seq_len(n)]
 }
 
 #' Colors for vector
@@ -159,7 +161,8 @@
 #' @importFrom viridis viridis
 #' @keywords internal
 #' @author Daniel C. Ellwanger
-.color_ramp <- function(x, range=3, colPal=NULL, min.val=1e-10, min.val.col=NA, breaks=100) {
+.color_ramp <- function(x, range=3, colPal=NULL, min.val=1e-10,
+                        min.val.col=NA, breaks=100) {
   if(is.null(colPal)) {
     colPal <- viridis
   }
@@ -268,7 +271,8 @@ simulate_exprs <- function(n_features, n_samples, prefix_sample="", seed=1101) {
 #' Distribution parameters for each feature are sampled from a Gamma distribution. The
 #' resulting expression matrix is then log2-scaled. The expression data consist of
 #' 25 features and 100 samples
-#' @seealso \code{\link[Biobase]{ExpressionSet}} and \code{\link[CellTrails]{simulate_exprs}}
+#' @seealso \code{\link[Biobase]{ExpressionSet}}
+#' \code{\link[CellTrails]{simulate_exprs}}
 #' @examples
 #' # Generate example data
 #' exDat
@@ -276,7 +280,7 @@ simulate_exprs <- function(n_features, n_samples, prefix_sample="", seed=1101) {
 #' @export
 #' @author Daniel C. Ellwanger
 exDat <- function() {
-  expr <- lapply(1:10, function(i)
+  expr <- lapply(seq_len(10), function(i)
     simulate_exprs(seed = 1101 + i,
                    n_features=25,
                    n_samples=10,
@@ -286,7 +290,8 @@ exDat <- function() {
                 "3.Late", "3.Late", NA, NA, "2.Mid"), each = 10)
   ExpressionSet(expr,
                 phenoData = new("AnnotatedDataFrame",
-                                data.frame(age=meta, row.names=colnames(expr))))
+                                data.frame(age=meta,
+                                           row.names=colnames(expr))))
 }
 
 #' Enrichment test

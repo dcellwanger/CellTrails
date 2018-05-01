@@ -12,10 +12,11 @@
 \item{...}{Additional arguments; not normally accessed by user directly}
 }
 \value{
-A \code{\link[ggplot2]{ggplot}} object
+A \code{ggplot} object
 }
 \description{
-Method illustrates the automatic determination of informative latent dimensions.
+Method illustrates the automatic determination of informative latent
+dimensions.
 }
 \details{
 Line segement plot showing the lagged differences between

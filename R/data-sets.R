@@ -7,7 +7,7 @@
 #' generated during tissue preparation (cell origin) and cell sorting
 #' (uptake of FM1-43 dye indicating cell maturity). This data set is the
 #' foundation used for the development of CellTrails.
-#' @format An object of class \code{\link[Biobase]{ExpressionSet}}
+#' @format An object of class \code{ExpressionSet}
 #' @usage data("gga_e15_utricle")
 #' @references Ellwanger DC, Scheibinger M, Dumont RA,
 #' Barr-Gillespie PG, and Heller S. "Transcriptional dynamics of

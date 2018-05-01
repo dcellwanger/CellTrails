@@ -1,6 +1,6 @@
 #' DEF: Spectral embedding of samples
 #'
-#' For details see \code\link{embedSamples}
+#' For details see \code{embedSamples}
 #' @param nbins Cubic B-spline discretization is used to compute fuzzy mutual
 #' information between pairs of samples; \code{nbins} defines the number of intervals
 #' used for discretization of expression data. (default: 10)
@@ -19,9 +19,10 @@
     # Cubic B-splines
     for(i in seq_len(m)) {
       x <- M[i, ]
-      k <- seq(from=min(x, na.rm=TRUE), to=max(x, na.rm=TRUE), length.out=nbins - 2)
-      W[1:nbins, , i] <- t(bs(x, knots=k[-c(nbins - 2)],
-                              Boundary.knots=range(k))) #cubic, degree = 3
+      k <- seq(from=min(x, na.rm=TRUE), to=max(x, na.rm=TRUE),
+               length.out=nbins-2)
+      W[seq_len(nbins), , i] <- t(bs(x, knots=k[-c(nbins - 2)],
+                              Boundary.knots=range(k))) #cubic, degree=3
     }
 
     # Avoid NAs
@@ -64,8 +65,9 @@
   #Pre-flight check
   ze <- apply(x[x@useFeature, ], 1L, function(x){sum(x > 0)})
   if(sum(ze == 0) > 0) {
-    warning(ze, " samples do not encode trajectory information (i.e. have zero entropy).
-            You may want to select a proper set of trajectory features (see '?trajectoryFeatures').")
+    warning(ze, " samples do not encode trajectory information (i.e. have ",
+            "zero entropy). You may want to select a proper set of trajectory ",
+            "features (see '?trajectoryFeatures').")
   }
   ze <- ze > 0
 
@@ -74,8 +76,8 @@
   M <- x[x@useFeature, ] #filter by trajectory features
   M <- M[ze, ] #filter by informative features
   if(nrow(M) < 2) {
-    stop("Cannot compute embedding, because less than two features were selected. Please, increase
-         the number of trajectory features.")
+    stop("Cannot compute embedding, because less than two features ",
+         "were selected. Please, increase the number of trajectory features.")
   }
 
   if(!is.null(design)) { #block uninteresting factors
@@ -118,7 +120,7 @@
 
 #' DEF: Determine number of informative latent dimensions
 #'
-#' For details see \code\link{findSpectrum}
+#' For details see \code{findSpectrum}
 #' @importFrom utils head
 #' @keywords internal
 #' @author Daniel C. Ellwanger
@@ -139,7 +141,7 @@
 
 #' DEF: Truncate eigenbasis
 #'
-#' For details see \code\link{reduceDimensions}
+#' For details see \code{reduceDimensions}
 #' @keywords internal
 #' @author Daniel C. Ellwanger
 .reduceDimensions_def <- function(x, s) {
@@ -151,7 +153,7 @@
 #' t-Distributed Stochastic Neighbor Embedding
 #'
 #' Barnes-Hut implementation of t-Distributed Stochastic Neighbor Embedding
-#' @param x An \code{\link{CellTrailsSet}} object
+#' @param x An \code{CellTrailsSet} object
 #' @param dims Output dimensionality
 #' @param perplexity Perplexity parameter (default: 30)
 #' @param theta Speed/accuracy trade-off (increase for less accuracy),
@@ -168,7 +170,8 @@
 #' @importFrom Rtsne Rtsne
 #' @keywords internal
 #' @author Daniel C. Ellwanger
-.bhtsne <- function(x, dims=2, perplexity=30, theta=.5, max_iter=1000, seed=1101){
+.bhtsne <- function(x, dims=2, perplexity=30, theta=.5, max_iter=1000,
+                    seed=1101){
   if(!is.null(seed)) {
     set.seed(seed)
   }
@@ -182,7 +185,7 @@
 
 #' DEF: PCA
 #'
-#' For details see \code\link{pca}
+#' For details see \code{pca}
 #' @keywords internal
 #' @author Daniel C. Ellwanger
 .pca <- function(x, do_scaling=TRUE, design=NULL) {
@@ -213,7 +216,7 @@
   # Result
   res <- list()
   #res$princomp <- X %*% edecomp$vectors
-  #colnames(res$princomp) <- paste("PC", 1:ncol(X))
+  #colnames(res$princomp) <- paste("PC", seq_len(ncol(X)))
   #res$variance <- edecomp$values #/ sum(edecomp$values)
   #res$sdev <- sqrt(res$variance)
   #res$loadings <- sweep(edecomp$vectors, MARGIN = 2,

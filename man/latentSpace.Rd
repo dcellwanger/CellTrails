@@ -9,18 +9,18 @@
 latentSpace(object)
 }
 \arguments{
-\item{object}{An object of class \code{\link[CellTrails]{CellTrailsSet}}.}
+\item{object}{An object of class \code{CellTrailsSet}}
 }
 \value{
-An object of class \code{\link[base]{matrix}}
+An object of class \code{matrix}
 }
 \description{
 Retrieve computed latent space from a \code{CellTrailsSet} object.
 }
 \details{
-Returns the latent space computed by spectral embedding of samples. The
-corresponding matrix is numeric. Rows are samples and columns are \emph{d}
-components.
+Returns the latent space computed by spectral embedding of samples.
+The corresponding matrix is numeric. Rows are samples and columns are
+\emph{d} components.
 }
 \examples{
 # Generate example data
@@ -34,6 +34,9 @@ ctset <- embedSamples(ctset)
 
 # Get latent space
 latentSpace(ctset)
+}
+\seealso{
+\code{\link[CellTrails]{CellTrailsSet}}
 }
 \author{
 Daniel C. Ellwanger

@@ -9,14 +9,20 @@
 as.ExpressionSet(object)
 }
 \arguments{
-\item{object}{A \code{\link[CellTrails]{CellTrailsSet}} object}
+\item{object}{A \code{CellTrailsSet} object}
 }
 \value{
-An \code{\link[Biobase]{ExpressionSet}} object
+An \code{ExpressionSet} object
 }
 \description{
-Function to coerce a \code{\link[CellTrails]{CellTrailsSet}} object into
-an \code{\link[Biobase]{ExpressionSet}} object.
+Function to coerce a \code{CellTrailsSet} object into
+an \code{ExpressionSet} object.
+}
+\details{
+The resulting \code{ExpressionSet} object
+contains additional phenoData information from the CellTrails
+analysis (e.g., the determined states, the pseudotime
+along each trail).
 }
 \examples{
 # Generate example data
@@ -29,5 +35,7 @@ dat2 <- as.ExpressionSet(ctset)
 dat2
 }
 \seealso{
+\code{\link[Biobase]{ExpressionSet}}
+
 ExpressionSet
 }

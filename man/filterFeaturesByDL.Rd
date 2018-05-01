@@ -9,28 +9,29 @@
 filterFeaturesByDL(ctset, threshold)
 }
 \arguments{
-\item{ctset}{An \code{\link[CellTrails]{CellTrailsSet}} object}
+\item{ctset}{An \code{CellTrailsSet} object}
 
-\item{threshold}{Minimum number of samples; if value < 1 it is interpreted as
-fraction, otherwise as absolute sample count}
+\item{threshold}{Minimum number of samples; if value < 1 it is interpreted
+as fraction, otherwise as absolute sample count}
 }
 \value{
-An updated \code{\link[CellTrails]{CellTrailsSet}} object
+An updated \code{CellTrailsSet} object
 }
 \description{
-Filters trajectory features that are detected in a minimum number of samples.
+Filters trajectory features that are detected in a minimum number of
+samples.
 }
 \details{
-The detection level denotes the fraction of samples in which a feature was detected.
-For each trajectory feature listed in the
-CellTrailsSet object the relative number of samples having a feature expression
-value greater than 0 is counted. Features that are expressed in a fraction of all
-samples greater than \code{threshold} remain labeled as trajectory feature in
-the \code{CellTrailsSet} object, otherwise
-they are not considered for dimensionality reduction, clustering and trajectory reconstruction.
-If the parameter \code{threshold} fullfills
-\code{threshold} \eqn{>= 1} it becomes converted to a relative fraction of the
-total sample count.
+The detection level denotes the fraction of samples in which a
+feature was detected. For each trajectory feature listed in the
+CellTrailsSet object the relative number of samples having a feature
+expression value greater than 0 is counted. Features that are expressed in
+a fraction of all samples greater than \code{threshold} remain labeled as
+trajectory feature in the \code{CellTrailsSet} object, otherwise
+they are not considered for dimensionality reduction, clustering and
+trajectory reconstruction. If the parameter \code{threshold} fullfills
+\code{threshold} \eqn{>= 1} it becomes converted to a relative fraction of
+the total sample count.
 }
 \examples{
 # Simulate example data
@@ -45,7 +46,9 @@ ctset <- filterFeaturesByDL(ctset, threshold=2)
 length(trajectoryFeatures(ctset))
 }
 \seealso{
-\code{\link{trajectoryFeatures}}
+\code{trajectoryFeatures}
+
+\code{\link[CellTrails]{CellTrailsSet}}
 }
 \author{
 Daniel C. Ellwanger

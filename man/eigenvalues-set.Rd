@@ -9,20 +9,22 @@
 eigenvalues(object) <- value
 }
 \arguments{
-\item{object}{An object of class \code{\link[CellTrails]{CellTrailsSet}}}
+\item{object}{An object of class \code{CellTrailsSet}}
 
 \item{value}{A numeric vector}
 }
 \value{
-An updated object of class \code{\link[CellTrails]{CellTrailsSet}}
+An updated object of class \code{CellTrailsSet}
 }
 \description{
 Sets eigenvalues to a \code{CellTrailsSet} object.
 }
 \details{
-Eigenvalues represent the information content for each eigenvector derived by
-spectral embedding of samples. Vector needs to be numeric and its length needs to correspond
-to the number of eigenvectors. Usually, this function is not directly accessed by the user.
+Eigenvalues represent the information content for each
+eigenvector derived by spectral embedding of samples. Vector
+needs to be numeric and its length needs to correspond to the number
+of eigenvectors. Usually, this function is not directly accessed
+by the user.
 }
 \examples{
 # Generate example data
@@ -35,6 +37,9 @@ ctset <- as.CellTrailsSet(dat)
 pca_result <- pca(ctset)
 latentSpace(ctset) <- pca_result$princomp
 eigenvalues(ctset) <- pca_result$variance
+}
+\seealso{
+\code{\link[CellTrails]{CellTrailsSet}}
 }
 \author{
 Daniel C. Ellwanger

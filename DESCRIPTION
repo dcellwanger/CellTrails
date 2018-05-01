@@ -13,14 +13,14 @@ Description: CellTrails is an unsupervised algorithm for the de novo
   counteract intrinsic noise of single cell data caused by drop-outs, technical 
   variance, and redundancy of predictive variables. CellTrails enables the 
   reconstruction of branching trajectories and provides an intuitive graphical 
-  representation of expression patterns along all branches simultaneously. It allows 
-  the user to define and infer the expression dynamics of individual and multiple 
-  pathways towards distinct phenotypes.
+  representation of expression patterns along all branches simultaneously. It 
+  allows the user to define and infer the expression dynamics of individual and 
+  multiple pathways towards distinct phenotypes.
 License: Artistic-2.0 | file LICENSE
 Encoding: UTF-8
 LazyData: true
 VignetteBuilder: knitr
-Depends: R (>= 3.5), Biobase
+Depends: R (>= 3.4), Biobase
 Imports:
   BiocStyle,
   cba,
@@ -38,6 +38,8 @@ Imports:
   mgcv,
   reshape2,
   Rtsne,
+  S4Vectors,
+  SingleCellExperiment,
   stats,
   splines,
   viridis,

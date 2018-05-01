@@ -25,7 +25,8 @@ resulting expression matrix is then log2-scaled. The expression data consist of
 exDat
 }
 \seealso{
-\code{\link[Biobase]{ExpressionSet}} and \code{\link[CellTrails]{simulate_exprs}}
+\code{\link[Biobase]{ExpressionSet}}
+\code{\link[CellTrails]{simulate_exprs}}
 }
 \author{
 Daniel C. Ellwanger

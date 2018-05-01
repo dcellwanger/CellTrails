@@ -9,19 +9,21 @@
 trajectorySamples(object)
 }
 \arguments{
-\item{object}{An object of class \code{\link[CellTrails]{CellTrailsSet}}.}
+\item{object}{An object of class \code{CellTrailsSet}}
 }
 \value{
-An object of class \code{\link[base]{character}}
+An object of class \code{character}
 }
 \description{
-Retrieve names of samples that are contained in the trajectory from a \code{CellTrailsSet} object.
+Retrieve names of samples that are contained in the trajectory from
+a \code{CellTrailsSet} object.
 }
 \details{
-Samples are selected prior to trajectory inference; a state trajectory graph may contain
-multiple components. Each component is composed of a set of states. This method retrieves
-the names of the samples that are members of the states contained in the
-user-selected state trajectory graph component from a \code{CellTrailsSet} object.
+Samples are selected prior to trajectory inference; a state trajectory
+graph may contain multiple components. Each component is composed of a set of
+states. This method retrieves the names of the samples that are members of the
+states contained in the user-selected state trajectory graph component from a
+\code{CellTrailsSet} object.
 }
 \examples{
 # Generate example data
@@ -50,6 +52,9 @@ ctset <- selectTrajectory(ctset, component=1)
 
 # Get trajectory samples
 trajectorySamples(ctset)
+}
+\seealso{
+\code{\link[CellTrails]{CellTrailsSet}}
 }
 \author{
 Daniel C. Ellwanger

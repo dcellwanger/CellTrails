@@ -9,7 +9,7 @@
 states(object)
 }
 \arguments{
-\item{object}{An object of class \code{\link[CellTrails]{CellTrailsSet}}.}
+\item{object}{An object of class \code{CellTrailsSet}.}
 }
 \value{
 A \code{factor} vector
@@ -18,8 +18,8 @@ A \code{factor} vector
 Retrieve computed states from a \code{CellTrailsSet} object.
 }
 \details{
-State information is extracted from \code{featureData}; factor levels
-are alphanumerically ordered by ID.
+State information is extracted from \code{featureData};
+factor levels are alphanumerically ordered by ID.
 }
 \examples{
 # Generate example data
@@ -42,6 +42,9 @@ ctset <- findStates(ctset, max_pval=1e-3, min_feat=4)
 
 # Get state assignments
 states(ctset)
+}
+\seealso{
+\code{\link[CellTrails]{CellTrailsSet}}
 }
 \author{
 Daniel C. Ellwanger

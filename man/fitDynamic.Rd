@@ -9,35 +9,38 @@
 fitDynamic(ctset, feature_name, trail_name)
 }
 \arguments{
-\item{ctset}{A \code{\link[CellTrails]{CellTrailsSet}} object}
+\item{ctset}{A \code{CellTrailsSet} object}
 
 \item{feature_name}{Name of feature}
 
 \item{trail_name}{Name of trail}
 }
 \value{
-An object of type \code{\link[base]{list}} with the following components
+An object of type \code{list} with the following components
 \describe{
   \item{\code{pseudotime}}{The pseudotime along the trail}
   \item{\code{expression}}{The fitted expression values for each value of pseudotime}
-  \item{\code{gam}}{A object of class \code{\link{gamObject}}}
+  \item{\code{gam}}{A object of class \code{gamObject}}
 }
 }
 \description{
 Fits feature expression as a function of pseudotime along a defined trail.
 }
 \details{
-A trail is an induced subgraph of the trajectory graph. A trajectory graph is
-composed of samples (nodes) that are connected (by weighted edges) if they are chronologically
-related. A trail has to be defined by the user using \code{\link{addTrail}}.
-A pseudotime vector is extracted by computing the geodesic distance for each sample
-from the trail's start node. To infer the expression level of a feature as a function of
-pseudotime, CellTrails used generalized additive models with a single smoothing term
-with four basis dimensions. Here, for each feature CellTrails introduces prior weights
-for each observation to lower the confounding effect of drop-outs to the
-maximum-likelihood-based fitting process as follows. Each non-detect of feature
-\emph{j} in state \emph{h} is weighted by the relative fraction of non-detects of
-feature \emph{j} in state \emph{h}; detected values are always assigned weight = 1.
+A trail is an induced subgraph of the trajectory graph. A
+trajectory graph is composed of samples (nodes) that are connected
+(by weighted edges) if they are chronologically related. A trail has to be
+defined by the user using \code{addTrail}. A pseudotime vector is extracted by
+computing the geodesic distance for each sample from the trail's start node.
+To infer the expression level of a feature as a function of
+pseudotime, CellTrails used generalized additive models with a single
+smoothing term with four basis dimensions. Here, for each feature CellTrails
+introduces prior weights for each observation to lower the confounding
+effect of drop-outs to the maximum-likelihood-based fitting process as
+follows. Each non-detect of feature
+\emph{j} in state \emph{h} is weighted by the relative fraction of
+non-detects of feature \emph{j} in state \emph{h}; detected values are
+always assigned weight = 1.
 }
 \examples{
 # Generate example data
@@ -75,12 +78,15 @@ ctset <- fitTrajectory(ctset)
 trajectoryLayout(ctset, adjust=TRUE) <- trajLayouts$example
 
 # Define trail
-ctset <- addTrail(ctset, from="H1", to="H3", name="Tr1") # Define trail
+ctset <- addTrail(ctset, from="H1", to="H3", name="Tr1")
 
 # Fit dynamic
 fit <- fitDynamic(ctset, feature_name="feature_3", trail_name="Tr1")
 
 summary(fit)
+}
+\seealso{
+\code{\link[CellTrails]{addTrail}} \code{\link[mgcv]{gamObject}}
 }
 \author{
 Daniel C. Ellwanger

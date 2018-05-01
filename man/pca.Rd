@@ -9,7 +9,7 @@
 pca(ctset, do_scaling = TRUE, design = NULL)
 }
 \arguments{
-\item{ctset}{An \code{\link{CellTrailsSet}} object}
+\item{ctset}{An \code{CellTrailsSet} object}
 
 \item{do_scaling}{FALSE = covariance matrix, TRUE = correlation matrix}
 
@@ -32,11 +32,12 @@ a covariance or correlation matrix
 The calculation is done by a spectral decomposition of the
 (scaled) covariance matrix of the trajectory features
 as defined in the \code{CellTrails} object.
-Features with zero variance get automatically removed. To account for systematic bias in the
-expression data (e.g., cell cycle effects), a design matrix can be
-provided for the learning process. It should list the factors that should be blocked and
+Features with zero variance get automatically removed. To account for
+systematic bias in the expression data (e.g., cell cycle effects), a
+design matrix can be provided for the learning process. It should list
+the factors that should be blocked and
 their values per sample. It is suggested to construct a design matrix with
-\code{\link[stats]{model.matrix}}.
+\code{model.matrix}.
 }
 \examples{
 # Generate example data
@@ -48,9 +49,13 @@ ctset <- as.CellTrailsSet(dat)
 # Principal component analysis
 pca_result <- pca(ctset)
 
-barplot(pca_result$variance[1:10], ylab="Variance",
-        names.arg=colnames(pca_result$princomp)[1:10], las=2)
+barplot(pca_result$variance[seq_len(10)], ylab="Variance",
+        names.arg=colnames(pca_result$princomp)[seq_len(10)], las=2)
 plot(pca_result$princomp, xlab="PC1", ylab="PC2")
+}
+\seealso{
+\code{\link[CellTrails]{CellTrailsSet}}
+\code{\link[stats]{model.matrix}}
 }
 \author{
 Daniel C. Ellwanger

@@ -9,20 +9,20 @@
 stateTrajectoryGraph(object)
 }
 \arguments{
-\item{object}{An object of class \code{\link[CellTrails]{CellTrailsSet}}.}
+\item{object}{An object of class \code{CellTrailsSet}.}
 }
 \value{
-An object of class \code{\link{list}}
+An object of class \code{list}
 }
 \description{
 Retrieve computed state trajectory graph from a \code{CellTrailsSet} object.
 }
 \details{
-A graph is computed by spanning states maximizing the overall interface
-score (i.e., number of neighboring samples between states). This method retrieves
-the maximum interface spanning forest information from a \code{CellTrailsSet}
-object. The return value is a \code{list} with an \code{\link{igraph}} object for each
-component.
+A graph is computed by spanning states maximizing the overall
+interface score (i.e., number of neighboring samples between states).
+This method retrieves the maximum interface spanning forest information
+from a \code{CellTrailsSet} object. The return value is a \code{list} with
+an \code{igraph} object for each component.
 }
 \examples{
 # Generate example data
@@ -48,6 +48,10 @@ ctset <- connectStates(ctset, l=20)
 
 # Get state trajectory graph
 stateTrajectoryGraph(ctset)
+}
+\seealso{
+\code{\link[CellTrails]{CellTrailsSet}}
+\code{\link[igraph]{igraph}}
 }
 \author{
 Daniel C. Ellwanger

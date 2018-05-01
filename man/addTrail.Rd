@@ -9,7 +9,7 @@
 addTrail(ctset, from, to, name)
 }
 \arguments{
-\item{ctset}{An object of class \code{\link[CellTrails]{CellTrailsSet}}}
+\item{ctset}{An object of class \code{CellTrailsSet}}
 
 \item{from}{Start node ID}
 
@@ -18,7 +18,7 @@ addTrail(ctset, from, to, name)
 \item{name}{Name of trail}
 }
 \value{
-An updated object of class \code{\link[CellTrails]{CellTrailsSet}}
+An updated object of class \code{CellTrailsSet}
 }
 \description{
 Function to define a single trail on the trajectory.
@@ -34,7 +34,7 @@ of samples are starting with the character "B"
 \emph{Diagnostic messages}
 \cr \cr
 An error is thrown if the trajectory has not been fitted yet. Please,
-call \code{\link{fitTrajectory}} first. Further, an error is thrown if the
+call \code{fitTrajectory} first. Further, an error is thrown if the
 provided start or end ID is unknown.
 }
 \examples{
@@ -74,6 +74,9 @@ trajectoryLayout(ctset, adjust=TRUE) <- trajLayouts$example
 
 # Define trail
 ctset <- addTrail(ctset, from="H1", to="H3", name="Tr1") # Define trail
+}
+\seealso{
+\code{\link[CellTrails]{CellTrailsSet}} \code{\link[CellTrails]{fitTrajectory}}
 }
 \author{
 Daniel C. Ellwanger

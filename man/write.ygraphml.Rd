@@ -10,13 +10,15 @@ write.ygraphml(object, file, feature_name = NULL, pheno_type = NULL,
   label = NULL)
 }
 \arguments{
-\item{object}{A \code{\link[CellTrails]{CellTrailsSet}} object}
+\item{object}{A \code{CellTrailsSet} object}
 
 \item{file}{A character string naming a file}
 
-\item{feature_name}{A character string specifying by which feature expression nodes should be colorized}
+\item{feature_name}{A character string specifying by
+which feature expression nodes should be colorized}
 
-\item{pheno_type}{A character string specifying by which phenotype label nodes should be colorized}
+\item{pheno_type}{A character string specifying by which
+phenotype label nodes should be colorized}
 
 \item{label}{Defines the label name (optional). Can be either set to the
 sample name with \code{NAME} or to a phenotype label name.}
@@ -28,23 +30,28 @@ sample name with \code{NAME} or to a phenotype label name.}
 Writes graphml file containing the trajectory graph's structure.
 }
 \details{
-To visualize the trajectory graph, a proper graph layout has to be computed.
-Ideally, edges should not cross and nodes should not overlap. CellTrails enables the
-export and import of the trajectory graph structure using the graphml file format.
-This file format can be interpreted by most third-party graph analysis applications,
+To visualize the trajectory graph, a proper graph layout has
+to be computed. Ideally, edges should not cross and nodes should not
+overlap. CellTrails enables the export and import of the trajectory
+graph structure using the graphml file format. This file format can be
+interpreted by most third-party graph analysis applications,
 allowing the user to subject the trajectory graph to a wide range of (tree)
-layout algorithms. In particular, its format has additional ygraph attributes best suited to be
-used with the Graph Visualization Software 'yEd' which is freely available from yWorks GmbH
-(http://www.yworks.com/products/yed) for all major platforms. \cr\cr
-The colors of the nodes can be defined by the parameters \code{feature_name} and \code{pheno_type}.
-Please note that the trajectory landmarks can be colorized via \code{pheno_type = 'landmark'}.
-If a layout is already present in the provided \code{CellTrailsSet} object, the
-samples' coordinates will be listed in the graphml file.
+layout algorithms. In particular, its format has additional ygraph
+attributes best suited to be used with the Graph Visualization Software
+'yEd' which is freely available from yWorks GmbH
+(http://www.yworks.com/products/yed) for all major platforms.
+\cr\cr
+The colors of the nodes can be defined by the parameters
+\code{feature_name} and \code{pheno_type}.
+Please note that the trajectory landmarks can be colorized via
+\code{pheno_type = 'landmark'}.
+If a layout is already present in the provided \code{CellTrailsSet}
+object, the samples' coordinates will be listed in the graphml file.
 \cr \cr
 \emph{Diagnostic messages}
 \cr \cr
 An error is thrown if the trajectory has not been computed yet; function
-\code{\link[CellTrails]{fitTrajectory}} needs to be called first.
+\code{fitTrajectory} needs to be called first.
 }
 \examples{
 # Generate example data
@@ -82,6 +89,7 @@ write.ygraphml(ctset, file="yourFilePath",
               pheno_type="age", label="state")}
 }
 \seealso{
+\code{\link[CellTrails]{fitTrajectory}}
 \code{\link[CellTrails]{read.ygraphml}}
 }
 \author{

@@ -9,28 +9,32 @@
 filterFeaturesByCOV(ctset, threshold, design = NULL)
 }
 \arguments{
-\item{ctset}{An \code{\link[CellTrails]{CellTrailsSet}} object}
+\item{ctset}{An \code{CellTrailsSet} object}
 
-\item{threshold}{Minimum coefficient of variation; numeric value between 0 and 1}
+\item{threshold}{Minimum coefficient of variation;
+numeric value between 0 and 1}
 
 \item{design}{A numeric matrix describing the factors that should be blocked}
 }
 \value{
-An updated \code{\link[CellTrails]{CellTrailsSet}} object
+An updated \code{CellTrailsSet} object
 }
 \description{
 Filters trajectory features that have a minimal coefficient of variation.
 }
 \details{
-For each trajectory feature \emph{x} listed in the CellTrailsSet object
-the coefficient of variation is computed by
-\eqn{CoV(x) = sd(x) / mean(x)}. Features with a CoV(x) greater than \code{threshold}
-remain labeled as trajectory feature in the \code{CellTrailsSet} object, otherwise
-they are not considered for dimensionality reduction, clustering and trajectory reconstruction.
+For each trajectory feature \emph{x} listed in the CellTrailsSet
+object the coefficient of variation is computed by
+\eqn{CoV(x) = sd(x) / mean(x)}. Features with a CoV(x) greater
+than \code{threshold} remain labeled as trajectory feature in the
+\code{CellTrailsSet} object, otherwise they are not considered
+for dimensionality reduction, clustering and trajectory reconstruction.
 \cr \cr
-To account for systematic bias in the expression data (e.g., cell cycle effects), a design matrix can be
-provided for the learning process. It should list the factors that should be blocked and their values per
-sample. It is suggested to construct a design matrix with \code{\link[stats]{model.matrix}}.
+To account for systematic bias in the expression data
+(e.g., cell cycle effects), a design matrix can be provided for the
+learning process. It should list the factors that should be blocked and
+their values per sample. It is suggested to construct a design
+matrix with \code{model.matrix}.
 }
 \examples{
 # Simulate example data
@@ -46,7 +50,9 @@ ctset <- filterFeaturesByCOV(ctset, threshold=0.5)
 length(trajectoryFeatures(ctset))
 }
 \seealso{
-\code{\link{trajectoryFeatures}}
+\code{\link[CellTrails]{CellTrailsSet}}
+\code{\link[CellTrails]{trajectoryFeatures}}
+\code{\link[stats]{model.matrix}}
 }
 \author{
 Daniel C. Ellwanger

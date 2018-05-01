@@ -7,7 +7,7 @@
 \title{Class to reconstruct and visualize trajectories from biological samples}
 \description{
 Container for high-throughput assays and experimental metadata, as well as,
-trajectory data. This class is derived from \code{\link[Biobase]{ExpressionSet}}.
+trajectory data. This class is derived from \code{ExpressionSet}.
 }
 \details{
 \strong{Class-specific methods}
@@ -28,35 +28,41 @@ trajectory data. This class is derived from \code{\link[Biobase]{ExpressionSet}}
 \section{Slots}{
 
 \describe{
-\item{\code{assayData}}{See \code{\link[Biobase]{ExpressionSet}}}
+\item{\code{assayData}}{See \code{ExpressionSet}}
 
-\item{\code{phenoData}}{See \code{\link[Biobase]{ExpressionSet}}}
+\item{\code{phenoData}}{See \code{ExpressionSet}}
 
-\item{\code{featureData}}{See \code{\link[Biobase]{ExpressionSet}}}
+\item{\code{featureData}}{See \code{ExpressionSet}}
 
-\item{\code{experimentData}}{See \code{\link[Biobase]{ExpressionSet}}}
+\item{\code{experimentData}}{See \code{ExpressionSet}}
 
-\item{\code{annotation}}{See \code{\link[Biobase]{ExpressionSet}}}
+\item{\code{annotation}}{See \code{ExpressionSet}}
 
-\item{\code{protocolData}}{See \code{\link[Biobase]{ExpressionSet}}}
+\item{\code{protocolData}}{See \code{ExpressionSet}}
 
-\item{\code{useFeature}}{Object of class \code{\link[base]{logical}}, containing indices of selected trajectory features}
+\item{\code{useFeature}}{Object of class \code{logical}, containing indices of
+selected trajectory features}
 
-\item{\code{useSample}}{Object of class \code{\link[base]{logical}}, containing indices of selected trajectory samples}
+\item{\code{useSample}}{Object of class \code{logical}, containing indices of
+selected trajectory samples}
 
-\item{\code{eigen}}{Object of class \code{\link[base]{list}}, containing the latent space and eigenvalues from the spectral embedding.}
+\item{\code{eigen}}{Object of class \code{list}, containing the latent space and
+eigenvalues from the spectral embedding.}
 
-\item{\code{spanForest}}{Object of class \code{\link[base]{list}}, containing the \code{\link[igraph]{igraph}} components of the maximum interface spanning graph}
+\item{\code{spanForest}}{Object of class \code{list}, containing the \code{igraph}
+components of the maximum interface spanning graph}
 
-\item{\code{trajectory}}{Object of class \code{\link[base]{list}}, containing the trajectory fit}
+\item{\code{trajectory}}{Object of class \code{list}, containing the trajectory fit}
 
-\item{\code{layout}}{Object of class \code{\link[base]{data.frame}}, containing the geographic coordinates of the CellTrails maps}
+\item{\code{layout}}{Object of class \code{data.frame}, containing the geographic
+coordinates of the CellTrails maps}
 
-\item{\code{trails}}{Object of class \code{\link[base]{list}}, containing trails information}
+\item{\code{trails}}{Object of class \code{list}, containing trails information}
 }}
 
 \seealso{
-\code{\link[Biobase]{ExpressionSet}}, \code{\link[Biobase]{eSet}}
+\code{\link[Biobase]{ExpressionSet}} \code{\link[Biobase]{eSet}}
+\code{\link[igraph]{igraph}}
 }
 \author{
 Daniel C. Ellwanger

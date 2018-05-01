@@ -9,9 +9,10 @@
 trailSamples(object, trail_name = NULL)
 }
 \arguments{
-\item{object}{An object of class \code{\link[CellTrails]{CellTrailsSet}}.}
+\item{object}{An object of class \code{CellTrailsSet}}
 
-\item{trail_name}{A character string indicating the name of the trail (optional)}
+\item{trail_name}{A character string indicating the name of the trail
+(optional)}
 }
 \value{
 An object of class \code{list}; each element is a vector of sample
@@ -60,6 +61,9 @@ ctset <- addTrail(ctset, from="H1", to="H3", name="Tr1") # Define trail
 
 # Get trail samples
 trailSamples(ctset, trail_name="Tr1")
+}
+\seealso{
+\code{\link[CellTrails]{CellTrailsSet}}
 }
 \author{
 Daniel C. Ellwanger

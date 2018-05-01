@@ -9,16 +9,17 @@
 trajectoryFit(object)
 }
 \arguments{
-\item{object}{An object of class \code{\link[CellTrails]{CellTrailsSet}}.}
+\item{object}{An object of class \code{CellTrailsSet}.}
 }
 \value{
-An object of type \code{\link[base]{list}} with the following components
+An object of type \code{list} with the following components
 \describe{
-  \item{\code{error}}{numerical vector; the actual distance of each sample from the fitted trajectory}
-  \item{\code{traj}}{\code{\link[igraph]{igraph}} object; graph connecting samples by
+  \item{\code{error}}{numerical vector; the actual distance of each sample
+  from the fitted trajectory}
+  \item{\code{traj}}{\code{igraph} object; graph connecting samples by
   their chronological ordering}
-  \item{\code{blaze}}{data.frame; indicates landmarks (branching points and end points)
-  in the trajectory graph}
+  \item{\code{blaze}}{data.frame; indicates landmarks
+  (branching points and end points) in the trajectory graph}
 }
 }
 \description{
@@ -54,6 +55,10 @@ ctset <- fitTrajectory(ctset)
 
 # Get trajectory fit
 trajectoryFit(ctset)
+}
+\seealso{
+\code{\link[CellTrails]{CellTrailsSet}}
+\code{\link[igraph]{igraph}}
 }
 \author{
 Daniel C. Ellwanger

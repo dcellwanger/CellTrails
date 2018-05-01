@@ -1,6 +1,6 @@
 #' DEF: Find states
 #'
-#' For details see \code\link{findStates}
+#' For details see \code{findStates}
 #' @keywords internal
 #' @import Biobase
 #' @importFrom graphics par plot points abline axis box text
@@ -55,7 +55,8 @@
 
   clclip <- clip.clust(hcl, X, k = k) #prune dendrogram
   #plot(clclip)
-  cldist <- as.matrix(cophenetic(clclip)) #cophenetic distance between cluster
+  #cophenetic distance between cluster
+  cldist <- as.matrix(cophenetic(clclip))
   diag(cldist) <- NA
   #if(verbose) {
   #  message("Initialized", dim(cldist)[1], "clusters.")
@@ -113,7 +114,7 @@
           mrgtree[f, ] <- c(-j, mrgtree[f, ][mrgtree[f, ] != pos])
           mrgtree[pos, ] <- c(NA, NA)
 
-          change <- length(unique(cl)) > 1 #continue only if more than two clusters are left
+          change <- length(unique(cl)) > 1 #continue only if > 2 clusters remain
           merge.log[[log.index]] <- c(i, j) #merged i in j
           log.index <- log.index + 1
           break;
@@ -129,10 +130,10 @@
       next
     } else {
       if(z[1] > 0) {
-        z[1] <- z[1] - sum(is.na(mrgtree[1:z[1], 1]))
+        z[1] <- z[1] - sum(is.na(mrgtree[seq_len(z[1]), 1]))
       }
       if(z[2] > 0) {
-        z[2] <- z[2] - sum(is.na(mrgtree[1:z[2], 1]))
+        z[2] <- z[2] - sum(is.na(mrgtree[seq_len(z[2]), 1]))
       }
       mrgtree[i, ] <- z
     }
@@ -162,9 +163,11 @@
       if(link.method == "average") {
         for(j in seq(ncl)) {
           if(is.null(ordi)) {
-            dmat[i, j] <- dmat[j, i] <- f.average_linkage_dist(a = X[cl == i, ], b = X[cl == j, ])
+            dmat[i, j] <- dmat[j, i] <- f.average_linkage_dist(a=X[cl == i,],
+                                                               b=X[cl == j,])
           } else {
-            dmat[i, j] <- dmat[j, i] <- f.average_linkage_dist(a = ordi[cl == i, ], b = ordi[cl == j, ])
+            dmat[i, j] <- dmat[j, i] <- f.average_linkage_dist(a=ordi[cl == i, ],
+                                                               b=ordi[cl == j, ])
           }
         }
       }
@@ -224,11 +227,14 @@
   f.find_cluster_plots <- function(i) {
     if(i == 1) {
       par(mar = c(3, 3, 0.5, 0.5), mgp = c(2, 0.65, 0))
-      plot(1:k, ms[1:k], ylab = expression("<" * italic(S) * ">"), type = "b",
-           xlab = "Number of clusters", col = "blue", axes = FALSE, ylim = c(0, max(ms[1:k])))
-      #f.grid(x.grid = 1:k)
-      points(1:k, ms[1:k], type = "b", col = "blue"); abline(h = min.size, lty = 2)
-      axis(1, at = 1:k); axis(2); box(bty = "L")
+      plot(seq_len(k), ms[seq_len(k)], ylab = expression("<" * italic(S) * ">"),
+           type = "b",
+           xlab = "Number of clusters", col = "blue", axes = FALSE,
+           ylim = c(0, max(ms[seq_len(k)])))
+      #f.grid(x.grid = seq_len(k))
+      points(seq_len(k), ms[seq_len(k)], type = "b", col = "blue")
+      abline(h=min.size, lty = 2)
+      axis(1, at = seq_len(k)); axis(2); box(bty = "L")
     } else if(i == 2) {
       par(mar = c(0.5, 3, 0.5, 0.5), mgp = c(2, 0.65, 0))
       plot(as.hclust(hcl), main = "", xlab = "", sub = "",
@@ -237,17 +243,20 @@
     } else if(i == 3) {
       par(mar = c(0.5, 3, 0.5, 0.5), mgp = c(2, 0.65, 0))
       if(k > 2) {
-        draw.clust(clip.clust(as.hclust(hcl), X, k = k), size = 1.5, pch = NA, cex = .1)
+        draw.clust(clip.clust(as.hclust(hcl), X, k=k), size=1.5,
+                   pch=NA, cex=.1)
         #axis(2, font = 2, las = 2)
       }
     } else if(i == 4) {
       par(mar = c(0, 1, 0.5, 0.5), mgp = c(2, 0.65, 0))
       n <- length(merge.log)
-      plot(0, 0, type = "n", ylim = c(-2, n), xlim = c(0, 10), axes = FALSE, xlab = "", ylab = "")
+      plot(0, 0, type = "n", ylim = c(-2, n), xlim = c(0, 10), axes=FALSE,
+           xlab = "", ylab = "")
       text(1, n - 0.5, "Log", adj = c(0,0), font = 2)
       if(n > 0) {
         for(i in seq(n)) {
-          text(1, n - i, paste(i, ". Merged: ", merge.log[[i]][1], " & ", merge.log[[i]][2], " => ",
+          text(1, n - i, paste(i, ". Merged: ", merge.log[[i]][1], " & ",
+                               merge.log[[i]][2], " => ",
                                merge.log[[i]][2], sep = ""), adj = c(0,0))
         }
       }
@@ -257,7 +266,7 @@
 
   if(show.plots) {
     par(mfrow = c(2,2), mar = c(4, 4, 0.5, 0.5), mgp = c(2, 0.65, 0))
-    for(i in 1:4){
+    for(i in seq_len(4)){
       f.find_cluster_plots(i)
     }
   }

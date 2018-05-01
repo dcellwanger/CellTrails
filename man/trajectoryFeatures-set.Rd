@@ -9,29 +9,30 @@
 trajectoryFeatures(object) <- value
 }
 \arguments{
-\item{object}{An object of class \code{\link[CellTrails]{CellTrailsSet}}.}
+\item{object}{An object of class \code{CellTrailsSet}}
 
-\item{value}{A character vector containing the names of the features.}
+\item{value}{A character vector containing the names of the features}
 }
 \value{
-An updated object of class \code{\link[CellTrails]{CellTrailsSet}}.
+An updated object of class \code{CellTrailsSet}
 }
 \description{
-Sets features that are used for trajectory reconstruction to a \code{CellTrailsSet}
-object.
+Sets features that are used for trajectory reconstruction
+to a \code{CellTrailsSet} object.
 }
 \details{
-Features can be selected prior to trajectory inference. This step is recommended
-as it increases the accuracy and minimzes the runtime of the trajectory reconstruction
-algorithm.
+Features can be selected prior to trajectory inference.
+This step is recommended as it increases the accuracy and minimzes the
+runtime of the trajectory reconstruction algorithm.
 \cr \cr
 \emph{Diagnostic messages}
 \cr \cr
-The method states a warning if feature names cannot be found in the stored assay. Since
-\code{CellTrailsSet} extends class \code{ExpressionSet}, all feature names stored in a
-\code{CellTrailsSet} object can be retrieved by the function \code{\link[Biobase]{featureNames}}.
-Further, this method shows a warning if the feature selection generates samples with zero
-entropy, that is the selected features were not detected in these samples.
+The method states a warning if feature names cannot be found in the stored
+assay. Since \code{CellTrailsSet} extends class \code{ExpressionSet}, all
+feature names stored in a \code{CellTrailsSet} object can be retrieved by
+the function \code{featureNames}. Further, this method shows a warning if
+the feature selection generates samples with zero entropy, that is the
+selected features were not detected in these samples.
 }
 \examples{
 # Generate example data
@@ -42,6 +43,9 @@ ctset <- as.CellTrailsSet(dat)
 
 # Set trajectory features
 trajectoryFeatures(ctset) <- Biobase::featureNames(ctset)[1:10]
+}
+\seealso{
+\code{\link[CellTrails]{CellTrailsSet}}
 }
 \author{
 Daniel C. Ellwanger

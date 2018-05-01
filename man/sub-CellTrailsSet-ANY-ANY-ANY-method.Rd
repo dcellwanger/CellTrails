@@ -8,17 +8,18 @@
 \S4method{[}{CellTrailsSet,ANY,ANY,ANY}(x, i, j, drop = "missing")
 }
 \arguments{
-\item{x}{A \code{\link[CellTrails]{CellTrailsSet}} object}
+\item{x}{A \code{CellTrailsSet} object}
 
 \item{i}{Feature indices specifying elements to extract}
 
 \item{j}{Sample indices specifying elements to extract}
 
-\item{drop}{If TRUE the result is coerced to the lowest possible dimension (default: "missing").}
+\item{drop}{If TRUE the result is coerced to the lowest possible
+dimension (default: "missing").}
 }
 \value{
 numerical matrix
-See \code{\link[base]{drop}} for further details.
+See \code{drop} for further details.
 }
 \description{
 Extract parts of expression matrix

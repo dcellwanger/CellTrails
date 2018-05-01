@@ -9,19 +9,19 @@
 trajectoryFeatures(object)
 }
 \arguments{
-\item{object}{An object of class \code{\link[CellTrails]{CellTrailsSet}}.}
+\item{object}{An object of class \code{CellTrailsSet}}
 }
 \value{
-An object of class \code{\link{character}}
+An object of class \code{character}
 }
 \description{
-Retrieve names of features that were selected for trajectory reconstruction from a
-\code{CellTrailsSet} object.
+Retrieve names of features that were selected for trajectory reconstruction
+from a \code{CellTrailsSet} object.
 }
 \details{
-Features can be selected prior to trajectory inference. This method retrieves
-the user-defined features from a \code{CellTrailsSet} object. The return value
-is a character vector containing the feature names.
+Features can be selected prior to trajectory inference.
+This method retrieves the user-defined features from a \code{CellTrailsSet}
+object. The return value is a character vector containing the feature names.
 }
 \examples{
 # Generate example data
@@ -32,6 +32,9 @@ ctset <- as.CellTrailsSet(dat)
 
 # Get trajectory features
 trajectoryFeatures(ctset)
+}
+\seealso{
+\code{\link[CellTrails]{CellTrailsSet}}
 }
 \author{
 Daniel C. Ellwanger

@@ -9,12 +9,12 @@
 addLandmark(object, sample_name)
 }
 \arguments{
-\item{object}{An object of class \code{\link[CellTrails]{CellTrailsSet}}.}
+\item{object}{An object of class \code{CellTrailsSet}}
 
 \item{sample_name}{A character string indicating the name of the sample}
 }
 \value{
-An updated object of class \code{\link[CellTrails]{CellTrailsSet}}
+An updated object of class \code{CellTrailsSet}
 }
 \description{
 Adds a landmark to a \code{CellTrailsSet} object.
@@ -58,6 +58,9 @@ trajectoryLayout(ctset, adjust=TRUE) <- trajLayouts$example
 ctset <- addLandmark(ctset, sample_name="C3_sample_10")
 
 plot(ctset, type="trailblazing")
+}
+\seealso{
+\code{\link[CellTrails]{CellTrailsSet}}
 }
 \author{
 Daniel C. Ellwanger

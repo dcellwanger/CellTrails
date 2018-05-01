@@ -9,9 +9,9 @@
 reduceDimensions(ctset, ctspec)
 }
 \arguments{
-\item{ctset}{A \code{\link[CellTrails]{CellTrailsSet}} object}
+\item{ctset}{A \code{CellTrailsSet} object}
 
-\item{ctspec}{A \code{\link[CellTrails]{CellTrailsSpectrum}} object}
+\item{ctspec}{A \code{CellTrailsSpectrum} object}
 }
 \value{
 An updated object of class \code{CellTrailsSet}
@@ -21,17 +21,17 @@ Truncates eigenbasis based on the eigengap criterion.
 }
 \details{
 The number of informative dimensions was determined
-using the function \code{\link{findSpectrum}}. The resulting
+using the function \code{findSpectrum}. The resulting
 object is of class \code{CellTrailsSpectrum} and is used
 in this method to reduce the dimensionality of the latent space
 (ie. the result of the sample embedding).
 \cr \cr
 \emph{Diagnostic messages}
 \cr \cr
-An error is thrown if the samples stored in the \code{CellTrailsSet} object were
-not embedded yet (ie. the \code{CellTrailsSet} object does not contain a
-latent space matrix object; function call \code{\link[CellTrails]{latentSpace}}
-returns NULL; see \code{\link[CellTrails]{embedSamples}}).
+An error is thrown if the samples stored in the \code{CellTrailsSet}
+object were not embedded yet (ie. the \code{CellTrailsSet} object does not contain a
+latent space matrix object; function call \code{latentSpace}
+returns NULL; see \code{embedSamples}).
 }
 \examples{
 # Generate example data
@@ -52,6 +52,11 @@ ctset
 
 dim(latentSpace(ctset))
 plot(ctset, type="latentSpace", feature_name="feature_1")
+}
+\seealso{
+\code{\link[CellTrails]{latentSpace}}
+\code{\link[CellTrails]{embedSamples}}
+\code{\link[CellTrails]{findSpectrum}}
 }
 \author{
 Daniel C. Ellwanger

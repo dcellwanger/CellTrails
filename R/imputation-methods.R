@@ -1,6 +1,6 @@
 #' DEF: Imputation of drop-outs
 #'
-#' For details see \code{\link{imputeDropouts}}
+#' For details see \code{imputeDropouts}
 #' @importFrom igraph neighbors
 #' @import Biobase
 #' @keywords internal
@@ -28,7 +28,8 @@
     X.imp[i, ] <- f.impute(g = g, y = X[i, ])
     if(i %% rep.f == 0) {
       rep.ana <- (rep.total - sum(is.na(X.imp)))
-      rep.douts <- round((rep.ana - sum(X.imp == 0, na.rm = TRUE)) / rep.ana * 100, 1)
+      rep.douts <- round((rep.ana - sum(X.imp == 0, na.rm=TRUE)) / rep.ana*100,
+                         1)
       message(round(rep.ana / rep.total * 100), "% non-detects analyzed (",
               rep.douts, "% drop-outs) ...")
     }

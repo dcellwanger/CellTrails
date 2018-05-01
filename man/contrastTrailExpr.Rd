@@ -10,7 +10,7 @@ contrastTrailExpr(ctset, feature_name = featureNames(ctset), trail_names,
   score = "rmsd")
 }
 \arguments{
-\item{ctset}{A \code{\link[CellTrails]{CellTrailsSet}} object}
+\item{ctset}{A \code{CellTrailsSet} object}
 
 \item{feature_name}{Name of feature; can be multiple names}
 
@@ -25,40 +25,46 @@ Numeric value
 Comparison of feature expression dynamic between two trails.
 }
 \details{
-Genes have non-uniform expression rates and each trail has a distinct
-set of upregulated genes, but also contains unequal numbers of cells. Because
-pseudotime is based on transcriptional change, its axis may be distorted,
-leading to stretched or compressed sections of longitudinal expression data that
-make comparison of trails challenging. To align different trails, despite these
-differences, CellTrails employs a dynamic programming based algorithm that has
-long been known in speech recognition, called dynamic time warping
-(Sakoe and Chiba, 1978). RNA expression rates are modeled analogous to speaking
-rates (Aach and Church, 2001); the latter accounts for innate non-linear variation
-in the length of individual phonemes (i.e. states) resulting in stretching and
-shrinking of word (i.e. trail) segments. This allows the computation of inter-trail
-alignment warps of individual expression time series that are similar but
-locally out of phase. \cr \cr
-A trail is defined as a chronologically ordered sequence of samples representing
-feature expression snapshots at distinct points in pseudotime. Expression values
-of given features per trail are fitted and smoothed using \code{\link{gam}}, which
-also enables the projection of expression values for non-observed time points.
-Univariate pairwise alignments are computed resulting in one warp per feature and
-per trail set. First, the pseudotime axis is unified by projecting feature
-expression for a given sequence of reference pseudotime points. Then, the
+Genes have non-uniform expression rates and each trail
+has a distinct set of upregulated genes, but also contains unequal
+numbers of cells. Because pseudotime is based on transcriptional change,
+its axis may be distorted, leading to stretched or compressed sections of
+longitudinal expression data that make comparison of trails challenging.
+To align different trails, despite these differences, CellTrails employs a
+dynamic programming based algorithm that has long been known in speech
+recognition, called dynamic time warping (Sakoe and Chiba, 1978). RNA
+expression rates are modeled analogous to speaking rates
+(Aach and Church, 2001);  the latter accounts for innate non-linear variation
+in the length of individual phonemes (i.e. states) resulting in stretching
+and shrinking of word (i.e. trail) segments. This allows the computation of
+inter-trail alignment warps of individual expression time series that are
+similar but locally out of phase. \cr \cr
+A trail is defined as a chronologically ordered sequence of samples
+representing feature expression snapshots at distinct points in pseudotime.
+Expression values of given features per trail are fitted and smoothed
+using \code{gam}, which also enables the projection of expression
+values for non-observed time points. Univariate pairwise alignments are
+computed resulting in one warp per feature and per trail set. First,
+the pseudotime axis is unified by projecting feature expression for a
+given sequence of reference pseudotime points. Then, the
 corresponding expression value vectors are normalized by \eqn{x / max(x)}.
 The cross-distance matrix between both time series denotes the input to the
-dynamic time warping algorithm. Similar to a (global) pairwise protein sequence
-alignment, monotonicity (i.e. no time loops) and continuity (i.e. no time leaps)
-constraints have to be imposed on the warping function to preserve temporal sequence
-ordering. To find the optimal warp, a recursion rule is applied which selects the
-local minimum of three moves through a dynamic programming matrix: suppose that
-query snapshot \emph{g} and reference snapshot \emph{h} have already been aligned,
-then the alignment of \emph{h}+1 with \emph{g}+1 is a (unit slope) diagonal move,
-\emph{h} with \emph{g}+1 denotes an expansion by repetition of \emph{h}, and
-\emph{h}+2 with \emph{g}+1 contracts the query by dropping \emph{h}+1. \cr \cr
-The overall dissimilarity between two aligned expression time series \emph{x} and \emph{y}
+dynamic time warping algorithm. Similar to a (global) pairwise protein
+sequence alignment, monotonicity (i.e. no time loops) and continuity
+(i.e., no time leaps) constraints have to be imposed on the warping function
+to preserve temporal sequence ordering. To find the optimal warp, a recursion
+rule is applied which selects the local minimum of three moves through a
+dynamic programming matrix: suppose that query snapshot \emph{g} and reference
+snapshot \emph{h} have already been aligned,
+then the alignment of \emph{h}+1 with \emph{g}+1 is a (unit slope) diagonal
+move, \emph{h} with \emph{g}+1 denotes an expansion by repetition of \emph{h},
+and \emph{h}+2 with \emph{g}+1 contracts the query by dropping \emph{h}+1.
+\cr \cr
+The overall dissimilarity between two aligned expression time series
+\emph{x} and \emph{y}
 of length \emph{n} is estimated by either the root-mean-square deviation
-\eqn{RMSD(x, y) = \sqrt(\sum(x - y)^2/n)}, the total aboslute deviation \eqn{TAD(x, y) = \sum(|x-y|)},
+\eqn{RMSD(x, y) = \sqrt(\sum(x - y)^2/n)}, the total aboslute deviation
+\eqn{TAD(x, y) = \sum(|x-y|)},
 the area between the aligned dynamic curves (\code{ABC}), or Pearson's
 correlation coefficient (\code{cor}) over all aligned elements.
 }

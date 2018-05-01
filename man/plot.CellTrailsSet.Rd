@@ -10,37 +10,44 @@
   map_type = c("full", "se", "single"), ...)
 }
 \arguments{
-\item{x}{A \code{\link[CellTrails]{CellTrailsSet}} object}
+\item{x}{A \code{CellTrailsSet} object}
 
 \item{type}{character value; defines which type of data should be shown}
 
-\item{feature_name}{character value; name of feature(s) (one or multiple of \code{\link{featureNames}})}
+\item{feature_name}{character value; name of feature(s) (one or multiple
+of \code{featureNames})}
 
-\item{pheno_type}{character value; name of phenotypical information (one of \code{\link{varLabels}})}
+\item{pheno_type}{character value; name of phenotypical information
+(one of \code{varLabels})}
 
-\item{viz}{an object of class \code{\link[ggplot2]{ggplot}}; can be used to avoid tSNE re-calculation}
+\item{viz}{an object of class \code{ggplot}; can be used to avoid tSNE
+re-calculation}
 
 \item{perplexity}{numeric value; perplexity parameter of tSNE (default: 30)}
 
-\item{seed}{integer value; starting number for random number generator (default: 1101)}
+\item{seed}{integer value; starting number for random number generator
+(default: 1101)}
 
-\item{component}{integer value; component of trajectory graph that should be shown}
+\item{component}{integer value; component of trajectory graph that should
+be shown}
 
-\item{point_size}{numeric value; size of shown points or pie charts (default: 3)}
+\item{point_size}{numeric value; size of shown points or pie charts
+(default: 3)}
 
 \item{label_offset}{numeric value; offset of point label (default: 2)}
 
-\item{trail_name}{character value; name of trail (one of \code{\link{trailNames}})}
+\item{trail_name}{character value; name of trail (one of \code{trailNames})}
 
-\item{map_type}{character value; type of map that should be shown (default: "full")}
+\item{map_type}{character value; type of map that should be shown
+(default: "full")}
 
 \item{...}{Additional arguments; not normally accessed by user directly}
 }
 \value{
-A \code{\link[ggplot2]{ggplot}} object
+A \code{ggplot} object
 }
 \description{
-Visualizes the data contained in a \code{\link[CellTrails]{CellTrailsSet}} object
+Visualizes the data contained in a \code{CellTrailsSet} object
 }
 \details{
 The available usage options:
@@ -88,7 +95,7 @@ The available visualization options for parameter \code{type}:
   individual samples by a metadata label. The feature is selected with parameter \code{feature_name},
   the metadata label with \code{pheno_type}, respectively. To show feature expression, a surface is
   fitted using isotropic (i.e. same parameters for both map dimensions)
-  thin-plate spline smoothing in \code{\link{gam}}. It gives an overview of expression dynamics
+  thin-plate spline smoothing in \code{gam}. It gives an overview of expression dynamics
   along all branches of the trajectory. The parameter \code{map_type} defines if either the full
   fitted expression surface should be shown (\code{map_type="full"}) or the standard error
   of the surface prediction (\code{map_type="se"}), or the expression values of single samples
@@ -102,9 +109,9 @@ The available visualization options for parameter \code{type}:
   given trail. Feature name(s) are defined by parameter \code{feature_name}, the trail is defined by
   parameter \code{trail_name}. Points represent single samples colorized by state and the line is the
   fitted dynamic. If multiple features are selected, then only their fitted dynamics are shown.
-  The dynamic is fitted using a \code{\link{gam}} with a single
+  The dynamic is fitted using a \code{gam} with a single
   smoothing term with four basis dimension and prior weights as defined in function
-  \code{\link{fitDynamic}}.}
+  \code{fitDynamic}.}
 }
 }
 \examples{
@@ -181,8 +188,9 @@ plot(ctset, type="dynamic", feature_name="feature_3", trail_name="Tr1")
 plot(ctset, type="dynamic", feature_name=c("feature_1", "feature_10"), trail_name="Tr2")
 }
 \references{
-van der Maaten, L.J.P. & Hinton, G.E., 2008. Visualizing High-Dimensional
-Data Using t-SNE. Journal of Machine Learning Research, 9, pp.2579-2605.
+van der Maaten, L.J.P. & Hinton, G.E., 2008. Visualizing
+High-Dimensional Data Using t-SNE. Journal of Machine Learning Research,
+9, pp.2579-2605.
 }
 \seealso{
 \code{\link[ggplot2]{ggplot2-package}}

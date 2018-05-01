@@ -9,12 +9,12 @@
 trailNames(object) <- value
 }
 \arguments{
-\item{object}{An object of class \code{\link[CellTrails]{CellTrailsSet}}}
+\item{object}{An object of class \code{CellTrailsSet}}
 
 \item{value}{A character vector with the trail names}
 }
 \value{
-An updated object of class \code{\link[CellTrails]{CellTrailsSet}}
+An updated object of class \code{CellTrailsSet}
 }
 \description{
 Enables to rename trails stored in a \code{CellTrailsSet}
@@ -69,6 +69,9 @@ trailNames(ctset)
 # Update trail names
 trailNames(ctset) <- c("TrA", "TrB")
 trailNames(ctset)
+}
+\seealso{
+\code{\link[CellTrails]{CellTrailsSet}}
 }
 \author{
 Daniel C. Ellwanger

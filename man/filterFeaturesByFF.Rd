@@ -9,7 +9,7 @@
 filterFeaturesByFF(ctset, threshold = 1.7, min_expr = 0, design = NULL)
 }
 \arguments{
-\item{ctset}{An \code{\link[CellTrails]{CellTrailsSet}} object}
+\item{ctset}{An \code{CellTrailsSet} object}
 
 \item{threshold}{A Z-score cutoff (default: 1.7)}
 
@@ -19,7 +19,7 @@ filterFeaturesByFF(ctset, threshold = 1.7, min_expr = 0, design = NULL)
 for filter procedure (default: 0)}
 }
 \value{
-An updated \code{\link[CellTrails]{CellTrailsSet}} object
+An updated \code{CellTrailsSet} object
 }
 \description{
 Filters trajectory features that exhibit a significantly high fano factor
@@ -28,18 +28,23 @@ Filters trajectory features that exhibit a significantly high fano factor
 \details{
 To identify the most variable features an unsupervised strategy
 that controls for the relationship between a features’s average expression
-intensity and its expression variability is applied. Features are placed into
-20 bins based on their mean expression. For each bin the fano factor
-(a windowed version of the index of dispersion, IOD = variance / mean) distribution
-is computed and standardized (\emph{Z}-score(\emph{x}) = x/sd(\emph{x}) - mean(\emph{x})/sd(\emph{x})).
+intensity and its expression variability is applied. Features are placed
+into 20 bins based on their mean expression. For each bin the fano factor
+(a windowed version of the index of dispersion, IOD = variance / mean)
+distribution is computed and standardized
+(\emph{Z}-score(\emph{x}) = x/sd(\emph{x}) - mean(\emph{x})/sd(\emph{x})).
 Features with a \emph{Z}-score
 greater than \code{threshold} remain labeled as trajectory feature
-in the \code{CellTrailsSet} object. The parameter \code{min_expr} defines the minimum
-average expression level of a feature to be considered for this filter method.
+in the \code{CellTrailsSet} object. The parameter \code{min_expr} defines
+the minimum average expression level of a feature to be considered for
+this filter method.
 \cr \cr
-To account for systematic bias in the expression data (e.g., cell cycle effects), a design matrix can be
-provided for the learning process. It should list the factors that should be blocked and their values per
-sample. It is suggested to construct a design matrix with \code{\link[stats]{model.matrix}}.
+To account for systematic bias in the expression data
+(e.g., cell cycle effects),
+a design matrix can be provided for the learning process. It should list the
+factors that should be blocked and their values per
+sample. It is suggested to construct a design matrix
+with \code{model.matrix}.
 }
 \examples{
 # Simulate example data
@@ -56,7 +61,9 @@ ctset <- filterFeaturesByFF(ctset, threshold=1.7, min_expr=0)
 length(trajectoryFeatures(ctset))
 }
 \seealso{
-\code{\link{trajectoryFeatures}}
+\code{\link[CellTrails]{CellTrailsSet}}
+\code{\link[CellTrails]{trajectoryFeatures}}
+\code{\link[stats]{model.matrix}}
 }
 \author{
 Daniel C. Ellwanger

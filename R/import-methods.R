@@ -1,6 +1,6 @@
 #' DEF: Read trajectory graph
 #'
-#' For details see \code{\link[igraph]{read.ygraphml}}
+#' For details see \code{read.ygraphml}
 #' @importFrom utils read.table
 #' @keywords internal
 #' @author Daniel C. Ellwanger
@@ -28,8 +28,10 @@
 
     x.tmp <- regmatches(tmp, regexpr('x=\"-?[0-9]+\\.?[0-9]*\"', tmp)) #regexpr('x=\"-?[0-9]+\\.?-?[0-9]*\"', tmp)
     y.tmp <- regmatches(tmp, regexpr('y=\"-?[0-9]+\\.?[0-9]*\"', tmp))
-    x1 <- gsub(pattern = "[^-?[:digit:]+\\.?-?[:digit:]+]", replacement = "", x = x.tmp, perl = TRUE)
-    x2 <- gsub(pattern = "[^-?[:digit:]+\\.?-?[:digit:]+]", replacement = "", x = y.tmp, perl = TRUE)
+    x1 <- gsub(pattern = "[^-?[:digit:]+\\.?-?[:digit:]+]", replacement = "",
+               x = x.tmp, perl = TRUE)
+    x2 <- gsub(pattern = "[^-?[:digit:]+\\.?-?[:digit:]+]", replacement = "",
+               x = y.tmp, perl = TRUE)
 
     Y <- data.frame(D1 = as.numeric(x1), D2 = -as.numeric(x2))
     row.names(Y) <- snames
@@ -55,7 +57,8 @@
     #  Y[i, 2] <- -y2
     #}
   } else if(format == "PLAIN") {
-    Y <- read.table(file, row.names = 1, colClasses = c("numeric", "numeric"), sep = "\t")
+    Y <- read.table(file, row.names = 1,
+                    colClasses = c("numeric", "numeric"), sep = "\t")
     colnames(Y) <- c("D1", "D2")
   } else {
     stop("Unknown format ", format, ".")

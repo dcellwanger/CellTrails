@@ -5,6 +5,7 @@
 \alias{as.CellTrailsSet}
 \alias{as.CellTrailsSet,ExpressionSet-method}
 \alias{as.CellTrailsSet,matrix-method}
+\alias{as.CellTrailsSet,SingleCellExperiment-method}
 \title{Coerce into CellTrailsSet}
 \usage{
 as.CellTrailsSet(object)
@@ -12,22 +13,33 @@ as.CellTrailsSet(object)
 \S4method{as.CellTrailsSet}{ExpressionSet}(object)
 
 \S4method{as.CellTrailsSet}{matrix}(object)
+
+\S4method{as.CellTrailsSet}{SingleCellExperiment}(object)
 }
 \arguments{
-\item{object}{An \code{\link[Biobase]{ExpressionSet}} object or numerical matrix
+\item{object}{An \code{ExpressionSet} object or numerical matrix
 with samples in rows and features in columns}
 }
 \value{
-A \code{\link[CellTrails]{CellTrailsSet}} object
+A \code{CellTrailsSet} object
 }
 \description{
-Function to coerce an \code{\link[Biobase]{ExpressionSet}} object or numerical
-matrix into a \code{\link[CellTrails]{CellTrailsSet}} object.
+Function to coerce an \code{ExpressionSet} object, numerical
+matrix or \code{SingleCellExperiment} object into a \code{CellTrailsSet}
+object.
+}
+\details{
+We recommend to perform a CellTrails analysis on
+log-normalized expression data without spike-in controls. To properly coerce
+a \code{SingleCellExperiment} into a \code{CellTrailsSet} a \code{logcounts}
+assay needs to be defined (see examples).
 }
 \examples{
 # Generate example data
 dat_num <- simulate_exprs(10, 100)
 dat_eset <- exDat()
+dat_list <- list(logcounts=dat_num)
+dat_sce <- SingleCellExperiment::SingleCellExperiment(assay=dat_list)
 
 # From numerical matrix to CellTrailsSet
 ctset1 <- as.CellTrailsSet(dat_num)
@@ -36,7 +48,14 @@ ctset1
 # From ExpressionSet to CellTrailsSet
 ctset2 <- as.CellTrailsSet(dat_eset)
 ctset2
+
+# From SingleCellExperiment to CellTrailsSet
+ctset3 <- as.CellTrailsSet(dat_sce)
 }
 \seealso{
+\ code{\link[CellTrails]{CellTrailsSet}}
+\code{\link[Biobase]{ExpressionSet}}
+\code{\link[SingleCellExperiment]{SingleCellExperiment}}
+
 ExpressionSet
 }

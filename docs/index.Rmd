@@ -453,7 +453,9 @@ The following illustrates the typical sequence of steps performed during a *Cell
 # -------------------------------
 # Container Creation
 # -------------------------------
-ctset <- as.CellTrailsSet(object) #either numeric matrix or ExpressionSet
+# Either from a numeric matrix, 
+# ExpressionSet or SingleCellExperiment object
+ctset <- as.CellTrailsSet(object)
 
 # -------------------------------
 # Feature Selection
@@ -574,9 +576,25 @@ class(gga_e15_utricle)
 ctset <- as.CellTrailsSet(gga_e15_utricle)
 ```
 
-*Please note*, that function `as.ExpressionSet` enables to (back) coerce any `CellTrailsSet` object into an `ExpressionSet`.
+*Please note*, that function `as.ExpressionSet` enables to (back) coerce any `CellTrailsSet` object into an `ExpressionSet`. Relevant sample information produced during a *CellTrails* analysis can be accessed via `pData`.
 
-## From Matrix
+## From SingleCellExperiment
+The `r Biocpkg("SingleCellExperiment")` package, enables the efficient organization of quantitative single-cell expression data and experimental metadata. A `CellTrailsSet` object can be initialized from a `SingleCellExperiment` object as follows:
+
+```{r, eval=TRUE}
+# Create SingleCellExperiment from ExpressionSet
+sce <- SingleCellExperiment::SingleCellExperiment(
+  assay = list(logcounts = exprs(gga_e15_utricle)), 
+  colData = S4Vectors::DataFrame(pData(gga_e15_utricle)),
+  rowData = S4Vectors::DataFrame(fData(gga_e15_utricle)))
+
+# Initialize CellTrailsSet from SingleCellExperiment
+ctset <- as.CellTrailsSet(sce)
+```
+
+*Please note*, the function `as.SingleCellExperiment` enables to (back) coerce any `CellTrailsSet` object into an `SingleCellExperiment`. Relevant sample information produced during a *CellTrails* analysis can be accessed via `SingleCellExperiment::colData`.
+
+## From Numeric Matrix
 The minimal requirement to initialize a `CellTrailsSet` object is a numerical matrix containing quantitative expression measurements. Here, features (e.g., genes or transcripts) are represented by rows and samples (e.g., single cells) are represented by columns. We recommend assigning meaningful row and column names.
 
 ```{r, eval=TRUE}

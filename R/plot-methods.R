@@ -1,8 +1,8 @@
 #' DEF: Visualizing the spectrum definition
 #'
-#' For details see \code{\link{plot.CellTrailsSpectrum}}
-#' @param x A \code{\link{CellTrailsSpectrum}} object
-#' @return A \code{\link{ggplot}} object
+#' For details see \code{plot.CellTrailsSpectrum}
+#' @param x A \code{CellTrailsSpectrum} object
+#' @return A \code{ggplot} object
 #' @import ggplot2
 #' @keywords internal
 #' @author Daniel C. Ellwanger
@@ -12,8 +12,10 @@
   }
   Y <- x@cs[seq(x@frac)]
   gp <- ggplot()
-  gp <- gp + aes(x=seq(x@frac), y=Y) + geom_point(color=c(rep("red", x@n - 1), rep("gray40", x@frac - x@n + 1)))
-  gp <- gp + geom_line(mapping=aes(x=x@fit$x, y=x@fit$y, lty = 'Fit'), color = "blue")
+  gp <- gp + aes(x=seq(x@frac), y=Y) +
+    geom_point(color=c(rep("red", x@n - 1), rep("gray40", x@frac - x@n + 1)))
+  gp <- gp + geom_line(mapping=aes(x=x@fit$x, y=x@fit$y, lty = 'Fit'),
+                       color = "blue")
   gp <- gp + xlab("Spectrum")
   gp <- gp + ylab("Total eigengap")
   brks <- sort(c(pretty(seq(x@frac)), x@n - 1))
@@ -22,16 +24,17 @@
   col[brks == x@n - 1] <- "red"
   gp <- gp + theme(axis.line=element_line(colour = "black"),
                    axis.text.x=element_text(color = col),
-                   axis.ticks.x=element_line(color = col), legend.title=element_blank())
+                   axis.ticks.x=element_line(color = col),
+                   legend.title=element_blank())
   #gp <- gp + geom_vline(xintercept = 8)
   gp
 }
 
 #' DEF: Visualizing states sizes
 #'
-#' For details see \code{\link{plot.CellTrailsSet}}
+#' For details see \code{plot.CellTrailsSet}
 #' @param x A \code{CellTrailsSet} object
-#' @return A \code{\link{ggplot}} object
+#' @return A \code{ggplot} object
 #' @import ggplot2
 #' @keywords internal
 #' @author Daniel C. Ellwanger
@@ -46,10 +49,10 @@
 
 #' DEF: Violine plots of genes
 #'
-#' For details see \code{\link{plot.CellTrailsSet}}
+#' For details see \code{plot.CellTrailsSet}
 #' @param x A \code{CellTrailsSet} object
 #' @param feature_name Name of feature
-#' @return A \code{\link{ggplot}} object
+#' @return A \code{ggplot} object
 #' @import ggplot2
 #' @keywords internal
 #' @author Daniel C. Ellwanger
@@ -71,26 +74,30 @@
 
 #' DEF: Visualizing the lower-dimensional manifold
 #'
-#' For details see \code{\link{plot.CellTrailsSet}}
+#' For details see \code{plot.CellTrailsSet}
 #' @param x A \code{CellTrailsSet} object
-#' @param pheno_type Type of sample meta information; must match entity in \code{varLabels}.
+#' @param pheno_type Type of sample meta information; must match entity
+#' in \code{varLabels}.
 #' @param feature_name Name of feature; must match entity in \code{featureNames}.
 #' @param seed Seed for tSNE computation
 #' @param perplexity Perplexity parameter of tSNE calculation
-#' @param viz A \code{\link{ggplot}} object containing the result of a previous
+#' @param viz A \code{ggplot} object containing the result of a previous
 #' \code{plot_latentSpace} call
-#' @return A \code{\link{ggplot}} object
+#' @return A \code{ggplot} object
 #' @import ggplot2
 #' @keywords internal
 #' @author Daniel C. Ellwanger
 .plot_latentSpace <- function(x, pheno_type=NULL,
-                            feature_name=NULL, seed=1101, perplexity=30, viz=NULL, ...) {
+                            feature_name=NULL,
+                            seed=1101, perplexity=30, viz=NULL, ...) {
   #Pre-flight checks
   if(is.null(pheno_type) && is.null(feature_name)) {
-    stop("Wrong parameter setting: define either a pheno_type or a feature_name, please.")
+    stop("Wrong parameter setting: define either a pheno_type or a ",
+         "feature_name, please.")
   }
   if(!is.null(pheno_type) && !is.null(feature_name)) {
-    stop("Wrong parameter setting: define either a pheno_type or a feature_name, please.")
+    stop("Wrong parameter setting: define either a pheno_type or a ",
+         "feature_name, please.")
   }
 
   if(is.null(viz)) {
@@ -123,8 +130,10 @@
       gp <- gp + ylab("CellTrails tSNE 2")
       gp <- gp + labs(colour = pheno_type)
 
-      gp <- gp + geom_point(mapping = aes(x = Y[!nas,1], y = Y[!nas,2], color = dat[!nas]))
-      gp <- gp + scale_color_gradientn(colours = viridis(3), limits = c(1e-10, max(dat)))
+      gp <- gp + geom_point(mapping=aes(x=Y[!nas,1], y=Y[!nas,2],
+                                          color=dat[!nas]))
+      gp <- gp + scale_color_gradientn(colours=viridis(3),
+                                       limits=c(1e-10, max(dat)))
     } else {
       nas <- is.na(dat)
       gp <- gp + aes(x = Y[nas, 1], y = Y[nas, 2])
@@ -132,7 +141,8 @@
       gp <- gp + xlab("CellTrails tSNE 1")
       gp <- gp + ylab("CellTrails tSNE 2")
       gp <- gp + labs(colour = pheno_type)
-      gp <- gp + geom_point(mapping = aes(x = Y[!nas, 1], y = Y[!nas, 2], color = factor(dat[!nas])))
+      gp <- gp + geom_point(mapping=aes(x=Y[!nas, 1], y=Y[!nas, 2],
+                                        color=factor(dat[!nas])))
     }
   } else if(!is.null(feature_name)) {
     .checkFeatureNameExists(x, feature_name)
@@ -146,8 +156,11 @@
     gp <- gp + ylab("CellTrails tSNE 2")
     gp <- gp + labs(colour = feature_name)
 
-    gp <- gp + geom_point(mapping = aes(x = Y[!nas,1], y = Y[!nas,2], color = dat[!nas]))
-    gp <- gp + scale_color_gradientn(colours = viridis(3), limits = c(1e-10, max(dat)))
+    gp <- gp + geom_point(mapping=aes(x=Y[!nas,1],
+                                      y=Y[!nas,2],
+                                      color=dat[!nas]))
+    gp <- gp + scale_color_gradientn(colours=viridis(3),
+                                     limits=c(1e-10, max(dat)))
   }
   gp <- gp + theme(axis.line=element_line(colour="black"),
                    panel.border=element_blank(),
@@ -160,20 +173,22 @@
 
 #' DEF: Visualizing the trajectory graph
 #'
-#' For details see \code{\link{plot.CellTrailsSet}}
+#' For details see \code{plot.CellTrailsSet}
 #' @param x A \code{CellTrailsSet} object
 #' @param feature_name Name of the feature (optional)
 #' @param seed Makes result reproducible
 #' @param component Component of the trajectory graph
-#' @return A \code{\link{ggplot}} object
+#' @return A \code{ggplot} object
 #' @importFrom igraph V layout.fruchterman.reingold get.edgelist
 #' @import Biobase
 #' @importFrom viridis viridis
 #' @import ggplot2
 #' @keywords internal
 #' @author Daniel C. Ellwanger
-.plot_stateTrajectoryGraph <- function(x, feature_name=NULL, pheno_type=NULL, component=NULL,
-                                 point_size=3, label_offset=2, seed=1101) {
+.plot_stateTrajectoryGraph <- function(x, feature_name=NULL,
+                                       pheno_type=NULL, component=NULL,
+                                       point_size=3, label_offset=2,
+                                       seed=1101) {
   #Pre-flight checks
   if(is.null(component) && length(stateTrajectoryGraph(x)) > 1) {
     stop("Please, specify the component.")
@@ -182,13 +197,16 @@
     component <- 1
   }
   if(component > length(stateTrajectoryGraph(x))) {
-    stop("Unknown component selected. Please, make sure that the correct component number was selected.")
+    stop("Unknown component selected. Please, make sure that the ",
+         "correct component number was selected.")
   }
   if(is.null(pheno_type) && is.null(feature_name)) {
-    stop("Wrong parameter setting: define either a pheno_type or a feature_name, please.")
+    stop("Wrong parameter setting: define either a pheno_type or a ",
+         "feature_name, please.")
   }
   if(!is.null(pheno_type) && !is.null(feature_name)) {
-    stop("Wrong parameter setting: define either a pheno_type or a feature_name, please.")
+    stop("Wrong parameter setting: define either a pheno_type or a ",
+         "feature_name, please.")
   }
 
   g <- stateTrajectoryGraph(x)[[component]]
@@ -207,15 +225,21 @@
   edgelist <- get.edgelist(g)
   edges <- data.frame(Y[edgelist[,1],], Y[edgelist[,2],])
   colnames(edges) <- c("X1", "Y1", "X2", "Y2")
-  gp <- ggplot() + geom_segment(aes_string(x="X1", y="Y1", xend="X2", yend="Y2"),
-                                     data=edges, size = 0.5, colour="gray")
+  gp <- ggplot() + geom_segment(aes_string(x="X1",
+                                           y="Y1",
+                                           xend="X2",
+                                           yend="Y2"),
+                                data=edges,
+                                size = 0.5,
+                                colour="gray")
   lblfactor <- 1
 
   if(!is.null(pheno_type)) {
     pheno_type <- ifelse(toupper(pheno_type) == "STATE", "STATE", pheno_type)
     if(!pheno_type %in% varLabels(x)) {
-      stop("Variable label '", pheno_type, "' not found. Please, check correct spelling. ",
-           "To see all available pheno_types call 'varLabels(object)'.")
+      stop("Variable label '", pheno_type, "' not found. Please, check correct ",
+           "spelling. ", "To see all available pheno_types call ",
+           "'varLabels(object)'.")
     }
     pdata <- pData(x)[, c("STATE", pheno_type)]
 
@@ -236,8 +260,10 @@
       nas <- dat == 0
       gp <- gp + aes(x = Y[nas, 1], y = Y[nas, 2])
       gp <- gp + geom_point(pch = 1, col = "gray40", size = point_size)
-      gp <- gp + geom_point(aes(Y[!nas, 1], Y[!nas, 2], color = dat[!nas]), size = point_size)
-      gp <- gp + scale_color_gradientn(colours = viridis(3), limits = c(1e-10, max(tmax)))
+      gp <- gp + geom_point(aes(Y[!nas, 1], Y[!nas, 2], color=dat[!nas]),
+                            size=point_size)
+      gp <- gp + scale_color_gradientn(colours = viridis(3),
+                                       limits=c(1e-10, max(tmax)))
       gp <- gp + labs(colour = pheno_type)
     } else {
       pdata[, 2] <- factor(pdata[, 2])
@@ -247,13 +273,16 @@
 #        gp <- gp + geom_point(aes(X1, X2, color = vnames), data=Y, size = point_size)
 #        gp <- gp + labs(colour = pheno_type)
 #      } else {
-          df <- data.frame(Y[as.character(pdata$STATE), ], STATE=pdata$STATE, X3=pdata[,2], K=factor(1))
+          df <- data.frame(Y[as.character(pdata$STATE), ], STATE=pdata$STATE,
+                           X3=pdata[,2], K=factor(1))
 
           l <- list()
           for(i in vnames) {
-            l[[i]] <- ggplot(df[df$STATE == i, ], aes_string(x="K", fill="X3")) +
+            l[[i]] <- ggplot(df[df$STATE == i, ], aes_string(x="K",
+                                                             fill="X3")) +
               geom_bar(width = 1, color = "black") +
-              scale_fill_discrete(drop=FALSE) + scale_x_discrete(drop=FALSE) +
+              scale_fill_discrete(drop=FALSE) +
+              scale_x_discrete(drop=FALSE) +
               coord_polar("y") +
               #geom_col(position = "fill", alpha = 0.75, colour = "white") +
               #coord_polar("y", start = 1) +  #theta =
@@ -273,12 +302,18 @@
                                     ymin=Y[i, 2] - d, ymax=Y[i, 2] + d)
             l2[[i]] <- ac
           }
-          gp <- ggplot() + geom_segment(data=edges, aes_string(x="X1", y="Y1", xend="X2", yend="Y2"),
+          gp <- ggplot() + geom_segment(data=edges, aes_string(x="X1",
+                                                               y="Y1",
+                                                               xend="X2",
+                                                               yend="Y2"),
                                         size = 0.5, colour="gray")
           #ggplot(data = Y, aes(X1, X2)) + l2 + geom_point()
           df.f <- df[1, ]
-          gp <- gp + geom_point(data = df, aes_string(x="X1", y="X2", colour="X3")) + l2
-          gp <- gp + guides(col = guide_legend(override.aes = list(shape = 15, size = 5)))
+          gp <- gp + geom_point(data = df, aes_string(x="X1",
+                                                      y="X2",
+                                                      colour="X3")) + l2
+          gp <- gp + guides(col = guide_legend(override.aes = list(shape=15,
+                                                                   size=5)))
           #gp <- gp + geom_col(data = df, aes(x=0, y=0, fill = X3)) + l2
           gp <- gp + labs(colour = pheno_type)
 #      }
@@ -292,15 +327,19 @@
     nas <- dat == 0
     gp <- gp + aes(x = Y[nas, 1], y = Y[nas, 2])
     gp <- gp + geom_point(pch = 1, col = "gray40", size = point_size)
-    gp <- gp + geom_point(aes(Y[!nas, 1], Y[!nas, 2], color = dat[!nas]), size = point_size)
-    gp <- gp + scale_color_gradientn(colours = viridis(3), limits = c(1e-10, max(tmax)))
+    gp <- gp + geom_point(aes(Y[!nas, 1],
+                              Y[!nas, 2],
+                              color=dat[!nas]), size=point_size)
+    gp <- gp + scale_color_gradientn(colours=viridis(3),
+                                     limits=c(1e-10, max(tmax)))
     gp <- gp + labs(colour = feature_name)
   }
   #lbls
   gp.xrange <- ggplot_build(gp)$layout$panel_ranges[[1]]$x.range
   gp.yrange <- ggplot_build(gp)$layout$panel_ranges[[1]]$y.range
   gp <- gp + geom_text(aes_string(x="X1", y="X2", label="vnames"),
-                       hjust=0, vjust=0, data=Y, nudge_x=abs(gp.xrange[1] - gp.xrange[2]) * 0.01 * label_offset,
+                       hjust=0, vjust=0, data=Y,
+                       nudge_x=abs(gp.xrange[1] - gp.xrange[2]) * 0.01 * label_offset,
                        nudge_y = abs(gp.yrange[1] - gp.yrange[2]) * 0.01 * label_offset)
   #gp <- gp + geom_text_repel(aes(X1, X2, label=vnames), data=Y, segment.size = 0)
   gp <- gp + xlim(gp.xrange[1] - abs(gp.xrange[1] - gp.xrange[2]) * 0.01 * label_offset,
@@ -320,23 +359,25 @@
 
 #' DEF: Visualizing the trajectory fit
 #'
-#' For details see \code{\link{plot.CellTrailsSet}}
+#' For details see \code{plot.CellTrailsSet}
 #' @param x A \code{CellTrailsSet} object
 #' @param factor The jitter intensity correlates to the projection error
 #' @param rev Should the trajectory shown in reverse order?
-#' @return A \code{\link{ggplot}} object
+#' @return A \code{ggplot} object
 #' @importFrom igraph get.edgelist
 #' @import ggplot2
 #' @keywords internal
 #' @author Daniel C. Ellwanger
 .plot_trajectoryFit <- function(x, factor=7, rev=FALSE) {
-  Y <- .generate_ordination(x@trajectory$traj, x@trajectory$error, factor=factor, rev=rev)
+  Y <- .generate_ordination(x@trajectory$traj, x@trajectory$error,
+                            factor=factor, rev=rev)
   Y$ordi <- Y$ordi * 100
   Y$ordi.jitter <- Y$ordi.jitter * 100
   edgelist <- get.edgelist(x@trajectory$traj)
   #edgelist <- apply(edgelist, 2, as.numeric)
   #rownames(Y$ordi) <- NULL
-  edges <- data.frame(Y$ordi[edgelist[,1],], Y$ordi[edgelist[,2],], row.names=seq(nrow(edgelist)))
+  edges <- data.frame(Y$ordi[edgelist[,1],], Y$ordi[edgelist[,2],],
+                      row.names=seq(nrow(edgelist)))
   colnames(edges) <- c("X1", "Y1", "X2", "Y2")
   gp <- ggplot()
 
@@ -358,27 +399,32 @@
 
 #' DEF: Visualizing CellTrails maps
 #'
-#' For details see \code{\link{plot.CellTrailsSet}}
+#' For details see \code{plot.CellTrailsSet}
 #' @param x A \code{CellTrailsSet} object
-#' @param feature_name Name of feature; must match entity in \code{featureNames}.
-#' @param pheno_type Type of sample meta information; must match entity in \code{varLabels}.
+#' @param feature_name Name of feature; must match entity in
+#' \code{featureNames}.
+#' @param pheno_type Type of sample meta information; must match entity
+#' in \code{varLabels}.
 #' @param npoints Points of the grids (along the x- and y-axis)
 #' @param w Weights for GAM
 #' @param knots Number of knots for GAM
-#' @return A \code{\link{ggplot}} object
+#' @return A \code{ggplot} object
 #' @importFrom igraph V get.edgelist
 #' @import Biobase
 #' @import ggplot2
 #' @keywords internal
 #' @author Daniel C. Ellwanger
 .plot_map <- function(x, feature_name=NULL, pheno_type=NULL, npoints=300,
-                      weight=TRUE, knots=10, only_backbone=FALSE, map_type=c("full", "backbone", "se")) {
+                      weight=TRUE, knots=10, only_backbone=FALSE,
+                      map_type=c("full", "backbone", "se")) {
   #Pre-flight check
   if(is.null(pheno_type) && is.null(feature_name)) {
-    stop("Wrong parameter setting: define either a pheno_type or a feature_name, please.")
+    stop("Wrong parameter setting: define either a pheno_type or a ",
+         "feature_name, please.")
   }
   if(!is.null(pheno_type) && !is.null(feature_name)) {
-    stop("Wrong parameter setting: define either a pheno_type or a feature_name, please.")
+    stop("Wrong parameter setting: define either a pheno_type or a ",
+         "feature_name, please.")
   }
   if(is.null(trajectoryLayout(x))) {
     stop("No layout defined. Please, set a layout to your CellTrailsSet object
@@ -405,11 +451,13 @@
 
     if(map_type == "SINGLE") {
       #Simplified fit on small grid
-      fit <- .fit_surface(x, feature_name=feature_name, npoints=1, weight=weight, knots=knots)
+      fit <- .fit_surface(x, feature_name=feature_name, npoints=1,
+                          weight=weight, knots=knots)
       fval <- fit$fit$fitted.values
       brks <- pretty(range(fval, na.rm=TRUE, finite=TRUE), 10)
       #lbls <- paste(c("nd", brks[2:(length(brks) - 1)]), brks[2:(length(brks))], sep = " - ")
-      lbls <- paste(brks[1:(length(brks) - 1)], brks[2:(length(brks))], sep = " - ")
+      lbls <- paste(brks[seq_len(length(brks)-1)],
+                    brks[seq_len(length(brks)-1)+1], sep = " - ")
       lbls <- gsub(pattern="^0 -", replacement = "nd -", x = lbls)
 
       equalSpace <- cut(fval, breaks=brks, include.lowest=TRUE, labels=lbls)
@@ -419,11 +467,16 @@
       #cols <- cols[cut(fval, breaks = brks, include.lowest = T)]
       #cols <- adjustcolor(cols, alpha.f = .5)
 
-      gp <- ggplot() + geom_segment(aes_string(x = "X1", y = "Y1", xend = "X2", yend = "Y2"),
+      gp <- ggplot() + geom_segment(aes_string(x="X1",
+                                               y="Y1",
+                                               xend="X2",
+                                               yend="Y2"),
                                     data=edges, size = 0.5, colour = "darkred")
-      gp <- gp + geom_point(data=tlayout, mapping=aes_string(x="D1", y="D2", col="equalSpace"))
+      gp <- gp + geom_point(data=tlayout, mapping=aes_string(x="D1", y="D2",
+                                                             col="equalSpace"))
       gp <- gp + scale_colour_manual(values=
-                                      colorRampPalette(c("gray95", viridis(3)[2:3]))(length(brks) - 1),
+                                      colorRampPalette(
+                                        c("gray95", viridis(3)[2:3]))(length(brks) - 1),
                                       name=feature_name, breaks=breaks, labels=breaks)
       gp <- gp + theme_bw()
       gp <- gp + theme(axis.line=element_line(colour="black"),
@@ -440,7 +493,8 @@
       df$x3 <- fit$fit$se
       brks <- pretty(range(df$x3, na.rm=TRUE, finite=TRUE), 10)
       #lbls <- paste(c("nd", brks[2:(length(brks) - 1)]), brks[2:(length(brks))], sep = " - ")
-      lbls <- paste(brks[1:(length(brks) - 1)], brks[2:(length(brks))], sep=" - ")
+      lbls <- paste(brks[seq_len(length(brks)-1)],
+                    brks[seq_len(length(brks)-1)+1], sep = " - ")
       #lbls <- gsub(pattern="^0 -", replacement = "nd -", x = lbls)
       df$equalSpace <- cut(df$x3, breaks=brks, include.lowest=TRUE, labels=lbls)
       breaks <- rev(levels(df$equalSpace))
@@ -451,16 +505,21 @@
       #lbls <- paste0(rep("(", length(brks) - 1), lbls, rep("]", length(brks) - 1))
       breaks <- rev(levels(df$equalSpace))
 
-      gp <- ggplot() + geom_tile(data=df, aes_string(x="x1", y="x2", fill="equalSpace"))
+      gp <- ggplot() + geom_tile(data=df, aes_string(x="x1",
+                                                     y="x2",
+                                                     fill="equalSpace"))
       gp <- gp + geom_contour(data=df, aes_string(x="x1", y="x2", z="x3"),
                               color="gray40", alpha=0.5, lty=2, lwd=.5)
       gp <- gp + scale_fill_manual(values =
-                                     colorRampPalette(c("white", "black"))(length(brks) - 1),
+                                     colorRampPalette(
+                                       c("white", "black"))(length(brks) - 1),
                                    name=paste0(feature_name, "(SE)"),
                                    breaks=breaks,
                                    labels=breaks)
-      gp <- gp + geom_segment(aes_string(x="X1", y="Y1", xend="X2", yend="Y2"), data=edges,
-                              size=0.5, colour="darkred")
+      gp <- gp + geom_segment(aes_string(x="X1", y="Y1", xend="X2", yend="Y2"),
+                              data=edges,
+                              size=0.5,
+                              colour="darkred")
       gp <- gp + theme(axis.line=element_line(colour="black"),
                        panel.grid.major=element_blank(),
                        panel.grid.minor=element_blank(),
@@ -478,8 +537,10 @@
                           npoints=npoints, weight=weight, knots=knots)
       df <- fit$grid
       brks <- pretty(range(df$x3, na.rm=TRUE, finite=TRUE), 10)
-      lbls <- paste(c("nd", brks[2:(length(brks) - 1)]), brks[2:(length(brks))], sep = " - ")
-      lbls <- paste(brks[1:(length(brks) - 1)], brks[2:(length(brks))], sep=" - ")
+      lbls <- paste(c("nd", brks[2:(length(brks) - 1)]), brks[2:(length(brks))],
+                    sep = " - ")
+      lbls <- paste(brks[seq_len(length(brks)-1)],
+                    brks[seq_len(length(brks)-1)+1], sep = " - ")
       lbls <- gsub(pattern="^0 -", replacement = "nd -", x = lbls)
       df$equalSpace <- cut(df$x3, breaks=brks, include.lowest=TRUE, labels=lbls)
       breaks <- rev(levels(df$equalSpace))
@@ -510,22 +571,25 @@
       gp <- gp + geom_point(data=tlayout, aes_string(x="D1", y="D2"),
                                           colour="red", size=1.5, alpha=.1)
     } else {
-      stop("Unknown map type selected. Please, choose one from {full, backbone, se}.")
+      stop("Unknown map type selected. Please, choose one from ",
+           "{full, backbone, se}.")
     }
   } else if(!is.null(pheno_type)) {
     pheno_type <- ifelse(toupper(pheno_type) == "STATE", "STATE", pheno_type)
     if(!pheno_type %in% varLabels(x)) {
-      stop("Variable label '", pheno_type, "' not found. Please, check correct spelling. ",
+      stop("Variable label '", pheno_type, "' not found. Please, check ",
+           "correct spelling. ",
            "To see all available pheno_types call 'varLabels(object)'.")
     }
 
     df <- pData(x)[x@useSample, pheno_type]
     nnas <- !is.na(df)
     df <- df[nnas]
-    gp <- gp + geom_segment(aes_string(x="X1", y="Y1", xend="X2", yend="Y2"), data=edges,
-                                        size=0.5, colour="gray40")
+    gp <- gp + geom_segment(aes_string(x="X1", y="Y1", xend="X2", yend="Y2"),
+                            data=edges, size=0.5, colour="gray40")
     gp <- gp + labs(colour = pheno_type)
-    gp <- gp + geom_point(data=tlayout[nnas, ], mapping=aes_string(x="D1", y="D2", color=factor(df)))
+    gp <- gp + geom_point(data=tlayout[nnas, ],
+                          mapping=aes_string(x="D1", y="D2", color=factor(df)))
     gp <- gp + theme(axis.line=element_line(colour="black"),
                      panel.border=element_blank(),
                      axis.text.x=element_blank(),
@@ -534,15 +598,16 @@
                      axis.ticks.y=element_blank())
   }
   gp <- gp + xlab('CellTrails 1') + ylab('CellTrails 2')
-  gp <- gp + scale_x_continuous(expand = c(0,0)) + scale_y_continuous(expand = c(0,0))
+  gp <- gp + scale_x_continuous(expand = c(0,0)) +
+    scale_y_continuous(expand = c(0,0))
   gp
 }
 
 #' DEF: Visualizing trailblazing
 #'
-#' For details see \code{\link{plot.CellTrailsSet}}
-#' @param x A \code{\link[CellTrails]{CellTrailsSet}} object
-#' @return A \code{\link{ggplot}} object
+#' For details see \code{plot.CellTrailsSet}
+#' @param x A \code{CellTrailsSet} object
+#' @return A \code{ggplot} object
 #' @importFrom igraph V get.edgelist
 #' @importFrom ggrepel geom_label_repel
 #' @import ggplot2
@@ -570,7 +635,10 @@
   tlayout <- tlayout[nnas, ]
 
   gp <- ggplot()
-  gp <- gp + geom_segment(data=edges, aes_string(x="X1", y="Y1", xend="X2", yend="Y2"),
+  gp <- gp + geom_segment(data=edges, aes_string(x="X1",
+                                                 y="Y1",
+                                                 xend="X2",
+                                                 yend="Y2"),
                           size=0.5, colour="darkred")
   gp <- gp + geom_label_repel(data=tlayout,
                               mapping=aes_string(x="D1", y="D2",
@@ -579,7 +647,9 @@
                               #box.padding = unit(0.35, "lines"), point.padding = unit(0.5, "lines"),
                               segment.color="gray40", size=2,
                               min.segment.length=unit(0, 'lines')) #col = "white", size = 2,
-  gp <- gp + geom_point(data=tlayout, mapping=aes_string(x="D1", y="D2", color="blaze"))
+  gp <- gp + geom_point(data=tlayout, mapping=aes_string(x="D1",
+                                                         y="D2",
+                                                         color="blaze"))
   gp <- gp + theme(axis.line=element_line(colour="black"),
                    panel.border=element_blank(),
                    axis.text.x=element_blank(),
@@ -649,7 +719,9 @@
   gp <- gp + geom_point(data=tlayout[sampleNames(x)[pth], ],
                         aes_string(x="D1", y="D2", color=ptime), size=0.75)
   gp <- gp + geom_label(data=startEnd,
-                              mapping=aes_string(x="D1", y="D2", label="label"),
+                              mapping=aes_string(x="D1",
+                                                 y="D2",
+                                                 label="label"),
                               fontface='bold', #box.padding = unit(0.35, "lines"), point.padding = unit(0.5, "lines"),
                               size=2) #col = "white", size = 2,
   gp <- gp + theme(axis.line=element_line(colour="black"),
@@ -685,7 +757,8 @@
   }
   if(length(trail_name) > 1) {
     trail_name <- trail_name[1]
-    warning("Provided more than one trail_name. Dynamic is only shown for ", trail_name, ".")
+    warning("Provided more than one trail_name. Dynamic is only shown for ",
+            trail_name, ".")
   }
 
   trail <- x@trails[[trail_name]]

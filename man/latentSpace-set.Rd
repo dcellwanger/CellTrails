@@ -9,19 +9,19 @@
 latentSpace(object) <- value
 }
 \arguments{
-\item{object}{An object of class \code{\link[CellTrails]{CellTrailsSet}}}
+\item{object}{An object of class \code{CellTrailsSet}}
 
 \item{value}{A numeric matrix}
 }
 \value{
-An updated object of class \code{\link[CellTrails]{CellTrailsSet}}
+An updated object of class \code{CellTrailsSet}
 }
 \description{
 Set computed latent space to a \code{CellTrailsSet} object.
 }
 \details{
-Rows need to be samples and columns to be \emph{d} components (spanning the
-lower-dimensional latent space). Usually, this function is not
+Rows need to be samples and columns to be \emph{d} components
+(spanning the lower-dimensional latent space). Usually, this function is not
 directly accessed by the user.
 }
 \examples{
@@ -34,6 +34,9 @@ ctset <- as.CellTrailsSet(dat)
 # Perform PCA and set components to object
 pca_result <- pca(ctset)
 latentSpace(ctset) <- pca_result$princomp
+}
+\seealso{
+\code{\link[CellTrails]{CellTrailsSet}}
 }
 \author{
 Daniel C. Ellwanger

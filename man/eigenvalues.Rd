@@ -9,10 +9,10 @@
 eigenvalues(object)
 }
 \arguments{
-\item{object}{An object of class \code{\link[CellTrails]{CellTrailsSet}}}
+\item{object}{An object of class \code{CellTrailsSet}}
 }
 \value{
-An object of class \code{\link{numeric}}
+An object of class \code{numeric}
 }
 \description{
 Retrieve computed eigenvalues from a \code{CellTrailsSet} object.
@@ -34,6 +34,9 @@ ctset <- embedSamples(ctset)
 
 # Get eigenvalues
 eigenvalues(ctset)
+}
+\seealso{
+\code{\link[CellTrails]{CellTrailsSet}}
 }
 \author{
 Daniel C. Ellwanger

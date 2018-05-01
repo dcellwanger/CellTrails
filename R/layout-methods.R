@@ -3,7 +3,7 @@
 #' Adjusts the edge distances in the trajectory graph
 #' such that edge distances correlates to edge weights;
 #' pseudotime is stored in edge weights
-#' @param x A \code{\link{CellTrailsSpectrum}} object
+#' @param x A \code{CellTrailsSpectrum} object
 #' @return An adjusted layout
 #' @importFrom igraph distances mst get.edgelist graph_from_adjacency_matrix
 #' @importFrom igraph get.shortest.paths components delete.vertices
@@ -35,10 +35,13 @@
   # 2. Find pairs of internal nodes
   if(length(inodes) > 1) {
     D_inodes <- D[inodes, inodes, drop=FALSE]
-    ginodes <- igraph::mst(graph_from_adjacency_matrix(D_inodes, weighted=TRUE, mode="undirected"))
+    ginodes <- igraph::mst(graph_from_adjacency_matrix(D_inodes, weighted=TRUE,
+                                                       mode="undirected"))
     ge <- get.edgelist(ginodes)
     for(i in seq_len(nrow(ge))) {
-      pth <- as.vector(get.shortest.paths(g, from=ge[i, 1], to=ge[i, 2])$vpath[[1]])
+      pth <- as.vector(get.shortest.paths(g,
+                                          from=ge[i, 1],
+                                          to=ge[i, 2])$vpath[[1]])
       for(j in seq_len(length(pth) - 1)) {
         npair <- pth[j:(j+1)]
         d <- max(dist(l_new[npair, ])[1], 1e-7) #avoiding error due to overlapping nodes
@@ -54,18 +57,24 @@
       g_tmp <- delete.vertices(g, v=pth[length(pth)])
       comp <- igraph::components(g_tmp)$membership
       compl <- as.numeric(names(comp[comp != comp[as.character(pth[1])]]))
-      l_new[compl,] <- sweep(l_new[compl, ], MARGIN=2, STATS=delta, FUN = "+")
+      l_new[compl,] <- sweep(l_new[compl, ], MARGIN=2,
+                             STATS=delta, FUN = "+")
     }
   }
 
   # 3. Foreach internal node find its leafs
   #D <- igraph::distances(g)
-  lnode2inode <- cbind(Leaf=lnodes, Internal=inodes[apply(D[lnodes, inodes, drop=FALSE], 1, which.min)])
+  lnode2inode <- cbind(Leaf=lnodes,
+                       Internal=inodes[apply(D[lnodes, inodes, drop=FALSE],
+                                             1,
+                                             which.min)])
 
   # 3. Run from internal node to leafs and update distances (relative)
   for(i in seq_along(lnodes)) {
     from_to <- lnode2inode[i, ]
-    pth <- as.vector(get.shortest.paths(g, from=from_to["Internal"], to=from_to["Leaf"])$vpath[[1]])
+    pth <- as.vector(get.shortest.paths(g,
+                                        from=from_to["Internal"],
+                                        to=from_to["Leaf"])$vpath[[1]])
     for(j in seq_len(length(pth) - 1)) {
       npair <- pth[j:(j+1)]
       d <- max(dist(l_new[npair, ])[1], 1e-7) #avoiding error due to overlapping nodes

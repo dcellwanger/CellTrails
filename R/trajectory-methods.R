@@ -1,6 +1,6 @@
 #' DEF: Connect states
 #'
-#' For details see \code\link{connectStates}
+#' For details see \code{connectStates}
 #' @importFrom igraph components induced.subgraph graph_from_adjacency_matrix
 #' @keywords internal
 #' @author Daniel C. Ellwanger
@@ -30,7 +30,7 @@
 
   f.DFS <- function(v, A, visited, parent) {
     visited[v] <- visited[v] + 1
-    for(i in 1:ncol(A)) {
+    for(i in seq_len(ncol(A))) {
       if(visited[i] == 0 & A[v, i] > 0) {
         visited <- f.DFS(v = i, A = A, visited = visited, parent = v)
       } else if(visited[i] == 1 & A[v, i] > 0 & i != parent) {
@@ -83,8 +83,8 @@
   result$dt <- dt
 
   amat <- matrix(0, ncol = n, nrow = n)
-  colnames(amat) <- rownames(amat) <- sts #levels(cl) #lttrs[1:max(cl)]
-  for(i in 1:nrow(dt)) {
+  colnames(amat) <- rownames(amat) <- sts #levels(cl) #lttrs[seq_len(max(cl))]
+  for(i in seq_len(nrow(dt))) {
     amat.new <- amat
     amat.new[dt[i,1], dt[i,2]] <- amat.new[dt[i,2], dt[i,1]] <- 1
     s <- 0
@@ -96,7 +96,7 @@
     #  cat(dt[i,1], dt[i,2], "\n")
     }
     #    else {
-    #      print(dt[i,1:2])
+    #      print(dt[i,seq_len(2)])
     #    }
     if(sum(amat) / 2 == ncol(amat) - 1) {
       i <- l + 1
@@ -127,7 +127,7 @@
 
 #' DEF: Select component from trajectory graph
 #'
-#' For details see \code\link{selectTrajectory}
+#' For details see \code{selectTrajectory}
 #' @importFrom igraph V
 #' @keywords internal
 #' @author Daniel C. Ellwanger
@@ -147,7 +147,7 @@
 
 #' DEF: Trajectory fitting
 #'
-#' For details see \code\link{selectTrajectory}
+#' For details see \code{selectTrajectory}
 #' @import Biobase
 #' @importFrom igraph degree V<-
 #' @keywords internal
@@ -161,7 +161,9 @@
     orth_graph <- .deleteMedianCentres(orth_graph)
   } else {
     #Refine and remove mediancentres
-    vizmap <- .generate_ordination(g = orth_graph, error = orth$error, only.ordi = TRUE)
+    vizmap <- .generate_ordination(g = orth_graph,
+                                   error = orth$error,
+                                   only.ordi = TRUE)
     orth_graph <- .connect_ordi(vizmap$ordi)
   }
 
@@ -194,7 +196,7 @@
 #' AUX: Orthogonal projection
 #'
 #' Orthogonally projects samples onto trajectory
-#' @param x An \code{\link{CellTrailsSet}} object
+#' @param x An \code{CellTrailsSet} object
 #' @return A list containing the following components:
 #' @return \item{\code{Y}}{Projection}
 #' @return \item{\code{X.c}}{Mediancentres}
@@ -213,7 +215,9 @@
   cl <- droplevels(states(x)[x@useSample])
   g <- stateTrajectoryGraph(x)[[1]]
   X <- CellTrails::latentSpace(x)[x@useSample, ]
-  X.c <- t(sapply(levels(cl), function(i){med(X[cl == i, ], method = "Spatial")$median}))
+  X.c <- t(vapply(levels(cl), function(i){med(X[cl == i, ],
+                                              method = "Spatial")$median},
+                  rep(0, dim(X)[2])))
   mx <- max(as.numeric(substr(rownames(X.c), 2, nrow(X.c))))
   cl <- as.character(cl) #avoid automatic factor to number conversion
 
@@ -243,7 +247,7 @@
   op_adjmat <- matrix(0, ncol=nCodes, nrow=nCodes,
                       dimnames=list(rownames(X.c), rownames(X.c)))
 
-  for(i in 1:nrow(X)) {
+  for(i in seq_len(nrow(X))) {
     instance <- X[i, ]
     n <- names(neighbors(g, V(g)[cl[i]]))
 
@@ -412,7 +416,8 @@
 #' @importFrom igraph distances degree
 #' @keywords internal
 #' @author Daniel C. Ellwanger
-.generate_ordination <- function(g, error, factor=7, rev=FALSE, only.ordi=FALSE) {
+.generate_ordination <- function(g, error, factor=7, rev=FALSE,
+                                 only.ordi=FALSE) {
   # Offset points
   # x = Target; x.n = neighbors; size = offset width; side = (-1, 1) is left or right, respectively
   f.offset <- function(x, x.n, size, side = 1) {
@@ -478,7 +483,7 @@
         cnt <- cnt + 1
       }
       #d.tmp <- d.tmp[d.tmp > 0]
-      #nhbr <- order(d.tmp, decreasing = F)[1:2]
+      #nhbr <- order(d.tmp, decreasing = F)[seq_len(2)]
       eordi[i, ] <- f.offset(ordi[i, ], ordi[nhbr, ], size=error[i], side=1)
     }
 
@@ -512,8 +517,8 @@
 #' 2D simplification would collate the states and ignore the bifurcation.
 #' Therefore, the simplification step has to be skipped. This methods
 #' checks whether a siplification is possible or not.
-#' @param ctset An object of class \code{\link[CellTrails]{CellTrailsSet}}
-#' @param g An object of class \code{\link[igraph]{igraph}}
+#' @param ctset An object of class \code{CellTrailsSet}
+#' @param g An object of class \code{igraph}
 #' @return A logical value
 #' @details IF: any node has a degree > 3, return \code{TRUE}; OTHERWISE:
 #' Check all sorthest paths from start node to any leaf in trajectory
@@ -535,10 +540,10 @@
     l <- names(which(dg == 1))
     l <- l[!l %in% r.s]
 
-    doExpand <- sapply(l, FUN = function(z){
+    doExpand <- vapply(l, FUN = function(z) {
       n <- names(get.shortest.paths(tg, from = r.s[1], to = z)$vpath[[1]])
       any(any(dg[n[!n %in% bb]] > 3))
-    })
+    }, TRUE)
     return(any(doExpand))
   }
 }
@@ -547,8 +552,8 @@
 #'
 #' Deletes median centres from trajectory graph
 #' if graph has not been simplified/has been expanded.
-#' @param g An object of class \code{\link[igraph]{igraph}}
-#' @return An unpdated object of class \code{\link[igraph]{igraph}}
+#' @param g An object of class \code{igraph}
+#' @return An unpdated object of class \code{igraph}
 #' @importFrom igraph distances degree V neighbors add.edges delete.vertices
 #' @keywords internal
 #' @author Daniel C. Ellwanger
@@ -578,7 +583,7 @@
 #'
 #' Generates 2D ordination from orthogonal projection
 #' @param ordi Ordination
-#' @return An \code{\link{igraph}} object
+#' @return An \code{igraph} object
 #' @importFrom igraph graph_from_adjacency_matrix
 #' @keywords internal
 #' @author Daniel C. Ellwanger
@@ -605,7 +610,8 @@
 
   #backbone
   cells <- which(onBackbone)
-  start <- cells[which(dmat[cells, cells] == max(dmat[cells, cells]), arr.ind=TRUE)[1, 1]]
+  start <- cells[which(dmat[cells, cells] == max(dmat[cells, cells]),
+                       arr.ind=TRUE)[1, 1]]
   traj <- cells[order(dmat[start, cells])]
   for(i in seq(length(traj) - 1)) {
     adjmat[traj[i], traj[i + 1]] <- adjmat[traj[i + 1], traj[i]] <- 1
@@ -622,7 +628,8 @@
       adjmat[traj[i], traj[i + 1]] <- adjmat[traj[i + 1], traj[i]] <- 1
     }
     #connect to backbone
-    anker <- which(dmat[cells, onBackbone, drop=FALSE] == min(dmat[cells, onBackbone, drop=FALSE]), arr.ind=TRUE)[1, ]
+    anker <- which(dmat[cells, onBackbone, drop=FALSE] == min(dmat[cells, onBackbone, drop=FALSE]),
+                   arr.ind=TRUE)[1, ]
     anker <- c(cells[anker[1]], which(onBackbone)[anker[2]])
     adjmat[anker[1], anker[2]] <- adjmat[anker[2], anker[1]] <- 1
   }

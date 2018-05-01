@@ -1,11 +1,12 @@
 #' DEF: Export trajectory graph
 #'
-#' For details see \code{\link[CellTrails]{write.ygraphml}}
+#' For details see \code{write.ygraphml}
 #' @importFrom igraph V E vcount ends
 #' @importFrom grDevices colorRampPalette
 #' @keywords internal
 #' @author Daniel C. Ellwanger
-.write_ygraphml_def <- function(x, file, pheno_type=NULL, feature_name=NULL, label) {
+.write_ygraphml_def <- function(x, file, pheno_type=NULL,
+                                feature_name=NULL, label) {
   #write.graph(x@trajectory$traj, file = file, format = c("graphml"))
 
   if(!is.null(pheno_type) & !is.null(feature_name)) {
@@ -35,7 +36,8 @@
       sts <- x@trajectory$blaze$id
       sts[is.na(sts)] <- ""
     } else {
-      pheno_type <- ifelse(toupper(pheno_type) == "STATE", "STATE", pheno_type)
+      pheno_type <- ifelse(toupper(pheno_type) == "STATE", "STATE",
+                           pheno_type)
       if(!pheno_type %in% varLabels(x)) {
         stop("Variable label '", pheno_type, "' not found. ",
              "Please, check correct spelling. ",
@@ -55,7 +57,8 @@
     fval <- fit$fit$fitted.values
     brks <- pretty(range(fval, na.rm=TRUE, finite=TRUE), 10)
     equalSpace <- cut(fval, breaks=brks, include.lowest=TRUE)
-    cols <- colorRampPalette(c("gray95", viridis(3)[2:3]))(length(brks) - 1)[equalSpace]
+    cols <- colorRampPalette(
+      c("gray95", viridis(3)[2:3]))(length(brks) - 1)[equalSpace]
     sts[seq_along(sts)] <- ""
   }
 

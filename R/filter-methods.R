@@ -1,6 +1,6 @@
 #' DEF: Filter feaures by Detection Level
 #'
-#' For details see \code{\link[CellTrails]{filterFeaturesByPOD}}
+#' For details see \code{filterFeaturesByPOD}
 #' @import ggplot2
 #' @keywords internal
 #' @author Daniel C. Ellwanger
@@ -18,7 +18,9 @@
   #Diagnostic plot
   x.steps <- sort(unique(pod))
   y.ecdf <- ecdf(pod)(x.steps)
-  dat <- data.frame(X = x.steps, Y = y.ecdf, COLOR = c("Rejected", "Accepted")[(x.steps > threshold) + 1])
+  dat <- data.frame(X = x.steps, Y = y.ecdf,
+                    COLOR = c("Rejected",
+                              "Accepted")[(x.steps > threshold) + 1])
   gp <- ggplot(dat, aes_string(x = "X", y = "Y")) +
         geom_step(alpha = .5) +
         geom_point(aes_string(color = "COLOR")) +
@@ -34,7 +36,7 @@
 
 #' DEF: Filter features by coefficient of variation
 #'
-#' For details see \code{\link[CellTrails]{filterFeaturesByCOV}}
+#' For details see \code{filterFeaturesByCOV}
 #' @import ggplot2
 #' @keywords internal
 #' @author Daniel C. Ellwanger
@@ -54,7 +56,9 @@
   x.steps <- sort(unique(fcov))
   y.ecdf <- ecdf(fcov)(x.steps)
 
-  dat <- data.frame(X = x.steps, Y = y.ecdf, COLOR = c("Rejected", "Accepted")[(x.steps > threshold) + 1])
+  dat <- data.frame(X = x.steps, Y = y.ecdf,
+                    COLOR = c("Rejected",
+                              "Accepted")[(x.steps > threshold) + 1])
   gp <- ggplot(dat, aes_string(x = "X", y = "Y")) +
     geom_step(alpha = .5) +
     geom_point(aes_string(color = "COLOR")) +
@@ -70,7 +74,7 @@
 
 #' DEF: Filter features by index of dispersion
 #'
-#' For details see \code{\link[CellTrails]{filterFeaturesByIOD}}
+#' For details see \code{filterFeaturesByIOD}
 #' @import ggplot2
 #' @keywords internal
 #' @author Daniel C. Ellwanger
@@ -103,7 +107,8 @@
   #Diagnostic plot
   dat <- data.frame(mean = stat.mean, dispersion = stat.disp, f = f)
   gp <- ggplot() +
-        geom_point(data = dat, aes_string(x = "mean", y = "dispersion", color = "f")) +
+        geom_point(data = dat, aes_string(x = "mean", y = "dispersion",
+                                          color = "f")) +
         theme(axis.line = element_line(colour = "black")) +
         labs(colour = "Filter") +
         xlab("Mean") + ylab("Fano factor")
@@ -117,18 +122,19 @@
 #' DEF: Filter samples by reference gene
 #'
 #' Performs filtering of cells using reference gene information.
-#' @param x An \code{\link{ExpressionSet}} object
+#' @param x An \code{ExpressionSet} object
 #' @param refgene Symbol name(s) of reference gene(s)
 #' @param fence Fence to find outlier
-#' @return An \code{\link{ExpressionSet}} object
-#' @seealso \code{\link{ExpressionSet}}, \code{\link{quantile}}, \code{\link{IQR}}
+#' @return An \code{ExpressionSet} object
+#' @seealso \code{ExpressionSet}, \code{quantile}, \code{IQR}
 #' @details Identifies outliers (dead cells and multiplets) based on robust
 #' statistics on expression intensities of reference genes. It filters cells
 #' having a reference gene expression of
 #' \eqn{x > Q_{.25} - f * IQR} or \eqn{ x < Q_{.75} + f * IQR},
 #' where \eqn{Q} then quantile, \eqn{IQR} the interquartile function on the
-#' reference gene distribution and \eqn{f} is the fence parameter. If multiple reference genes are
-#' provided their geometric mean is used. As a rule of thumb, \code{fence} should be
+#' reference gene distribution and \eqn{f} is the fence parameter. If multiple
+#' reference genes are provided their geometric mean is used. As a rule of thumb,
+#' \code{fence} should be
 #' between 3 (extreme values) and 1.5 (outliers). Further, cells
 #' expressing all reference genes are filtered.
 #' @import Biobase

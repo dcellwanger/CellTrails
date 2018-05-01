@@ -43,7 +43,8 @@
 #' @author Daniel C. Ellwanger
 #' @importFrom mgcv gam
 #' @keywords internal
-.fit_surface <- function(x, feature_name, npoints=300, weight=TRUE, knots=10, rescale=FALSE) {
+.fit_surface <- function(x, feature_name, npoints=300, weight=TRUE,
+                         knots=10, rescale=FALSE) {
   X <- trajectoryLayout(x)
   #y <- exprs(x)[, x@featureData$NAME == toupper(feature.name)]
   y <- x[feature_name, x@useSample]
@@ -64,18 +65,21 @@
     x1 <- .rescale(x1, 0, 1)
     x2 <- .rescale(x2, 0, 1)
   }
-  eq <- formula(paste0("y ~ s(x1, x2, k = ", knots, ", bs = \"tp\", fx = FALSE)"))
+  eq <- formula(paste0("y ~ s(x1, x2, k = ", knots,
+                       ", bs = \"tp\", fx = FALSE)"))
 
   # dynamic nd weight
   w <- NULL
   if(weight) {
-    w <- aggregate(y, list(states(x)[x@useSample]), function(x) {sum(x == 0) / length(x)})
+    w <- aggregate(y, list(states(x)[x@useSample]),
+                   function(x) {sum(x == 0) / length(x)})
     w <- w[match(states(x)[x@useSample], w[,1]), 2]
     w[y > 0] <- 1 #set measured value weight always to 1
   }
 
   ## Fit
-  fit <- gam(eq, family="gaussian", weights=w, select=TRUE, method="REML", gamma=1)
+  fit <- gam(eq, family="gaussian", weights=w, select=TRUE,
+             method="REML", gamma=1)
   x1_proj <- seq(min(x1), max(x1), len = npoints)
   x2_proj <- seq(min(x2), max(x2), len = npoints)
   newd <- expand.grid(x1 = x1_proj, x2 = x2_proj)
@@ -138,7 +142,8 @@
   x <- x.ptime
 
   eq <- formula(paste0("y ~ te(x, k = ", k, ", bs = \"tp\", fx=TRUE)"))
-  mod <- gam(eq, family="gaussian", weights=w, select=TRUE, method="REML", gamma=1)
+  mod <- gam(eq, family="gaussian", weights=w, select=TRUE, method="REML",
+             gamma=1)
   #mod <- gam(y ~ te(x, k=k, bs="tp", fx=TRUE), family="gaussian",
   #           weights=w, select=TRUE, method="REML", gamma=1,
   #           data=data.frame(y=y.expr, x=x.ptime)))

@@ -9,19 +9,20 @@
 trajectoryStates(object)
 }
 \arguments{
-\item{object}{An object of class \code{\link[CellTrails]{CellTrailsSet}}.}
+\item{object}{An object of class \code{CellTrailsSet}.}
 }
 \value{
-A \code{\link[base]{character}} vector
+A \code{character} vector
 }
 \description{
-Retrieve state IDs along a selected trajectory from a \code{CellTrailsSet} object.
+Retrieve state IDs along a selected trajectory from a
+\code{CellTrailsSet} object.
 }
 \details{
 A state trajectory graph may contain
 multiple components composed of a set of states. This method retrieves
-the names of the states contained in the user-selected state trajectory graph
-component from a \code{CellTrailsSet} object.
+the names of the states contained in the user-selected state trajectory
+graph component from a \code{CellTrailsSet} object.
 }
 \examples{
 # Generate example data
@@ -50,6 +51,9 @@ ctset <- selectTrajectory(ctset, component=1)
 
 # Get trajectory states
 trajectoryStates(ctset)
+}
+\seealso{
+\code{\link[CellTrails]{CellTrailsSet}}
 }
 \author{
 Daniel C. Ellwanger

@@ -7,12 +7,13 @@ NULL
 #' SUBSET assay data
 #'
 #' Extract parts of expression matrix
-#' @param x A \code{\link[CellTrails]{CellTrailsSet}} object
+#' @param x A \code{CellTrailsSet} object
 #' @param i Feature indices specifying elements to extract
 #' @param j Sample indices specifying elements to extract
-#' @param drop If TRUE the result is coerced to the lowest possible dimension (default: "missing").
+#' @param drop If TRUE the result is coerced to the lowest possible
+#' dimension (default: "missing").
 #' @return numerical matrix
-#' See \code{\link[base]{drop}} for further details.
+#' See \code{drop} for further details.
 #' @examples
 #' # Generate example data
 #' dat <- exDat()
@@ -30,10 +31,10 @@ setMethod("[", "CellTrailsSet", function(x, i, j, drop="missing"){
 #' GET states
 #'
 #' Retrieve computed states from a \code{CellTrailsSet} object.
-#' @param object An object of class \code{\link[CellTrails]{CellTrailsSet}}.
+#' @param object An object of class \code{CellTrailsSet}.
 #' @return A \code{factor} vector
-#' @details State information is extracted from \code{featureData}; factor levels
-#' are alphanumerically ordered by ID.
+#' @details State information is extracted from \code{featureData};
+#' factor levels are alphanumerically ordered by ID.
 #' @examples
 #' # Generate example data
 #' dat <- exDat()
@@ -55,11 +56,13 @@ setMethod("[", "CellTrailsSet", function(x, i, j, drop="missing"){
 #'
 #' # Get state assignments
 #' states(ctset)
+#' @seealso \code{\link[CellTrails]{CellTrailsSet}}
 #' @docType methods
 #' @aliases states,CellTrailsSet-method
 #' @export
 #' @author Daniel C. Ellwanger
-setGeneric("states", function(object) standardGeneric("states"))
+setGeneric("states", function(object)
+  standardGeneric("states"))
 setMethod("states", "CellTrailsSet", function(object){
     object$STATE})
     #s <- unique(object$STATE)
@@ -69,14 +72,15 @@ setMethod("states", "CellTrailsSet", function(object){
 #' GET trajectory fit
 #'
 #' Retrieve trajectory fit information from a \code{CellTrailsSet} object.
-#' @param object An object of class \code{\link[CellTrails]{CellTrailsSet}}.
-#' @return An object of type \code{\link[base]{list}} with the following components
+#' @param object An object of class \code{CellTrailsSet}.
+#' @return An object of type \code{list} with the following components
 #' \describe{
-#'   \item{\code{error}}{numerical vector; the actual distance of each sample from the fitted trajectory}
-#'   \item{\code{traj}}{\code{\link[igraph]{igraph}} object; graph connecting samples by
+#'   \item{\code{error}}{numerical vector; the actual distance of each sample
+#'   from the fitted trajectory}
+#'   \item{\code{traj}}{\code{igraph} object; graph connecting samples by
 #'   their chronological ordering}
-#'   \item{\code{blaze}}{data.frame; indicates landmarks (branching points and end points)
-#'   in the trajectory graph}
+#'   \item{\code{blaze}}{data.frame; indicates landmarks
+#'   (branching points and end points) in the trajectory graph}
 #' }
 #' @examples
 #' # Generate example data
@@ -108,22 +112,25 @@ setMethod("states", "CellTrailsSet", function(object){
 #'
 #' # Get trajectory fit
 #' trajectoryFit(ctset)
+#' @seealso \code{\link[CellTrails]{CellTrailsSet}}
+#' \code{\link[igraph]{igraph}}
 #' @docType methods
 #' @aliases trajectoryFit,CellTrailsSet-method
 #' @export
 #' @author Daniel C. Ellwanger
-setGeneric("trajectoryFit", function(object) standardGeneric("trajectoryFit"))
+setGeneric("trajectoryFit", function(object)
+  standardGeneric("trajectoryFit"))
 setMethod("trajectoryFit", "CellTrailsSet", function(object){
   object@trajectory})
 
 #' GET latentSpace
 #'
 #' Retrieve computed latent space from a \code{CellTrailsSet} object.
-#' @param object An object of class \code{\link[CellTrails]{CellTrailsSet}}.
-#' @return An object of class \code{\link[base]{matrix}}
-#' @details Returns the latent space computed by spectral embedding of samples. The
-#' corresponding matrix is numeric. Rows are samples and columns are \emph{d}
-#' components.
+#' @param object An object of class \code{CellTrailsSet}
+#' @return An object of class \code{matrix}
+#' @details Returns the latent space computed by spectral embedding of samples.
+#' The corresponding matrix is numeric. Rows are samples and columns are
+#' \emph{d} components.
 #' @examples
 #' # Generate example data
 #' dat <- exDat()
@@ -136,23 +143,26 @@ setMethod("trajectoryFit", "CellTrailsSet", function(object){
 #'
 #' # Get latent space
 #' latentSpace(ctset)
+#' @seealso \code{\link[CellTrails]{CellTrailsSet}}
 #' @docType methods
 #' @aliases latentSpace,CellTrailsSet-method
 #' @export
 #' @author Daniel C. Ellwanger
-setGeneric("latentSpace", function(object) standardGeneric("latentSpace"))
+setGeneric("latentSpace", function(object)
+  standardGeneric("latentSpace"))
 setMethod("latentSpace", "CellTrailsSet", function(object){
     object@eigen$space})
 
 #' SET latent space
 #'
 #' Set computed latent space to a \code{CellTrailsSet} object.
-#' @param object An object of class \code{\link[CellTrails]{CellTrailsSet}}
+#' @param object An object of class \code{CellTrailsSet}
 #' @param value A numeric matrix
-#' @return An updated object of class \code{\link[CellTrails]{CellTrailsSet}}
-#' @details Rows need to be samples and columns to be \emph{d} components (spanning the
-#' lower-dimensional latent space). Usually, this function is not
+#' @return An updated object of class \code{CellTrailsSet}
+#' @details Rows need to be samples and columns to be \emph{d} components
+#' (spanning the lower-dimensional latent space). Usually, this function is not
 #' directly accessed by the user.
+#' @seealso \code{\link[CellTrails]{CellTrailsSet}}
 #' @examples
 #' # Generate example data
 #' dat <- exDat()
@@ -167,7 +177,8 @@ setMethod("latentSpace", "CellTrailsSet", function(object){
 #' @aliases latentSpace<-,CellTrailsSet-method
 #' @export
 #' @author Daniel C. Ellwanger
-setGeneric("latentSpace<-", function(object, value) standardGeneric("latentSpace<-"))
+setGeneric("latentSpace<-", function(object, value)
+  standardGeneric("latentSpace<-"))
 setMethod("latentSpace<-", "CellTrailsSet", function(object, value){
   #if(is.null(rownames(value))) {
   #  rownames(value) <- sampleNames(object)
@@ -179,11 +190,12 @@ setMethod("latentSpace<-", "CellTrailsSet", function(object, value){
 #' GET eigenvalues
 #'
 #' Retrieve computed eigenvalues from a \code{CellTrailsSet} object.
-#' @param object An object of class \code{\link[CellTrails]{CellTrailsSet}}
-#' @return An object of class \code{\link{numeric}}
+#' @param object An object of class \code{CellTrailsSet}
+#' @return An object of class \code{numeric}
 #' @details Eigenvalues represent the information content for each eigenvector derived by
 #' spectral embedding of samples. This function retrieves the derived eigenvalues from a
 #' \code{CellTrailsSet} object. The corresponding vector is numeric.
+#' @seealso \code{\link[CellTrails]{CellTrailsSet}}
 #' @examples
 #' # Generate example data
 #' dat <- exDat()
@@ -207,12 +219,15 @@ setMethod("eigenvalues", "CellTrailsSet", function(object){
 #' SET eigenvalues
 #'
 #' Sets eigenvalues to a \code{CellTrailsSet} object.
-#' @param object An object of class \code{\link[CellTrails]{CellTrailsSet}}
+#' @param object An object of class \code{CellTrailsSet}
 #' @param value A numeric vector
-#' @return An updated object of class \code{\link[CellTrails]{CellTrailsSet}}
-#' @details Eigenvalues represent the information content for each eigenvector derived by
-#' spectral embedding of samples. Vector needs to be numeric and its length needs to correspond
-#' to the number of eigenvectors. Usually, this function is not directly accessed by the user.
+#' @return An updated object of class \code{CellTrailsSet}
+#' @details Eigenvalues represent the information content for each
+#' eigenvector derived by spectral embedding of samples. Vector
+#' needs to be numeric and its length needs to correspond to the number
+#' of eigenvectors. Usually, this function is not directly accessed
+#' by the user.
+#' @seealso \code{\link[CellTrails]{CellTrailsSet}}
 #' @examples
 #' # Generate example data
 #' dat <- exDat()
@@ -228,7 +243,8 @@ setMethod("eigenvalues", "CellTrailsSet", function(object){
 #' @aliases eigenvalues<-,CellTrailsSet-method
 #' @export
 #' @author Daniel C. Ellwanger
-setGeneric("eigenvalues<-", function(object, value) standardGeneric("eigenvalues<-"))
+setGeneric("eigenvalues<-", function(object, value)
+  standardGeneric("eigenvalues<-"))
 setMethod("eigenvalues<-", "CellTrailsSet", function(object, value){
   object@eigen$values <- value
   object})
@@ -236,13 +252,15 @@ setMethod("eigenvalues<-", "CellTrailsSet", function(object, value){
 #' GET state trajectory graph
 #'
 #' Retrieve computed state trajectory graph from a \code{CellTrailsSet} object.
-#' @param object An object of class \code{\link[CellTrails]{CellTrailsSet}}.
-#' @return An object of class \code{\link{list}}
-#' @details A graph is computed by spanning states maximizing the overall interface
-#' score (i.e., number of neighboring samples between states). This method retrieves
-#' the maximum interface spanning forest information from a \code{CellTrailsSet}
-#' object. The return value is a \code{list} with an \code{\link{igraph}} object for each
-#' component.
+#' @param object An object of class \code{CellTrailsSet}.
+#' @return An object of class \code{list}
+#' @details A graph is computed by spanning states maximizing the overall
+#' interface score (i.e., number of neighboring samples between states).
+#' This method retrieves the maximum interface spanning forest information
+#' from a \code{CellTrailsSet} object. The return value is a \code{list} with
+#' an \code{igraph} object for each component.
+#' @seealso \code{\link[CellTrails]{CellTrailsSet}}
+#' \code{\link[igraph]{igraph}}
 #' @examples
 #' # Generate example data
 #' dat <- exDat()
@@ -271,19 +289,21 @@ setMethod("eigenvalues<-", "CellTrailsSet", function(object, value){
 #' @aliases stateTrajectoryGraph,CellTrailsSet-method
 #' @export
 #' @author Daniel C. Ellwanger
-setGeneric("stateTrajectoryGraph", function(object) standardGeneric("stateTrajectoryGraph"))
+setGeneric("stateTrajectoryGraph", function(object)
+  standardGeneric("stateTrajectoryGraph"))
 setMethod("stateTrajectoryGraph", "CellTrailsSet", function(object){
   object@spanForest})
 
 #' GET trajectory features
 #'
-#' Retrieve names of features that were selected for trajectory reconstruction from a
-#' \code{CellTrailsSet} object.
-#' @param object An object of class \code{\link[CellTrails]{CellTrailsSet}}.
-#' @return An object of class \code{\link{character}}
-#' @details Features can be selected prior to trajectory inference. This method retrieves
-#' the user-defined features from a \code{CellTrailsSet} object. The return value
-#' is a character vector containing the feature names.
+#' Retrieve names of features that were selected for trajectory reconstruction
+#' from a \code{CellTrailsSet} object.
+#' @param object An object of class \code{CellTrailsSet}
+#' @return An object of class \code{character}
+#' @details Features can be selected prior to trajectory inference.
+#' This method retrieves the user-defined features from a \code{CellTrailsSet}
+#' object. The return value is a character vector containing the feature names.
+#' @seealso \code{\link[CellTrails]{CellTrailsSet}}
 #' @examples
 #' # Generate example data
 #' dat <- exDat()
@@ -298,29 +318,32 @@ setMethod("stateTrajectoryGraph", "CellTrailsSet", function(object){
 #' @import Biobase
 #' @export
 #' @author Daniel C. Ellwanger
-setGeneric("trajectoryFeatures", function(object) standardGeneric("trajectoryFeatures"))
+setGeneric("trajectoryFeatures", function(object)
+  standardGeneric("trajectoryFeatures"))
 setMethod("trajectoryFeatures", "CellTrailsSet", function(object){
   featureNames(object)[object@useFeature]})
 
 #' SET trajectory features
 #'
-#' Sets features that are used for trajectory reconstruction to a \code{CellTrailsSet}
-#' object.
+#' Sets features that are used for trajectory reconstruction
+#' to a \code{CellTrailsSet} object.
 #' @usage trajectoryFeatures(object) <- value
-#' @param object An object of class \code{\link[CellTrails]{CellTrailsSet}}.
-#' @param value A character vector containing the names of the features.
-#' @return An updated object of class \code{\link[CellTrails]{CellTrailsSet}}.
-#' @details Features can be selected prior to trajectory inference. This step is recommended
-#' as it increases the accuracy and minimzes the runtime of the trajectory reconstruction
-#' algorithm.
+#' @param object An object of class \code{CellTrailsSet}
+#' @param value A character vector containing the names of the features
+#' @return An updated object of class \code{CellTrailsSet}
+#' @details Features can be selected prior to trajectory inference.
+#' This step is recommended as it increases the accuracy and minimzes the
+#' runtime of the trajectory reconstruction algorithm.
 #' \cr \cr
 #' \emph{Diagnostic messages}
 #' \cr \cr
-#' The method states a warning if feature names cannot be found in the stored assay. Since
-#' \code{CellTrailsSet} extends class \code{ExpressionSet}, all feature names stored in a
-#' \code{CellTrailsSet} object can be retrieved by the function \code{\link[Biobase]{featureNames}}.
-#' Further, this method shows a warning if the feature selection generates samples with zero
-#' entropy, that is the selected features were not detected in these samples.
+#' The method states a warning if feature names cannot be found in the stored
+#' assay. Since \code{CellTrailsSet} extends class \code{ExpressionSet}, all
+#' feature names stored in a \code{CellTrailsSet} object can be retrieved by
+#' the function \code{featureNames}. Further, this method shows a warning if
+#' the feature selection generates samples with zero entropy, that is the
+#' selected features were not detected in these samples.
+#' @seealso \code{\link[CellTrails]{CellTrailsSet}}
 #' @examples
 #' # Generate example data
 #' dat <- exDat()
@@ -335,7 +358,8 @@ setMethod("trajectoryFeatures", "CellTrailsSet", function(object){
 #' @import Biobase
 #' @export
 #' @author Daniel C. Ellwanger
-setGeneric("trajectoryFeatures<-", function(object, value) standardGeneric("trajectoryFeatures<-"))
+setGeneric("trajectoryFeatures<-", function(object, value)
+  standardGeneric("trajectoryFeatures<-"))
 setReplaceMethod("trajectoryFeatures", "CellTrailsSet", function(object, value) {
   object@useFeature <- featureNames(object) %in% value
   #Check feature selection
@@ -355,13 +379,14 @@ setReplaceMethod("trajectoryFeatures", "CellTrailsSet", function(object, value) 
 
 #' GET trajectory states
 #'
-#' Retrieve state IDs along a selected trajectory from a \code{CellTrailsSet} object.
-#' @param object An object of class \code{\link[CellTrails]{CellTrailsSet}}.
-#' @return A \code{\link[base]{character}} vector
+#' Retrieve state IDs along a selected trajectory from a
+#' \code{CellTrailsSet} object.
+#' @param object An object of class \code{CellTrailsSet}.
+#' @return A \code{character} vector
 #' @details A state trajectory graph may contain
 #' multiple components composed of a set of states. This method retrieves
-#' the names of the states contained in the user-selected state trajectory graph
-#' component from a \code{CellTrailsSet} object.
+#' the names of the states contained in the user-selected state trajectory
+#' graph component from a \code{CellTrailsSet} object.
 #' @examples
 #' # Generate example data
 #' dat <- exDat()
@@ -389,12 +414,14 @@ setReplaceMethod("trajectoryFeatures", "CellTrailsSet", function(object, value) 
 #'
 #' # Get trajectory states
 #' trajectoryStates(ctset)
+#' @seealso \code{\link[CellTrails]{CellTrailsSet}}
 #' @docType methods
 #' @aliases trajectoryStates,CellTrailsSet-method
 #' @importFrom igraph V
 #' @export
 #' @author Daniel C. Ellwanger
-setGeneric("trajectoryStates", function(object) standardGeneric("trajectoryStates"))
+setGeneric("trajectoryStates", function(object)
+  standardGeneric("trajectoryStates"))
 setMethod("trajectoryStates", "CellTrailsSet", function(object){
   if(length(stateTrajectoryGraph(object)) == 1) {
     V(stateTrajectoryGraph(object)[[1]])$name
@@ -404,13 +431,16 @@ setMethod("trajectoryStates", "CellTrailsSet", function(object){
 
 #' GET trajectory samples
 #'
-#' Retrieve names of samples that are contained in the trajectory from a \code{CellTrailsSet} object.
-#' @param object An object of class \code{\link[CellTrails]{CellTrailsSet}}.
-#' @return An object of class \code{\link[base]{character}}
-#' @details Samples are selected prior to trajectory inference; a state trajectory graph may contain
-#' multiple components. Each component is composed of a set of states. This method retrieves
-#' the names of the samples that are members of the states contained in the
-#' user-selected state trajectory graph component from a \code{CellTrailsSet} object.
+#' Retrieve names of samples that are contained in the trajectory from
+#' a \code{CellTrailsSet} object.
+#' @param object An object of class \code{CellTrailsSet}
+#' @return An object of class \code{character}
+#' @details Samples are selected prior to trajectory inference; a state trajectory
+#' graph may contain multiple components. Each component is composed of a set of
+#' states. This method retrieves the names of the samples that are members of the
+#' states contained in the user-selected state trajectory graph component from a
+#' \code{CellTrailsSet} object.
+#' @seealso \code{\link[CellTrails]{CellTrailsSet}}
 #' @examples
 #' # Generate example data
 #' dat <- exDat()
@@ -443,7 +473,8 @@ setMethod("trajectoryStates", "CellTrailsSet", function(object){
 #' @import Biobase
 #' @export
 #' @author Daniel C. Ellwanger
-setGeneric("trajectorySamples", function(object) standardGeneric("trajectorySamples"))
+setGeneric("trajectorySamples", function(object)
+  standardGeneric("trajectorySamples"))
 setMethod("trajectorySamples", "CellTrailsSet", function(object){
   sampleNames(object)[object@useSample]})
 
@@ -451,7 +482,8 @@ setMethod("trajectorySamples", "CellTrailsSet", function(object){
 #'
 #' Retrieve layout for trajectory visualization from
 #' \code{CellTrailsSet} object.
-#' @param object An object of class \code{\link[CellTrails]{CellTrailsSet}}.
+#' @param object An object of class \code{CellTrailsSet}
+#' @seealso \code{\link[CellTrails]{CellTrailsSet}}
 #' @return A numeric matrix
 #' @examples
 #' # Generate example data
@@ -494,26 +526,28 @@ setMethod("trajectorySamples", "CellTrailsSet", function(object){
 #' @aliases trajectoryLayout,CellTrailsSet-method
 #' @export
 #' @author Daniel C. Ellwanger
-setGeneric("trajectoryLayout", function(object) standardGeneric("trajectoryLayout"))
+setGeneric("trajectoryLayout", function(object)
+  standardGeneric("trajectoryLayout"))
 setMethod("trajectoryLayout", "CellTrailsSet", function(object){
   object@layout})
 
 #' SET trajectory layout
 #'
-#' Sets layout which is used for trajectory visualization to a \code{CellTrailsSet}
-#' object.
+#' Sets layout which is used for trajectory visualization to a
+#' \code{CellTrailsSet} object.
 #' @usage trajectoryLayout(object, adjust) <- value
-#' @param object An object of class \code{\link[CellTrails]{CellTrailsSet}}.
+#' @param object An object of class \code{CellTrailsSet}
 #' @param value A matrix with x- and y-coordinates for each sample; rows =
-#' samples, columns = coordinates.
+#' samples, columns = coordinates
 #' @param adjust If adjustment of the layout is required. (default: TRUE)
-#' @return An updated object of class \code{\link[CellTrails]{CellTrailsSet}}.
+#' @return An updated object of class \code{CellTrailsSet}
+#' @seealso \code{\link[CellTrails]{CellTrailsSet}}
 #' @details
 #' \emph{Diagnostic messages}
 #' \cr \cr
-#' An error is thrown if the number of rows of the layout does not correspond to
-#' the number of \code{trajectorySamples} or if the number of columns does not
-#' equal 2 or if the row names do not correspond to \code{sampleNames}.
+#' An error is thrown if the number of rows of the layout does not correspond
+#' to the number of \code{trajectorySamples} or if the number of columns does
+#' not equal 2 or if the row names do not correspond to \code{sampleNames}.
 #' @examples
 #' # Generate example data
 #' dat <- exDat()
@@ -553,10 +587,11 @@ setMethod("trajectoryLayout", "CellTrailsSet", function(object){
 #' @aliases trajectoryLayout<-,CellTrailsSet-method
 #' @import Biobase
 #' @export
-#' @seealso \code{\link[CellTrails]{trajectorySamples}}
 #' @author Daniel C. Ellwanger
-setGeneric("trajectoryLayout<-", function(object, adjust=FALSE, value) standardGeneric("trajectoryLayout<-"))
-setReplaceMethod("trajectoryLayout", "CellTrailsSet", function(object, adjust, value) {
+setGeneric("trajectoryLayout<-", function(object, adjust=FALSE, value)
+  standardGeneric("trajectoryLayout<-"))
+setReplaceMethod("trajectoryLayout", "CellTrailsSet",
+                 function(object, adjust, value) {
   if(is.null(value)) {
     object@layout <- value
   } else {
@@ -597,11 +632,11 @@ setReplaceMethod("trajectoryLayout", "CellTrailsSet", function(object, adjust, v
 #' ADD trail
 #'
 #' Function to define a single trail on the trajectory.
-#' @param ctset An object of class \code{\link[CellTrails]{CellTrailsSet}}
+#' @param ctset An object of class \code{CellTrailsSet}
 #' @param name Name of trail
 #' @param from Start node ID
 #' @param to End node ID
-#' @return An updated object of class \code{\link[CellTrails]{CellTrailsSet}}
+#' @return An updated object of class \code{CellTrailsSet}
 #' @details A trajectory can be composed of multiple single trails (e.g., developmental
 #' progression from a common start towards distinct terminal phenotypes).
 #' Start and endpoints of trails can be identified using the plot function
@@ -612,8 +647,9 @@ setReplaceMethod("trajectoryLayout", "CellTrailsSet", function(object, adjust, v
 #' \emph{Diagnostic messages}
 #' \cr \cr
 #' An error is thrown if the trajectory has not been fitted yet. Please,
-#' call \code{\link{fitTrajectory}} first. Further, an error is thrown if the
+#' call \code{fitTrajectory} first. Further, an error is thrown if the
 #' provided start or end ID is unknown.
+#' @seealso \code{\link[CellTrails]{CellTrailsSet}} \code{\link[CellTrails]{fitTrajectory}}
 #' @examples
 #' # Generate example data
 #' dat <- exDat()
@@ -688,14 +724,15 @@ setMethod("addTrail", "CellTrailsSet", function(ctset, from, to, name){
 #' REMOVE trail
 #'
 #' Removes trail from a \code{CellTrailsSet} object.
-#' @param ctset An object of class \code{\link[CellTrails]{CellTrailsSet}}.
+#' @param ctset An object of class \code{CellTrailsSet}
 #' @param name Name of trail
-#' @return An updated object of class \code{\link[CellTrails]{CellTrailsSet}}.
+#' @return An updated object of class \code{CellTrailsSet}
 #' @details
 #' \emph{Diagnostic messages}
 #' \cr \cr
 #' An error is thrown if the trail name is unknown. All stored trail names can be shown
-#' using function \code{\link[CellTrails]{trailNames}}.
+#' using function \code{trailNames}.
+#' @seealso \code{\link[CellTrails]{CellTrailsSet}} \code{\link[CellTrails]{trailNames}}
 #' @examples
 #' # Generate example data
 #' dat <- exDat()
@@ -755,8 +792,9 @@ setMethod("removeTrail", "CellTrailsSet", function(ctset, name){
 #' GET trail names
 #'
 #' Get names of trails from \code{CellTrailsSet} object.
-#' @param object An object of class \code{\link[CellTrails]{CellTrailsSet}}.
+#' @param object An object of class \code{CellTrailsSet}
 #' @return A \code{character} vector
+#' @seealso \code{\link[CellTrails]{CellTrailsSet}}
 #' @examples
 #' # Generate example data
 #' dat <- exDat()
@@ -811,14 +849,15 @@ setMethod("trailNames", "CellTrailsSet", function(object){
 #' Enables to rename trails stored in a \code{CellTrailsSet}
 #' object.
 #' @usage trailNames(object) <- value
-#' @param object An object of class \code{\link[CellTrails]{CellTrailsSet}}
+#' @param object An object of class \code{CellTrailsSet}
 #' @param value A character vector with the trail names
-#' @return An updated object of class \code{\link[CellTrails]{CellTrailsSet}}
+#' @return An updated object of class \code{CellTrailsSet}
 #' @details
 #' \emph{Diagnostic messages}
 #' \cr \cr
 #' An error is thrown if the number of names does not correspond to the number of
 #' trails stored in the object.
+#' @seealso \code{\link[CellTrails]{CellTrailsSet}}
 #' @examples
 #' # Generate example data
 #' dat <- exDat()
@@ -867,7 +906,8 @@ setMethod("trailNames", "CellTrailsSet", function(object){
 #' @export
 #' @author Daniel C. Ellwanger
 setGeneric("trailNames<-", function(object, value) standardGeneric("trailNames<-"))
-setReplaceMethod("trailNames", "CellTrailsSet", function(object, value) {
+setReplaceMethod("trailNames", "CellTrailsSet",
+                 function(object, value) {
   #Pre-flight check
   if(length(object@trails) != length(value)) {
     stop("Number of provided names (", length(value), ") does not correspond to ",
@@ -880,10 +920,12 @@ setReplaceMethod("trailNames", "CellTrailsSet", function(object, value) {
 #' GET trail samples
 #'
 #' Get names of samples for each trail from \code{CellTrailsSet} object.
-#' @param object An object of class \code{\link[CellTrails]{CellTrailsSet}}.
-#' @param trail_name A character string indicating the name of the trail (optional)
+#' @param object An object of class \code{CellTrailsSet}
+#' @param trail_name A character string indicating the name of the trail
+#' (optional)
 #' @return An object of class \code{list}; each element is a vector of sample
 #' names per trail
+#' @seealso \code{\link[CellTrails]{CellTrailsSet}}
 #' @examples
 #' # Generate example data
 #' dat <- exDat()
@@ -929,25 +971,30 @@ setReplaceMethod("trailNames", "CellTrailsSet", function(object, value) {
 #' @import Biobase
 #' @export
 #' @author Daniel C. Ellwanger
-setGeneric("trailSamples", function(object, trail_name=NULL) standardGeneric("trailSamples"))
-setMethod("trailSamples", "CellTrailsSet", function(object, trail_name=NULL){
+setGeneric("trailSamples", function(object, trail_name=NULL)
+  standardGeneric("trailSamples"))
+setMethod("trailSamples", "CellTrailsSet",
+          function(object, trail_name=NULL){
   if(is.null(trail_name)) {
     lapply(object@trails, function(x) sampleNames(object)[x$samples])
   } else {
     if(trail_name %in% trailNames(object)) {
       sampleNames(object)[object@trails[[trail_name]]$samples]
     } else {
-      stop("Please check name of trail. A trail named ", trail_name, " was not defined.")
+      stop("Please check name of trail. A trail named ", trail_name,
+           " was not defined.")
     }
   }})
 
 #' GET trail pseudotime
 #'
 #' Get pseudotime of each trail from \code{CellTrailsSet} object.
-#' @param object An object of class \code{\link[CellTrails]{CellTrailsSet}}.
-#' @param trail_name A character string indicating the name of the trail (optional)
-#' @return An object of class \code{list}; each element is a vector of pseudotime
-#' values per trail
+#' @param object An object of class \code{CellTrailsSet}
+#' @param trail_name A character string indicating the name of the trail
+#' (optional)
+#' @return An object of class \code{list}; each element is a vector of
+#' pseudotime values per trail
+#' @seealso \code{\link[CellTrails]{CellTrailsSet}}
 #' @examples
 #' # Generate example data
 #' dat <- exDat()
@@ -992,25 +1039,30 @@ setMethod("trailSamples", "CellTrailsSet", function(object, trail_name=NULL){
 #' @aliases trailPseudotime,CellTrailsSet-method
 #' @export
 #' @author Daniel C. Ellwanger
-setGeneric("trailPseudotime", function(object, trail_name=NULL) standardGeneric("trailPseudotime"))
-setMethod("trailPseudotime", "CellTrailsSet", function(object, trail_name=NULL){
+setGeneric("trailPseudotime", function(object, trail_name=NULL)
+  standardGeneric("trailPseudotime"))
+setMethod("trailPseudotime", "CellTrailsSet",
+          function(object, trail_name=NULL){
   if(is.null(trail_name)) {
     lapply(object@trails, function(x) x$ptime / max(x$ptime))
   } else {
     if(trail_name %in% trailNames(object)) {
       object@trails[[trail_name]]$ptime / max(object@trails[[trail_name]]$ptime)
     } else {
-      stop("Please check name of trail. A trail named ", trail_name, " was not defined.")
+      stop("Please check name of trail. A trail named ", trail_name,
+           " was not defined.")
     }
   }})
 
 #' GET trail states
 #'
 #' Get states of each trail from \code{CellTrailsSet} object.
-#' @param object An object of class \code{\link[CellTrails]{CellTrailsSet}}.
-#' @param trail_name A character string indicating the name of the trail (optional)
+#' @param object An object of class \code{CellTrailsSet}
+#' @param trail_name A character string indicating the name of the trail
+#' (optional)
 #' @return An object of class \code{list}; each element is a vector of states
 #' factor values per trail
+#' @seealso \code{\link[CellTrails]{CellTrailsSet}}
 #' @examples
 #' # Generate example data
 #' dat <- exDat()
@@ -1055,7 +1107,8 @@ setMethod("trailPseudotime", "CellTrailsSet", function(object, trail_name=NULL){
 #' @aliases trailStates,CellTrailsSet-method
 #' @export
 #' @author Daniel C. Ellwanger
-setGeneric("trailStates", function(object, trail_name=NULL) standardGeneric("trailStates"))
+setGeneric("trailStates", function(object, trail_name=NULL)
+  standardGeneric("trailStates"))
 setMethod("trailStates", "CellTrailsSet", function(object, trail_name=NULL){
   if(is.null(trail_name)) {
     lapply(object@trails, function(x) states(object)[x$samples])
@@ -1063,16 +1116,18 @@ setMethod("trailStates", "CellTrailsSet", function(object, trail_name=NULL){
     if(trail_name %in% trailNames(object)) {
       states(object)[object@trails[[trail_name]]$samples]
     } else {
-      stop("Please check name of trail. A trail named ", trail_name, " was not defined.")
+      stop("Please check name of trail. A trail named ", trail_name,
+           " was not defined.")
     }
   }})
 
 #' ADD landmark
 #'
 #' Adds a landmark to a \code{CellTrailsSet} object.
-#' @param object An object of class \code{\link[CellTrails]{CellTrailsSet}}.
+#' @param object An object of class \code{CellTrailsSet}
 #' @param sample_name A character string indicating the name of the sample
-#' @return An updated object of class \code{\link[CellTrails]{CellTrailsSet}}
+#' @return An updated object of class \code{CellTrailsSet}
+#' @seealso \code{\link[CellTrails]{CellTrailsSet}}
 #' @examples
 #' # Generate example data
 #' dat <- exDat()
@@ -1117,7 +1172,8 @@ setMethod("trailStates", "CellTrailsSet", function(object, trail_name=NULL){
 #' @import Biobase
 #' @export
 #' @author Daniel C. Ellwanger
-setGeneric("addLandmark", function(object, sample_name) standardGeneric("addLandmark"))
+setGeneric("addLandmark", function(object, sample_name)
+  standardGeneric("addLandmark"))
 setMethod("addLandmark", "CellTrailsSet", function(object, sample_name){
   sNames <- sampleNames(object)[object@useSample]
 
@@ -1137,9 +1193,10 @@ setMethod("addLandmark", "CellTrailsSet", function(object, sample_name){
 #' REMOVE landmark
 #'
 #' Removes a landmark to a \code{CellTrailsSet} object.
-#' @param object An object of class \code{\link[CellTrails]{CellTrailsSet}}
+#' @param object An object of class \code{CellTrailsSet}
 #' @param sample_name A character string indicating the name of the sample
-#' @return An updated object of class \code{\link[CellTrails]{CellTrailsSet}}
+#' @return An updated object of class \code{CellTrailsSet}
+#' @seealso \code{\link[CellTrails]{CellTrailsSet}}
 #' @examples
 #' # Generate example data
 #' dat <- exDat()
@@ -1186,7 +1243,8 @@ setMethod("addLandmark", "CellTrailsSet", function(object, sample_name){
 #' @import Biobase
 #' @export
 #' @author Daniel C. Ellwanger
-setGeneric("removeLandmark", function(object, sample_name) standardGeneric("removeLandmark"))
+setGeneric("removeLandmark", function(object, sample_name)
+  standardGeneric("removeLandmark"))
 setMethod("removeLandmark", "CellTrailsSet", function(object, sample_name){
   sNames <- sampleNames(object)[object@useSample]
 

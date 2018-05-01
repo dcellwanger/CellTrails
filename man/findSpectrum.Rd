@@ -9,10 +9,10 @@
 findSpectrum(ctset, frac = 100)
 }
 \arguments{
-\item{ctset}{A \code{\link[CellTrails]{CellTrailsSet}} object}
+\item{ctset}{A \code{CellTrailsSet} object}
 
-\item{frac}{Fraction or number (if \code{frac > 1}) of eigengaps used to perform
-linear fit. (default: 100)}
+\item{frac}{Fraction or number (if \code{frac > 1}) of eigengaps
+used to perform linear fit. (default: 100)}
 }
 \value{
 An object of class \code{CellTrailsSpectrum}
@@ -21,10 +21,10 @@ An object of class \code{CellTrailsSpectrum}
 Identifies the dimensionality of the latent space
 }
 \details{
-Similar to a scree plot, this method generates a simple line segement
-plot showing the lagged differences between ordered eigenvalues (eigengaps). A
-linear fit is calucated on a fraction of top ranked values to identify informative
-eigenvectors.
+Similar to a scree plot, this method generates a simple line
+segement plot showing the lagged differences between ordered eigenvalues
+(eigengaps). A linear fit is calucated on a fraction of top ranked values
+to identify informative eigenvectors.
 }
 \examples{
 # Generate example data
@@ -39,6 +39,9 @@ ctset <- embedSamples(ctset)
 # Find spectrum
 spectr <- findSpectrum(ctset, frac=25)
 plot(spectr)
+}
+\seealso{
+\code{\link[CellTrails]{CellTrailsSet}}
 }
 \author{
 Daniel C. Ellwanger

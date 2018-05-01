@@ -12,13 +12,17 @@ to be initialized by user directly.
 \section{Slots}{
 
 \describe{
-\item{\code{frac}}{Object of class \code{\link[base]{numeric}} containing the number of eigengaps used to perform linear fit}
+\item{\code{frac}}{Object of class \code{numeric} containing the number of
+eigengaps used to perform linear fit}
 
-\item{\code{n}}{Object of class \code{\link[base]{numeric}} containing the number of relevant dimensions}
+\item{\code{n}}{Object of class \code{numeric} containing the number of
+relevant dimensions}
 
-\item{\code{cs}}{Object of class \code{\link[base]{numeric}} contaning the cumulative sum of eigengaps}
+\item{\code{cs}}{Object of class \code{numeric} contaning the cumulative
+sum of eigengaps}
 
-\item{\code{fit}}{Object of class \code{\link[base]{list}} containing the results of the linear fit}
+\item{\code{fit}}{Object of class \code{list} containing the results of
+the linear fit}
 }}
 
 \author{

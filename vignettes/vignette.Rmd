@@ -53,6 +53,8 @@ Before ready to use, the *CellTrails* libraries must be loaded into the _R_ envi
 library(CellTrails)
 ```
 
+**Please note**, that we recommend to use *CellTrails* with filtered and log-normalized expression data without spike-in controls.
+
 The following illustrates the typical workflow of a *CellTrails* analysis. Shown is the signature of each function as provided in the *CellTrails* package documentation (call `?name_of_function`):
 
 ```{r eval=FALSE}
@@ -61,7 +63,9 @@ The following illustrates the typical workflow of a *CellTrails* analysis. Shown
 # -------------------------------
 # Container Creation
 # -------------------------------
-ctset <- as.CellTrailsSet(object) #either numeric matrix or ExpressionSet
+# Either from a numeric matrix, 
+# ExpressionSet or SingleCellExperiment object
+ctset <- as.CellTrailsSet(object) 
 
 # -------------------------------
 # Feature Selection

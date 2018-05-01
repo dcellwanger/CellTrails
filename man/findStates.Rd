@@ -10,46 +10,58 @@ findStates(ctset, min_size = 0.01, min_feat = 5, max_pval = 1e-04,
   min_fc = 2)
 }
 \arguments{
-\item{ctset}{A \code{\link[CellTrails]{CellTrailsSet}} object}
+\item{ctset}{A \code{CellTrailsSet} object}
 
-\item{min_size}{The initial cluster dedrogram is cut at an height such that the minimum cluster
-size is at least \code{min_size}; if \code{min_size} < 1 than the fraction of total samples
-is used, otherwise it is used as absoulte count (default: 0.01).}
+\item{min_size}{The initial cluster dedrogram is cut at an height such that
+the minimum cluster size is at least \code{min_size};
+if \code{min_size} < 1 than the fraction of total samples is used,
+otherwise it is used as absoulte count (default: 0.01).}
 
-\item{min_feat}{Minimum number of differentially expressed features between siblings. If this
-number is not reached, two neighboring clusters (siblings) in the pruned dendrogram get joined. (default: 5)}
+\item{min_feat}{Minimum number of differentially expressed features between
+siblings. If this number is not reached, two neighboring clusters (siblings)
+in the pruned dendrogram get joined. (default: 5)}
 
-\item{max_pval}{Maximum \emph{P}-value for differential expression computation. (default: 1e-4)}
+\item{max_pval}{Maximum \emph{P}-value for differential expression
+computation. (default: 1e-4)}
 
-\item{min_fc}{Mimimum fold-change for differential expression computation. (default: 2)}
+\item{min_fc}{Mimimum fold-change for differential expression
+computation. (default: 2)}
 }
 \value{
 An unpdated object of class \code{CellTrailsSet}
 }
 \description{
-Determines states using hierarchical spectral clustering with a \emph{post-hoc} test.
+Determines states using hierarchical spectral clustering with a
+\emph{post-hoc} test.
 }
 \details{
-To identify cellular subpopulations, CellTrails performs hierarchical clustering via minimization
-of a square error criterion (Ward, 1963) in the lower-dimensional space. To determine the cardinality
-of the clustering, CellTrails conducts an unsupervised \emph{post-hoc} analysis. Here, it is assumed that
-differential expression of assayed features determines distinct cellular stages. First, Celltrails
-identifies the maximal fragmentation of the data space, i.e. the lowest cutting height in the clustering
-dendrogram that ensured that the resulting clusters contained at least a certain fraction of samples.
-Then, processing from this height towards the root, CellTrails iteratively joins siblings if they did
-not have at least a certain number of differentially expressed features. Statistical significance is tested
-by means of a two-sample non-parametric linear rank test accounting for censored values (Peto & Peto, 1972).
-The null hypothesis is rejected using the Benjamini-Hochberg (Benjamini & Hochberg, 1995) procedure for
+To identify cellular subpopulations, CellTrails performs
+hierarchical clustering via minimization of a square error criterion
+(Ward, 1963) in the lower-dimensional space. To determine the cardinality
+of the clustering, CellTrails conducts an unsupervised \emph{post-hoc}
+analysis. Here, it is assumed that differential expression of assayed
+features determines distinct cellular stages. First, Celltrails identifies
+the maximal fragmentation of the data space, i.e. the lowest cutting height
+in the clustering dendrogram that ensured that the resulting clusters
+contained at least a certain fraction of samples. Then, processing from
+this height towards the root, CellTrails iteratively joins siblings if
+they did not have at least a certain number of differentially expressed
+features. Statistical significance is tested by means of a two-sample
+non-parametric linear rank test accounting for censored values
+(Peto & Peto, 1972). The null hypothesis is rejected using the
+Benjamini-Hochberg (Benjamini & Hochberg, 1995) procedure for
 a given significance level.
 \cr \cr
 \emph{Diagnostic messages}
 \cr \cr
-An error is thrown if the samples stored in the \code{CellTrailsSet} object were
-not embedded yet (ie. the \code{CellTrailsSet} object does not contain a
-latent space matrix object; \code{latentSpace(object)}is \code{NULL}, see \code{\link[CellTrails]{embedSamples}}).
-A warning is shown if the dimensionality of the latent space equals the number of samples. If
-the user intends to use the non-truncated latent space this message can be ignored, otherwise it is
-suggested to reduce the dimensionality (see \code{\link[CellTrails]{reduceDimensions}}).
+An error is thrown if the samples stored in the \code{CellTrailsSet} object
+were not embedded yet (ie. the \code{CellTrailsSet} object does not contain
+a latent space matrix object; \code{latentSpace(object)}is \code{NULL},
+see \code{embedSamples}).
+A warning is shown if the dimensionality of the latent space equals the
+number of samples. If the user intends to use the non-truncated latent space
+this message can be ignored, otherwise it is
+suggested to reduce the dimensionality (see \code{reduceDimensions}).
 }
 \examples{
 # Generate example data
@@ -74,16 +86,22 @@ ctset
 plot(ctset, type="stateSize")
 }
 \references{
-Ward, J.H. (1963). Hierarchical Grouping to Optimize an Objective Function.
-Journal of the American Statistical Association, 58, 236-244.
+Ward, J.H. (1963). Hierarchical Grouping to Optimize
+an Objective Function. Journal of the American Statistical
+Association, 58, 236-244.
 
 Peto, R., and Peto, J. (1972).
 Asymptotically Efficient Rank Invariant Test Procedures (with Discussion).
 Journal of the Royal Statistical Society of London, Series A 135, 185–206.
 
 Benjamini, Y., and Hochberg, Y. (1995).
-Controlling the false discovery rate: a practical and powerful approach to multiple
-testing. Journal of the Royal Statistical Society Series B 57, 289–300.
+Controlling the false discovery rate: a practical and powerful
+approach to multiple testing. Journal of the Royal Statistical
+Society Series B 57, 289–300.
+}
+\seealso{
+\code{\link[CellTrails]{embedSamples}}
+\code{\link[CellTrails]{reduceDimensions}}
 }
 \author{
 Daniel C. Ellwanger

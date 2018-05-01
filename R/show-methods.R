@@ -5,7 +5,7 @@ NULL
 ### CellTrailsSet
 ###############################################################################
 #' Shows content of a CellTrailsSet object
-#' @param object A \code{\link[CellTrails]{CellTrailsSet}} object
+#' @param object A \code{CellTrailsSet} object
 #' @return \code{show} returns an invisible \code{NULL}
 #' @examples
 #' # Generate example data
@@ -22,7 +22,9 @@ setMethod("show", "CellTrailsSet", function(object){
   if(!is.null(object@trajectory)) {
     tps <- table(object@trajectory$blaze$type)
     tfit <- paste0("MSE=",
-                   format(mean(object@trajectory$error), scientific=TRUE, digits=2),
+                   format(mean(object@trajectory$error),
+                          scientific=TRUE,
+                          digits=2),
                    " #Branches=", tps[1], " #Terminals=", tps[2])
   }
 
@@ -39,8 +41,19 @@ setMethod("show", "CellTrailsSet", function(object){
          "  fvarMetadata: labelDescription\n",
          "mapData: \n",
          "  trajectoryFeatures: ", .prettyString(trajectoryFeatures(object)), "\n",
-         "  latentSpace: ", ifelse(is.null(CellTrails::latentSpace(object)), "none", paste0(nrow(CellTrails::latentSpace(object)), " samples, ", ncol(CellTrails::latentSpace(object)), " components")), "\n",
-         "  stateTrajectoryGraph: ", ifelse(is.null(stateTrajectoryGraph(object)), "none", paste0("[Component(#Vertices,Edges)]: ", paste0(seq(length(stateTrajectoryGraph(object))), rep("(", length(stateTrajectoryGraph(object))), unlist(lapply(stateTrajectoryGraph(object), function(x){ paste(vcount(x), ecount(x), sep = ',')})), rep(")", length(stateTrajectoryGraph(object))), collapse = " "), "")), "\n",
+         "  latentSpace: ", ifelse(is.null(CellTrails::latentSpace(object)), "none",
+                                   paste0(nrow(CellTrails::latentSpace(object)), " samples, ",
+                                          ncol(CellTrails::latentSpace(object)), " components")), "\n",
+         "  stateTrajectoryGraph: ", ifelse(is.null(stateTrajectoryGraph(object)), "none",
+                                            paste0("[Component(#Vertices,Edges)]: ",
+                                                   paste0(seq(length(stateTrajectoryGraph(object))),
+                                                          rep("(", length(stateTrajectoryGraph(object))),
+                                                          unlist(lapply(stateTrajectoryGraph(object),
+                                                                        function(x){ paste(vcount(x),
+                                                                                           ecount(x),
+                                                                                           sep = ',')})),
+                                                          rep(")", length(stateTrajectoryGraph(object))),
+                                                          collapse = " "), "")), "\n",
          "  trajectoryStates: ", .prettyString(trajectoryStates(object)), "\n",
          "  trajectorySamples: ", .prettyString(trajectorySamples(object)), "\n",
          "  trajectoryFit: ", tfit, "\n",

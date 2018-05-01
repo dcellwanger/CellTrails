@@ -9,7 +9,7 @@
 read.ygraphml(ctset, file, adjust = TRUE)
 }
 \arguments{
-\item{ctset}{A \code{\link[CellTrails]{CellTrailsSet}} object}
+\item{ctset}{A \code{CellTrailsSet} object}
 
 \item{file}{A character string naming a file}
 
@@ -17,24 +17,27 @@ read.ygraphml(ctset, file, adjust = TRUE)
 correlated to pseudotime. (default: TRUE)}
 }
 \value{
-An updated \code{\link[CellTrails]{CellTrailsSet}} object
+An updated \code{CellTrailsSet} object
 }
 \description{
 Reads ygraphml file containing the trajectory graph's layout
 }
 \details{
-To visualize the trajectory graph, a proper graph layout has to be computed.
-Ideally, edges should not cross and nodes should not overlap. CellTrails enables the
-export and import of the trajectory graph structure using the graphml file format.
-This file format can be interpreted by most third-party graph analysis applications,
-allowing the user to subject the trajectory graph to a wide range of
-layout algorithms. Please note that the graphml file needs to contain layout information
+To visualize the trajectory graph, a proper graph layout has
+to be computed. Ideally, edges should not cross and nodes should not
+overlap. CellTrails enables the export and import of the trajectory
+graph structure using the graphml file format. This file format can be
+interpreted by most third-party graph analysis applications, allowing the user
+to subject the trajectory graph to a wide range of layout algorithms.
+Please note that the graphml file needs to contain layout information
 ("<y:Geometry x=... y=... >" entries) as provided by the 'ygraphml' file definition
 used by the Graph Visualization Software 'yEd' (freely available from yWorks GmbH,
 http://www.yworks.com/products/yed). \cr \cr
-CellTrails implements a module which can incorporate pseudotime information into the the graph
-layout (activated via parameter \code{adjust}). Here, edge lengths between two nodes (samples)
-will then correspond to the inferred pseudotime that separates two samples along the trajectory.
+CellTrails implements a module which can incorporate pseudotime information
+into the the graph layout (activated via parameter \code{adjust}). Here,
+edge lengths between two nodes (samples)
+will then correspond to the inferred pseudotime that separates two samples
+along the trajectory.
 }
 \examples{
 # Generate example data

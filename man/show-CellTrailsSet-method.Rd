@@ -8,7 +8,7 @@
 \S4method{show}{CellTrailsSet}(object)
 }
 \arguments{
-\item{object}{A \code{\link[CellTrails]{CellTrailsSet}} object}
+\item{object}{A \code{CellTrailsSet} object}
 }
 \value{
 \code{show} returns an invisible \code{NULL}

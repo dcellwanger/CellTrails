@@ -4,7 +4,7 @@
 \name{gga_e15_utricle}
 \alias{gga_e15_utricle}
 \title{Example single-cell RT-qPCR data}
-\format{An object of class \code{\link[Biobase]{ExpressionSet}}}
+\format{An object of class \code{ExpressionSet}}
 \usage{
 data("gga_e15_utricle")
 }

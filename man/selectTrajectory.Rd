@@ -9,26 +9,29 @@
 selectTrajectory(ctset, component)
 }
 \arguments{
-\item{ctset}{A \code{\link[CellTrails]{CellTrailsSet}} object}
+\item{ctset}{A \code{CellTrailsSet} object}
 
 \item{component}{Number of component to be selected}
 }
 \value{
-An updated \code{\link[CellTrails]{CellTrailsSet}} object
+An updated \code{CellTrailsSet} object
 }
 \description{
 Retains a single component of a trajectory graph.
 }
 \details{
-The construction of a trajectory graph may result in a forest having
-multiple tree components, which may represent individual trajectories or isolated nodes.
-This method should be used to extract a single component from the graph. A component is
+The construction of a trajectory graph may result in a forest
+having multiple tree components, which may represent individual
+trajectories or isolated nodes. This method should be used to extract a
+single component from the graph. A component is
 identified by its (integer) number.
 \cr \cr
 \emph{Diagnostic messages}
 \cr \cr
-An error is thrown if the states have not been connected yet; function \code{\link[CellTrails]{connectStates}}
-needs to be called first. An error is thrown if an unknown component (number) is selected.
+An error is thrown if the states have not been connected yet;
+function \code{connectStates}
+needs to be called first. An error is thrown if an unknown
+component (number) is selected.
 }
 \examples{
 # Generate example data
@@ -57,6 +60,9 @@ ctset <- selectTrajectory(ctset, component=1)
 
 stateTrajectoryGraph(ctset)
 trajectorySamples(ctset)
+}
+\seealso{
+\code{\link[CellTrails]{connectStates}}
 }
 \author{
 Daniel C. Ellwanger

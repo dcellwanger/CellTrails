@@ -186,7 +186,7 @@
     if(is.nan(snr)) {
       snr <- NA
     } else if(snr < 0) {
-      l <- x[1:sum(sel)]
+      l <- x[seq_len(sum(sel))]
       u <- x[(length(x) - sum(!sel) + 1):length(x)]
       #if(EM) {
       #  fac <- f.mean(l, lod)$mean - f.mean(u, lod)$mean
@@ -196,7 +196,7 @@
 
       fac <- f.snr_statistic(u, l) #abs(mean(u) - mean(l)) / (sd(u) + sd(l))
     } else if (snr > 0) {
-      u <- x[1:sum(!sel)]
+      u <- x[seq_len(sum(!sel))]
       l <- x[(length(x) - sum(sel) + 1):length(x)]
       #if(EM) {
       #  fac <- f.mean(u, lod)$mean - f.mean(l, lod)$mean
@@ -208,9 +208,9 @@
     snr / fac
 
     #if(snr < 0) {
-    #  snr <- -(snr / (mean(sort(x, decreasing = F)[1:sum(sel)]) - mean(sort(x, decreasing = T)[1:sum(!sel)])))
+    #  snr <- -(snr / (mean(sort(x, decreasing = F)[seq_len(sum(sel))]) - mean(sort(x, decreasing = T)[seq_len(sum(!sel))])))
     #} else if (snr > 0) {
-    #  snr <- snr / (mean(sort(x, decreasing = T)[1:sum(sel)]) - mean(sort(x, decreasing = F)[1:sum(!sel)]))
+    #  snr <- snr / (mean(sort(x, decreasing = T)[seq_len(sum(sel))]) - mean(sort(x, decreasing = F)[seq_len(sum(!sel))]))
     #}
   }
 
@@ -259,11 +259,13 @@
   #snr comparison to other clusters
   cl.snr <- do.call(rbind, lapply(res, function(x){x$diffexp}))
   for(i in k) {
-    comp <- apply(cl.snr, 2, function(x){2 * sum(x[k == i] > x) / (length(x) - 1) - 1})
+    comp <- apply(cl.snr, 2,
+                  function(x){2 * sum(x[k == i] > x) / (length(x) - 1) - 1})
     i <- as.character(i)
     res[[i]]$spec <- comp
   }
 
   # Create table
-  lapply(res, function(x){cbind(DiffExp = x$diffexp, Spec = x$spec, P.value = x$p.value)})
+  lapply(res, function(x){cbind(DiffExp = x$diffexp,
+                                Spec = x$spec, P.value = x$p.value)})
 }

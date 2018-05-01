@@ -9,7 +9,7 @@
 trajectoryLayout(object)
 }
 \arguments{
-\item{object}{An object of class \code{\link[CellTrails]{CellTrailsSet}}.}
+\item{object}{An object of class \code{CellTrailsSet}}
 }
 \value{
 A numeric matrix
@@ -55,6 +55,9 @@ trajectoryLayout(ctset, adjust=TRUE) <- trajLayouts$example
 
 # Get trajectory layout
 trajectoryLayout(ctset)
+}
+\seealso{
+\code{\link[CellTrails]{CellTrailsSet}}
 }
 \author{
 Daniel C. Ellwanger

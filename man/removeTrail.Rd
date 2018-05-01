@@ -9,12 +9,12 @@
 removeTrail(ctset, name)
 }
 \arguments{
-\item{ctset}{An object of class \code{\link[CellTrails]{CellTrailsSet}}.}
+\item{ctset}{An object of class \code{CellTrailsSet}}
 
 \item{name}{Name of trail}
 }
 \value{
-An updated object of class \code{\link[CellTrails]{CellTrailsSet}}.
+An updated object of class \code{CellTrailsSet}
 }
 \description{
 Removes trail from a \code{CellTrailsSet} object.
@@ -23,7 +23,7 @@ Removes trail from a \code{CellTrailsSet} object.
 \emph{Diagnostic messages}
 \cr \cr
 An error is thrown if the trail name is unknown. All stored trail names can be shown
-using function \code{\link[CellTrails]{trailNames}}.
+using function \code{trailNames}.
 }
 \examples{
 # Generate example data
@@ -68,6 +68,9 @@ trailNames(ctset)
 # Remove trail
 ctset <- removeTrail(ctset, name="Tr1")
 trailNames(ctset)
+}
+\seealso{
+\code{\link[CellTrails]{CellTrailsSet}} \code{\link[CellTrails]{trailNames}}
 }
 \author{
 Daniel C. Ellwanger

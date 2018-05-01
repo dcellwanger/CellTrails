@@ -9,26 +9,26 @@
 trajectoryLayout(object, adjust) <- value
 }
 \arguments{
-\item{object}{An object of class \code{\link[CellTrails]{CellTrailsSet}}.}
+\item{object}{An object of class \code{CellTrailsSet}}
 
 \item{adjust}{If adjustment of the layout is required. (default: TRUE)}
 
 \item{value}{A matrix with x- and y-coordinates for each sample; rows =
-samples, columns = coordinates.}
+samples, columns = coordinates}
 }
 \value{
-An updated object of class \code{\link[CellTrails]{CellTrailsSet}}.
+An updated object of class \code{CellTrailsSet}
 }
 \description{
-Sets layout which is used for trajectory visualization to a \code{CellTrailsSet}
-object.
+Sets layout which is used for trajectory visualization to a
+\code{CellTrailsSet} object.
 }
 \details{
 \emph{Diagnostic messages}
 \cr \cr
-An error is thrown if the number of rows of the layout does not correspond to
-the number of \code{trajectorySamples} or if the number of columns does not
-equal 2 or if the row names do not correspond to \code{sampleNames}.
+An error is thrown if the number of rows of the layout does not correspond
+to the number of \code{trajectorySamples} or if the number of columns does
+not equal 2 or if the row names do not correspond to \code{sampleNames}.
 }
 \examples{
 # Generate example data
@@ -67,7 +67,7 @@ trajectoryLayout(ctset, adjust=TRUE) <- trajLayouts$example
 
 }
 \seealso{
-\code{\link[CellTrails]{trajectorySamples}}
+\code{\link[CellTrails]{CellTrailsSet}}
 }
 \author{
 Daniel C. Ellwanger
