@@ -3,45 +3,37 @@
 \docType{methods}
 \name{states}
 \alias{states}
-\alias{states,CellTrailsSet-method}
+\alias{states,SingleCellExperiment-method}
 \title{GET states}
 \usage{
 states(object)
 }
 \arguments{
-\item{object}{An object of class \code{CellTrailsSet}.}
+\item{object}{An object of class \code{SingleCellExperiment}}
 }
 \value{
 A \code{factor} vector
 }
 \description{
-Retrieve computed states from a \code{CellTrailsSet} object.
+Retrieve computed states from a \code{SingleCellExperiment} object
 }
 \details{
-State information is extracted from \code{featureData};
+State information is extracted from \code{colData};
 factor levels are alphanumerically ordered by ID.
 }
 \examples{
 # Generate example data
-dat <- exDat()
+sce <- exDat()
 
-# Create container
-ctset <- as.CellTrailsSet(dat)
+# Assign clusters
+cl <- kmeans(logcounts(sce), centers=5)$cluster
+states(sce) <- cl
 
-# Embed samples
-ctset <- embedSamples(ctset)
-
-# Find spectrum
-spectr <- findSpectrum(ctset, frac=25)
-
-# Reduce dimensionality
-ctset <- reduceDimensions(ctset, spectr)
-
-# Find states
-ctset <- findStates(ctset, max_pval=1e-3, min_feat=4)
-
-# Get state assignments
-states(ctset)
+# Get clusters
+states(sce)
+}
+\seealso{
+\code{SingleCellExperiment} \code{findStates}
 }
 \author{
 Daniel C. Ellwanger

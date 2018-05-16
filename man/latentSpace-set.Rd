@@ -3,37 +3,36 @@
 \docType{methods}
 \name{latentSpace<-}
 \alias{latentSpace<-}
-\alias{latentSpace<-,CellTrailsSet-method}
+\alias{latentSpace<-,SingleCellExperiment-method}
 \title{SET latent space}
 \usage{
 latentSpace(object) <- value
 }
 \arguments{
-\item{object}{An object of class \code{CellTrailsSet}}
+\item{object}{A \code{SingleCellExperiment} object}
 
-\item{value}{A numeric matrix}
+\item{value}{A numeric matrix with rows are samples and columns are
+components}
 }
 \value{
-An updated object of class \code{CellTrailsSet}
+An updated object of class \code{SingleCellExperiment}
 }
 \description{
-Set computed latent space to a \code{CellTrailsSet} object.
+Set CellTrails' latent space to a \code{SingleCellExperiment} object.
 }
 \details{
 Rows need to be samples and columns to be \emph{d} components
-(spanning the lower-dimensional latent space). Usually, this function is not
-directly accessed by the user.
+(spanning the lower-dimensional latent space).
 }
 \examples{
 # Generate example data
-dat <- exDat()
+sce <- exDat()
 
-# Create container
-ctset <- as.CellTrailsSet(dat)
-
-# Perform PCA and set components to object
-pca_result <- pca(ctset)
-latentSpace(ctset) <- pca_result$princomp
+# Set latent space
+latentSpace(sce) <- pca(sce)$components[, 1:10]
+}
+\seealso{
+\code{SingleCellExperiment} \code{reducedDim}
 }
 \author{
 Daniel C. Ellwanger

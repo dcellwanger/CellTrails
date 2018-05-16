@@ -3,14 +3,14 @@
 \docType{methods}
 \name{findStates}
 \alias{findStates}
-\alias{findStates,CellTrailsSet-method}
+\alias{findStates,SingleCellExperiment-method}
 \title{Identify trajectory states}
 \usage{
-findStates(ctset, min_size = 0.01, min_feat = 5, max_pval = 1e-04,
+findStates(sce, min_size = 0.01, min_feat = 5, max_pval = 1e-04,
   min_fc = 2)
 }
 \arguments{
-\item{ctset}{A \code{CellTrailsSet} object}
+\item{sce}{A \code{SingleCellExperiment} object}
 
 \item{min_size}{The initial cluster dedrogram is cut at an height such that
 the minimum cluster size is at least \code{min_size};
@@ -28,7 +28,7 @@ computation. (default: 1e-4)}
 computation. (default: 2)}
 }
 \value{
-An unpdated object of class \code{CellTrailsSet}
+A \code{factor} vector
 }
 \description{
 Determines states using hierarchical spectral clustering with a
@@ -50,41 +50,32 @@ features. Statistical significance is tested by means of a two-sample
 non-parametric linear rank test accounting for censored values
 (Peto & Peto, 1972). The null hypothesis is rejected using the
 Benjamini-Hochberg (Benjamini & Hochberg, 1995) procedure for
-a given significance level.
+a given significance level. \cr
+Please note that this methods only uses the set of defined trajectory
+features in a \code{SingleCellExperiment} object; spike-in controls are
+ignored and are not listed as trajectory features.
 \cr \cr
 \emph{Diagnostic messages}
 \cr \cr
-An error is thrown if the samples stored in the \code{CellTrailsSet} object
-were not embedded yet (ie. the \code{CellTrailsSet} object does not contain
-a latent space matrix object; \code{latentSpace(object)}is \code{NULL},
-see \code{embedSamples}).
-A warning is shown if the dimensionality of the latent space equals the
-number of samples. If the user intends to use the non-truncated latent space
-this message can be ignored, otherwise it is
-suggested to reduce the dimensionality (see \code{reduceDimensions}).
+An error is thrown if the samples stored in the \code{SingleCellExperiment}
+object were not embedded yet (ie. the \code{SingleCellExperiment} object
+does not contain a latent space matrix object; \code{latentSpace(object)}is
+\code{NULL}).
 }
 \examples{
 # Generate example data
-dat <- exDat()
-
-# Create container
-ctset <- as.CellTrailsSet(dat)
-
-# Embed samples
-ctset <- embedSamples(ctset)
-
-# Find spectrum
-spectr <- findSpectrum(ctset, frac=25)
+sce <- exDat()
 
 # Reduce dimensionality
-ctset <- reduceDimensions(ctset, spectr)
+res <- embedSamples(sce)
+d <- findSpectrum(res$eigenvalues, frac=30)
+latentSpace(sce) <- res$components[, d]
 
 # Find states
-ctset <- findStates(ctset, max_pval=1e-3, min_feat=4)
-ctset
+states(sce) <- findStates(sce, max_pval=1e-3, min_feat=4)
 
 \dontrun{
-plot(ctset, type="stateSize")
+plotStateSize(sce)
 }
 }
 \references{
@@ -100,6 +91,9 @@ Benjamini, Y., and Hochberg, Y. (1995).
 Controlling the false discovery rate: a practical and powerful
 approach to multiple testing. Journal of the Royal Statistical
 Society Series B 57, 289–300.
+}
+\seealso{
+\code{latentSpace} \code{trajectoryFeatureNames}
 }
 \author{
 Daniel C. Ellwanger

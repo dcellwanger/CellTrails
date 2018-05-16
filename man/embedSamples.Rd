@@ -3,42 +3,47 @@
 \docType{methods}
 \name{embedSamples}
 \alias{embedSamples}
-\alias{embedSamples,CellTrailsSet-method}
+\alias{embedSamples,SingleCellExperiment-method}
+\alias{embedSamples,matrix-method}
 \title{Spectral embedding of biological samples}
 \usage{
-embedSamples(ctset, design = NULL)
+embedSamples(x, design = NULL)
+
+\S4method{embedSamples}{matrix}(x, design = NULL)
 }
 \arguments{
-\item{ctset}{A \code{CellTrailsSet} object}
+\item{x}{A \code{SingleCellExperiment} object or a numeric matrix with
+samples in columns and features in rows}
 
 \item{design}{A numeric matrix describing the factors that should be blocked}
 }
 \value{
-An updated \code{CellTrailsSet} object
+A list containing the following components:
+  \item{\code{eigenvectors}}{Ordered components of latent space}
+  \item{\code{eigenvalues}}{Information content of latent components}
 }
 \description{
 Non-linear learning of a data representation that captures the
-intrinsic geometry of the trajectory. CellTrails uses spectral decomposition
-of a graph encoding sample-to-sample similarities (based on their
-mutual information) to identify the chronological ordering of samples
-(e.g., cells).
+intrinsic geometry of the trajectory. This function performs spectral
+decomposition of a graph encoding conditional entropy-based
+sample-to-sample similarities.
 }
 \details{
 Single-cell gene expression measurements comprise high-dimensional
 data of large volume, i.e. many features (e.g., genes) are measured in many
-samples (e.g., cells); or more formally, \emph{m} samples can be described by
-the expression of \emph{n} features (i.e. \emph{n} dimensions). The cells’
-expression profiles are shaped by many distinct unobserved biological causes
-related to each cell's geno- and phenotype, such as developmental
+samples (e.g., cells); or more formally, \emph{m} samples can be described
+by the expression of \emph{n} features (i.e., \emph{n} dimensions). The
+cells’ expression profiles are shaped by many distinct unobserved biological
+causes related to each cell's geno- and phenotype, such as developmental
 age, tissue region of origin, cell cycle stage, as well as extrinsic sources
 such as status of signaling receptors, and environmental stressors, but also
 technical noise. In other words, a single dimension, despite just containing
 gene expression information, represents an underlying combination of multiple
 dependent and independent, relevant and non-relevant factors, whereat each
-factors’ individual contribution is non-uniform. To obtain a better resolution
-and to extract underlying information, CellTrails aims to find a meaningful
-low-dimensional structure - a manifold - that represents cells mainly by
-their temporal relation along a biological process.
+factors’ individual contribution is non-uniform. To obtain a better
+resolution and to extract underlying information, CellTrails aims to find a
+meaningful low-dimensional structure - a manifold - that represents cells
+mainly by their temporal relation along a biological process.
 \cr \cr
 This method assumes that the expression vectors are lying on or near a
 manifold with dimensionality \emph{d} that is embedded in the
@@ -47,7 +52,7 @@ amplify latent temporal information; it reduces noise (ie. truncates
 non-relevant dimensions) by transforming the expression matrix into a new
 dataset while retaining the geometry of the original dataset as much as
 possible.CellTrails captures overall cell-to-cell relations based on the
-statistical mutual dependency between any two data vectors. A high temporal
+statistical mutual dependency between any two data vectors. A high
 dependency between two samples should be represented by their close
 proximity in the lower-dimensional space.
 \cr \cr
@@ -68,6 +73,9 @@ heat kernel function applied on the generalzied correlation coefficient.
 Finally, nonlinear spectral embedding (ie. spectral decomposition of the
 graph's adjacency matrix) is performed
 (Belkin & Niyogi, 2003; Sussman \emph{et al.}, 2012) unfolding the manifold.
+Please note that this methods only uses the set of defined trajectory
+features in a \code{SingleCellExperiment} object; spike-in controls are
+ignored and are not listed as trajectory features.
 \cr \cr
 To account for systematic bias in the expression data
 (e.g., cell cycle effects), a design matrix can be
@@ -77,20 +85,16 @@ design matrix with \code{model.matrix}.
 \cr \cr
 \emph{Diagnostic messages}
 \cr \cr
-The method throws a warning if selected trajectory features generate samples
-with zero entropy (e.g., the
-samples exclusively contain non-detects, that is all expression values are zero).
+The method throws an error if expression matrix contains samples
+with zero entropy (e.g., the samples exclusively contain non-detects, that
+is all expression values are zero).
 }
 \examples{
 # Generate example data
-dat <- exDat()
-
-# Create container
-ctset <- as.CellTrailsSet(dat)
+sce <- exDat()
 
 # Embed samples
-ctset <- embedSamples(ctset)
-ctset
+res <- embedSamples(sce)
 }
 \references{
 Daub, C.O., Steuer, R., Selbig, J., and Kloska, S. (2004).
@@ -105,6 +109,10 @@ dimensionality reduction and data representation. Neural computation 15,
 Sussman, D.L., Tang, M., Fishkind, D.E., and Priebe, C.E.
 (2012). A Consistent Adjacency Spectral Embedding for Stochastic Blockmodel
 Graphs. J Am Stat Assoc 107, 1119-1128.
+}
+\seealso{
+\code{SingleCellExperiment} \code{trajectoryFeatureNames}
+\code{model.matrix}
 }
 \author{
 Daniel C. Ellwanger

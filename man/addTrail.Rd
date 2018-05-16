@@ -3,77 +3,68 @@
 \docType{methods}
 \name{addTrail}
 \alias{addTrail}
-\alias{addTrail,CellTrailsSet-method}
+\alias{addTrail,SingleCellExperiment-method}
 \title{ADD trail}
 \usage{
-addTrail(ctset, from, to, name)
+addTrail(sce, from, to, name)
 }
 \arguments{
-\item{ctset}{An object of class \code{CellTrailsSet}}
+\item{sce}{An object of class \code{SingleCellExperiment}}
 
-\item{from}{Start node ID}
+\item{from}{Start landmark}
 
-\item{to}{End node ID}
+\item{to}{End landmark}
 
 \item{name}{Name of trail}
 }
 \value{
-An updated object of class \code{CellTrailsSet}
+An updated object of class \code{SingleCellExperiment}
 }
 \description{
 Function to define a single trail on the trajectory.
 }
 \details{
-A trajectory can be composed of multiple single trails (e.g., developmental
-progression from a common start towards distinct terminal phenotypes).
-Start and endpoints of trails can be identified using the plot function
-(\code{plot(ctset, type = "trailblazing")}. Here, start (=from) and end (=to) IDs
-of samples are starting with the character "B"
-(for branching points) or "H" (for trail heads, i.e. terminal nodes).
+A trajectory can be composed of multiple single trails
+(e.g., developmental progression from a common start towards
+distinct terminal phenotypes). Start and endpoints of trails can
+be identified visually using the plot function \code{plotMap}.
+Here, start (=from) and end (=to) IDs
+of landmarks are starting with the character "B"
+(for branching points), "H" (for trail heads, i.e. terminal nodes),
+and "U" for user-defined landmarks.
 \cr \cr
 \emph{Diagnostic messages}
 \cr \cr
 An error is thrown if the trajectory has not been fitted yet. Please,
 call \code{fitTrajectory} first. Further, an error is thrown if the
-provided start or end ID is unknown.
+provided start or end ID is unknown. A warning is
+shown if a trail with the same name already exists and gets
+re-defined.
 }
 \examples{
 # Generate example data
-dat <- exDat()
-
-# Create container
-ctset <- as.CellTrailsSet(dat)
-
-# Embed samples
-ctset <- embedSamples(ctset)
-
-# Find spectrum
-spectr <- findSpectrum(ctset, frac=25)
+sce <- exDat()
 
 # Reduce dimensionality
-ctset <- reduceDimensions(ctset, spectr)
+res <- embedSamples(sce)
+d <- findSpectrum(res$eigenvalues, frac=30)
+latentSpace(sce) <- res$components[, d]
 
-# Find states
-ctset <- findStates(ctset, max_pval=1e-3, min_feat=4)
-
-# Connect states
-ctset <- connectStates(ctset, l=20)
-
-# Select trajectory
-ctset <- selectTrajectory(ctset, component=1)
+# Find and connect states
+states(sce) <- findStates(sce, max_pval=1e-3, min_feat=4)
+sce <- connectStates(sce, l=15)
 
 # Align samples to trajectory
-ctset <- fitTrajectory(ctset)
+sce <- selectTrajectory(sce, component=1)
+sce <- fitTrajectory(sce)
 
-# For illustration purposes a layout for each example dataset
-# is contained in this package.
-# The function trajectoryLayout allows to set a trajectory layout
-# to the object; the parameter adjust='TRUE' adjusts the layout
-# according to the computed pseudotime
-trajectoryLayout(ctset, adjust=TRUE) <- trajLayouts$example
-
-# Define trail
-ctset <- addTrail(ctset, from="H1", to="H3", name="Tr1") # Define trail
+# Add trail
+sce <- addTrail(sce, "H1", "H2", "myTrail")
+trailNames(sce)
+phenoNames(sce)
+}
+\seealso{
+\code{fitTrajectory} \code{landmarks} \code{plotMap}
 }
 \author{
 Daniel C. Ellwanger

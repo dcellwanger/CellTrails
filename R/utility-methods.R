@@ -1,3 +1,6 @@
+###############################################################################
+# Internal
+###############################################################################
 #' Pretty string from array
 #'
 #' Generates short representation of long
@@ -23,17 +26,50 @@
   }
 }
 
-#' Checks if feature name exists
+#' Capitalizes first character of string
 #'
-#' @param x A \code{CellTrailsSet} object
-#' @param feature_name Name of feature
-#' @import Biobase
+#' Capitalizes first character of string and sets the rest to
+#' lower case.
+#' @param x A string
+#' @return A string
+#' @details Example: "abC" becoms "Abc".
 #' @keywords internal
 #' @author Daniel C. Ellwanger
-.checkFeatureNameExists <- function(x, feature_name) {
-  if(!all(feature_name %in% featureNames(x))) {
-    stop("Feature '", feature_name, "' is not contained in data set.")
+.capitalize <- function(x) {
+  paste0(toupper(substr(x, 1, 1)),
+         tolower(substr(x, 2, 1000000L)))
+}
+
+#' Pretty color ramp
+#'
+#' @param n Number of colors
+#' @return Color codes
+#' @importFrom grDevices colorRampPalette
+#' @keywords internal
+#' @author Daniel C. Ellwanger
+.prettyColorRamp <- function(n, grayStart=TRUE) {
+  if(grayStart) {
+    cols <- c("#F2F2F2FF", "#21908CFF", "#FDE725FF")
+  } else {
+    cols <- c("#440154FF", "#3B528BFF", "#21908CFF", "#5DC863FF", "#FDE725FF")
   }
+  colorRampPalette(cols)(n)
+}
+
+#' Nearest neighbor imputation
+#'
+#' @param y Values; missing values need to be set to NA
+#' @param D distance matrix between samples
+#' @return Imputed values
+#' @keywords internal
+#' @author Daniel C. Ellwanger
+.nn_impute <- function(y, D) {
+  nas <- which(is.na(y))
+  nnas <- which(!is.na(y))
+  D <- D[nas, nnas] #    as.matrix(stats::dist(latentSpace(x)))[nas, nnas]
+  nn <- apply(D, 1L, which.min)
+  y[nas] <- y[nnas[nn]]
+  y
 }
 
 #' Compute differential expression
@@ -45,9 +81,10 @@
 #' @return A list containing the following components:
 #' @return \item{\code{p.value}}{P-value}
 #' @return \item{\code{fold}}{Fold-change}
-#' @details For censored data a Peto-Peto test is performed, for non-censored data a Wilcoxon rank sum test.
-#' If limit of detection is provided, expectation maximization is used to compute the
-#' fold-change.
+#' @details For censored data a Peto-Peto test is performed,
+#' for non-censored data a Wilcoxon rank sum test.
+#' If limit of detection is provided, expectation maximization
+#' is used to compute the fold-change.
 #' @importFrom EnvStats enormCensored twoSampleLinearRankTestCensored
 #' @keywords internal
 #' @author Daniel C. Ellwanger
@@ -158,13 +195,14 @@
 #' Generates colors for vector
 #' @param x A numeric vector
 #' @return Color codes
-#' @importFrom viridis viridis
 #' @keywords internal
 #' @author Daniel C. Ellwanger
 .color_ramp <- function(x, range=3, colPal=NULL, min.val=1e-10,
-                        min.val.col=NA, breaks=100) {
+                        min.val.col=NA, breaks=25) {
   if(is.null(colPal)) {
-    colPal <- viridis
+    #cols <- c("#440154FF", "#3B528BFF", "#21908CFF", "#5DC863FF", "#FDE725FF")
+    #colPal <- colorRampPalette(cols)
+    colPal = .prettyColorRamp
   }
 
   x[x < min.val] <- NA
@@ -204,7 +242,8 @@
   if(length(x) == 1) {
     mean(c(ymin, ymax))
   } else {
-    (ymax - ymin) / (max(x, na.rm=TRUE) -  min(x, na.rm=TRUE)) * (x - min(x, na.rm=TRUE)) + ymin
+    (ymax - ymin) / (max(x, na.rm=TRUE) -
+    min(x, na.rm=TRUE)) * (x - min(x, na.rm=TRUE)) + ymin
   }
 }
 
@@ -229,71 +268,9 @@
   x * sqrt(xvar/rvar)
 }
 
-#' Simulation of RNA-Seq expression data
-#'
-#' Simple simulation of RNA-Seq expression data estimating counts based
-#' on the negative binomial distribution
-#' @param n_features Number of genes
-#' @param n_samples Number of samples
-#' @param prefix_sample Prefix of sample name
-#' @param seed Seed of pseudo-random number generator; used for random generation of data
-#' @return A numeric matrix with genes in rows and samples in columns
-#' @details RNA-Seq counts are generated using the Negative Binomial Distribution.
-#' Distribution parameters for each feature are sampled from a Gamma distribution. The
-#' resulting expression matrix is log2-scaled.
-# #' @seealso \code{\link[stats]{NegBinomial}} and \code{\link[stats]{GammaDist}}
-#' @examples
-#' # Matrix with 100 genes and 50 cells
-#' dat <- simulate_exprs(n_features=100, n_samples=50)
-#' @docType methods
-#' @export
-#' @author Daniel C. Ellwanger
-simulate_exprs <- function(n_features, n_samples, prefix_sample="", seed=1101) {
-  set.seed(seed)
-  s_means <- 2^rgamma(n_features, shape=3.5, rate=1.2)
-  s_vars <- 2^rgamma(n_features, shape=12, rate=1)
-  s_counts <- suppressWarnings(
-    rnbinom(n_features * n_samples, mu=s_means, size=s_means^2/(s_vars-s_means)))
-  s_counts[is.na(s_counts)] <- 0
-  s_counts <- log2(s_counts + 1)
-  s_counts <- matrix(s_counts, nrow=n_features, ncol=n_samples)
-  rownames(s_counts) <- paste0("feature_", seq_len(n_features))
-  colnames(s_counts) <- paste0(prefix_sample, "sample_", seq_len(n_samples))
-  s_counts
-}
-
-#' Simulation of example data for trajectory reconstruction
-#'
-#' This method serves to generate the example data used to
-#' demonstrate the usage of individual functions of this package
-#' @return An \code{ExpressionSet}
-#' @details RNA-Seq counts are generated using the Negative Binomial Distribution.
-#' Distribution parameters for each feature are sampled from a Gamma distribution. The
-#' resulting expression matrix is then log2-scaled. The expression data consist of
-#' 25 features and 100 samples
-# #' @seealso \code{\link[Biobase]{ExpressionSet}}
-# #' \code{\link[CellTrails]{simulate_exprs}}
-#' @examples
-#' # Generate example data
-#' exDat
-#' @docType methods
-#' @export
-#' @author Daniel C. Ellwanger
-exDat <- function() {
-  expr <- lapply(seq_len(10), function(i)
-    simulate_exprs(seed = 1101 + i,
-                   n_features=25,
-                   n_samples=10,
-                   prefix_sample=paste0("C", i, "_")))
-  expr <- do.call(cbind, expr)
-  meta <- rep(c("2.Mid", "2.Mid", "3.Late", "1.Early", NA,
-                "3.Late", "3.Late", NA, NA, "2.Mid"), each = 10)
-  ExpressionSet(expr,
-                phenoData = new("AnnotatedDataFrame",
-                                data.frame(age=meta,
-                                           row.names=colnames(expr))))
-}
-
+###############################################################################
+# Exported
+###############################################################################
 #' Enrichment test
 #'
 #' Statistical enrichment analysis using either a Hypergeometric
@@ -304,19 +281,23 @@ exDat <- function() {
 #' @param pop_size Size of population
 #' @param method Statistical method that should be used
 #' @return A list containing the following components:
-#' @return \item{\code{p.value}}{P-value of the test}
-#' @return \item{\code{odds.ratio}}{Odds ratio}
-#' @return \item{\code{conf.int}}{Confidence interval for the odds ratio (only shown with method="fisher")}
-#' @return \item{\code{method}}{Used statistical test}
-#' @details Hypergeometric or one-tailed Fisher exact test is useful for enrichment analyses.
-#' For example, one needs to estimate which features are enriched among
+#'   \item{\code{p.value}}{P-value of the test}
+#'   \item{\code{odds.ratio}}{Odds ratio}
+#'   \item{\code{conf.int}}{Confidence interval for the odds ratio
+#'   (only shown with method="fisher")}
+#'   \item{\code{method}}{Used statistical test}
+#' @details Hypergeometric or one-tailed Fisher exact test is
+#' useful for enrichment analyses.
+#' For example, one needs to estimate which features
+#' are enriched among
 #' a set of instances sampled from a population.
-# #' @seealso \code{\link[stats]{Hypergeometric}} and \code{\link[stats]{fisher.test}}
+#' @seealso \code{Hypergeometric} and \code{fisher.test}
 #' @examples
 #' # Population has 13 of total 52 instances positive for a given feature
 #' # Sample has 1 of total 5 instances positive for a given feature
 #' # Test for significance of enrichment in sample
-#' enrichment.test(sample_true=1, sample_size=5, pop_true=13, pop_size=52, method="fisher")
+#' enrichment.test(sample_true=1, sample_size=5,
+#'                 pop_true=13, pop_size=52, method="fisher")
 #' @docType methods
 #' @export
 #' @author Daniel C. Ellwanger

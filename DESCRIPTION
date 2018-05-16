@@ -20,9 +20,10 @@ License: Artistic-2.0 | file LICENSE
 Encoding: UTF-8
 LazyData: true
 VignetteBuilder: knitr
-Depends: R (>= 3.5), Biobase
+Depends: R (>= 3.4), SingleCellExperiment
 Imports:
   BiocStyle,
+  BiocGenerics,
   cba,
   dendextend,
   depth,
@@ -38,15 +39,14 @@ Imports:
   mgcv,
   reshape2,
   Rtsne,
-  S4Vectors,
-  SingleCellExperiment,
+  SummarizedExperiment,
   stats,
   splines,
-  viridis,
   utils
 Suggests: 
-  destiny, 
-  scran, 
+  destiny,
+  scater,
+  scran,
   knitr,
   rmarkdown
 RoxygenNote: 6.0.1
@@ -61,21 +61,22 @@ biocViews:
   Software,
   TimeCourse
 Collate: 
-  'AllClasses.R'
-  'AllGenerics.R'
-  'accessor-methods.R'
-  'cluster-methods.R'
-  'constructor-methods.R'
-  'data-sets.R'
-  'diffexp-methods.R'
-  'dimred-methods.R'
-  'export-methods.R'
-  'filter-methods.R'
-  'fitting-methods.R'
-  'import-methods.R'
-  'imputation-methods.R'
-  'layout-methods.R'
-  'plot-methods.R'
-  'show-methods.R'
-  'trajectory-methods.R'
-  'utility-methods.R'
+    'AllClasses.R'
+    'AllGenerics.R'
+    'accessor-methods.R'
+    'check-methods.R'
+    'cluster-methods.R'
+    'data-sets.R'
+    'diffexp-methods.R'
+    'dimred-methods.R'
+    'export-methods.R'
+    'filter-methods.R'
+    'fitting-methods.R'
+    'import-methods.R'
+    'imputation-methods.R'
+    'layout-methods.R'
+    'plot-methods.R'
+    'show-methods.R'
+    'simulation-methods.R'
+    'trajectory-methods.R'
+    'utility-methods.R'

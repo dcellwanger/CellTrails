@@ -3,18 +3,18 @@
 \docType{methods}
 \name{selectTrajectory}
 \alias{selectTrajectory}
-\alias{selectTrajectory,CellTrailsSet-method}
+\alias{selectTrajectory,SingleCellExperiment-method}
 \title{Select component from trajectory graph}
 \usage{
-selectTrajectory(ctset, component)
+selectTrajectory(sce, component)
 }
 \arguments{
-\item{ctset}{A \code{CellTrailsSet} object}
+\item{sce}{A \code{SingleCellExperiment} object}
 
 \item{component}{Number of component to be selected}
 }
 \value{
-An updated \code{CellTrailsSet} object
+An updated \code{SingleCellExperiment} object
 }
 \description{
 Retains a single component of a trajectory graph.
@@ -29,37 +29,33 @@ identified by its (integer) number.
 \emph{Diagnostic messages}
 \cr \cr
 An error is thrown if the states have not been connected yet;
-function \code{connectStates}
-needs to be called first. An error is thrown if an unknown
-component (number) is selected.
+function \code{connectStates} needs to be called first. An
+error is thrown if an unknown component (number) is selected.
 }
 \examples{
 # Generate example data
-dat <- exDat()
-
-# Create container
-ctset <- as.CellTrailsSet(dat)
-
-# Embed samples
-ctset <- embedSamples(ctset)
-
-# Find spectrum
-spectr <- findSpectrum(ctset, frac=25)
+sce <- exDat()
 
 # Reduce dimensionality
-ctset <- reduceDimensions(ctset, spectr)
+res <- embedSamples(sce)
+d <- findSpectrum(res$eigenvalues, frac=30)
+latentSpace(sce) <- res$components[, d]
 
 # Find states
-ctset <- findStates(ctset, max_pval=1e-3, min_feat=4)
+states(sce) <- findStates(sce, max_pval=1e-3, min_feat=4)
 
 # Connect states
-ctset <- connectStates(ctset, l=20)
+sce <- connectStates(sce, l=15)
 
 # Select trajectory
-ctset <- selectTrajectory(ctset, component=1)
+ctset <- selectTrajectory(sce, component=1)
 
-stateTrajectoryGraph(ctset)
-trajectorySamples(ctset)
+length(trajSampleNames(ctset))
+}
+\seealso{
+\code{connectStates}
+
+\code{findStates} \code{states}
 }
 \author{
 Daniel C. Ellwanger

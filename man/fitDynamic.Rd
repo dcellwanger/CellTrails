@@ -3,13 +3,13 @@
 \docType{methods}
 \name{fitDynamic}
 \alias{fitDynamic}
-\alias{fitDynamic,CellTrailsSet-method}
+\alias{fitDynamic,SingleCellExperiment-method}
 \title{Fit expression dynamic}
 \usage{
-fitDynamic(ctset, feature_name, trail_name)
+fitDynamic(sce, feature_name, trail_name)
 }
 \arguments{
-\item{ctset}{A \code{CellTrailsSet} object}
+\item{sce}{A \code{SingleCellExperiment} object}
 
 \item{feature_name}{Name of feature}
 
@@ -19,7 +19,8 @@ fitDynamic(ctset, feature_name, trail_name)
 An object of type \code{list} with the following components
 \describe{
   \item{\code{pseudotime}}{The pseudotime along the trail}
-  \item{\code{expression}}{The fitted expression values for each value of pseudotime}
+  \item{\code{expression}}{The fitted expression values for
+  each value of pseudotime}
   \item{\code{gam}}{A object of class \code{gamObject}}
 }
 }
@@ -30,9 +31,9 @@ Fits feature expression as a function of pseudotime along a defined trail.
 A trail is an induced subgraph of the trajectory graph. A
 trajectory graph is composed of samples (nodes) that are connected
 (by weighted edges) if they are chronologically related. A trail has to be
-defined by the user using \code{addTrail}. A pseudotime vector is extracted by
-computing the geodesic distance for each sample from the trail's start node.
-To infer the expression level of a feature as a function of
+defined by the user using \code{addTrail}. A pseudotime vector is extracted
+by computing the geodesic distance for each sample from the trail's start
+node. To infer the expression level of a feature as a function of
 pseudotime, CellTrails used generalized additive models with a single
 smoothing term with four basis dimensions. Here, for each feature CellTrails
 introduces prior weights for each observation to lower the confounding
@@ -44,46 +45,35 @@ always assigned weight = 1.
 }
 \examples{
 # Generate example data
-dat <- exDat()
-
-# Create container
-ctset <- as.CellTrailsSet(dat)
-
-# Embed samples
-ctset <- embedSamples(ctset)
-
-# Find spectrum
-spectr <- findSpectrum(ctset, frac=25)
+sce <- exDat()
 
 # Reduce dimensionality
-ctset <- reduceDimensions(ctset, spectr)
+res <- embedSamples(sce)
+d <- findSpectrum(res$eigenvalues, frac=30)
+latentSpace(sce) <- res$components[, d]
 
-# Find states
-ctset <- findStates(ctset, max_pval=1e-3, min_feat=4)
-
-# Connect states
-ctset <- connectStates(ctset, l=20)
-
-# Select trajectory
-ctset <- selectTrajectory(ctset, component=1)
+# Find and connect states
+states(sce) <- findStates(sce, max_pval=1e-3, min_feat=4)
+sce <- connectStates(sce, l=15)
 
 # Align samples to trajectory
-ctset <- fitTrajectory(ctset)
+sce <- selectTrajectory(sce, component=1)
+sce <- fitTrajectory(sce)
 
-# For illustration purposes a layout for each example dataset
-# is contained in this package.
-# The function trajectoryLayout allows to set a trajectory layout
-# to the object; the parameter adjust='TRUE' adjusts the layout
-# according to the computed pseudotime
-trajectoryLayout(ctset, adjust=TRUE) <- trajLayouts$example
+# Export trajectory graph structure to graphml
+# with write.ygraphml("yourFile") and import layout with
+# trajLayout(sce) <- read.ygraphml("yourFile")
 
 # Define trail
-ctset <- addTrail(ctset, from="H1", to="H3", name="Tr1")
+sce <- addTrail(sce, from="H1", to="H3", name="Tr1")
 
 # Fit dynamic
-fit <- fitDynamic(ctset, feature_name="feature_3", trail_name="Tr1")
+fit <- fitDynamic(sce, feature_name="feature_3", trail_name="Tr1")
 
 summary(fit)
+}
+\seealso{
+\code{addTrail} \code{gamObject}
 }
 \author{
 Daniel C. Ellwanger

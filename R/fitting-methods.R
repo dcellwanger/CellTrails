@@ -6,9 +6,9 @@
 #' @param x.out Predictor variable for linear function, numeric vector
 #' @return A list containing the following components:
 #' @return \item{\code{p.value}}{Anova P-value}
-#' @return \item{\code{r2}}{Adjusted R-squared}
-#' @return \item{\code{x.out}}{Predictor variable for linear function, numeric vector}
-#' @return \item{\code{y.out}}{Response from linear function}
+#' \item{\code{r2}}{Adjusted R-squared}
+#' \item{\code{x.out}}{Predictor variable for linear function, numeric vector}
+#' \item{\code{y.out}}{Response from linear function}
 #' @keywords internal
 #' @author Daniel C. Ellwanger
 .linear_fit <- function(x.in, y.in, x.out=NULL) {
@@ -32,22 +32,20 @@
 #' Fitting the map surface
 #'
 #' Fits the smooth surface of CellTrails maps
-#' @param x A \code{CellTrailsSet} object
-#' @param feature.name Feature name
+#' @param X Ordination; numerical matrix
+#' @param y Expression values; numerical vector
 #' @param npoints Number of points along x and y axis
-#' @param w Weights
+#' @param weights Cluster states (defines weights based on fraction
+#' of non-detects per state)
 #' @param knots Number of knots in spline function
 #' @return A list containing the following components:
-#' @return \item{\code{fit}}{GAM fit object}
-#' @return \item{\code{grid}}{Fitted values}
+#' \item{\code{fit}}{GAM fit object}
+#' \item{\code{grid}}{Fitted values}
 #' @author Daniel C. Ellwanger
 #' @importFrom mgcv gam
 #' @keywords internal
-.fit_surface <- function(x, feature_name, npoints=300, weight=TRUE,
+.fit_surface <- function(X, y, npoints=300, weights=NULL,
                          knots=10, rescale=FALSE) {
-  X <- trajectoryLayout(x)
-  #y <- exprs(x)[, x@featureData$NAME == toupper(feature.name)]
-  y <- x[feature_name, x@useSample]
 
   # Remove NAs
   #nnas <- complete.cases(X) & !is.na(y)
@@ -70,10 +68,10 @@
 
   # dynamic nd weight
   w <- NULL
-  if(weight) {
-    w <- aggregate(y, list(states(x)[x@useSample]),
+  if(!is.null(weights)) {
+    w <- aggregate(y, list(weights),
                    function(x) {sum(x == 0) / length(x)})
-    w <- w[match(states(x)[x@useSample], w[,1]), 2]
+    w <- w[match(weights, w[,1]), 2]
     w[y > 0] <- 1 #set measured value weight always to 1
   }
 
@@ -94,14 +92,16 @@
   result <- list()
   result$grid <- data.frame(x1 = .rescale(newd[,1], x1r[1], x1r[2]),
                             x2 = .rescale(newd[,2], x2r[1], x2r[2]),
-                            x3 = surf) #list(x = x1_proj, y = x2_proj, z = matrix(surf, nrow = npoints))
+                            x3 = surf)
+  #list(x = x1_proj, y = x2_proj, z = matrix(surf, nrow = npoints))
   result$fit <- fit
   result
 }
 
 #' Fitting dynamics
 #'
-#' Fits expression as a function of pseudotime using generalized additive models
+#' Fits expression as a function of pseudotime using generalized
+#' additive models
 #' @param x Pseudotime values
 #' @param y Expression values
 #' @param z Sample states
@@ -109,9 +109,9 @@
 #' @param n.out Number of predicted expression values within pseudotime range
 #' @param x.out Predicted expression values for given set of pseudotime values
 #' @return A list containing the following components:
-#' @return \item{\code{x}}{Pseudotime}
-#' @return \item{\code{y}}{Fitted values}
-#' @return \item{\code{mod}}{GAM}
+#' \item{\code{x}}{Pseudotime}
+#' \item{\code{y}}{Fitted values}
+#' \item{\code{mod}}{GAM}
 #' @importFrom mgcv gam
 #' @keywords internal
 #' @author Daniel C. Ellwanger
@@ -144,9 +144,6 @@
   eq <- formula(paste0("y ~ te(x, k = ", k, ", bs = \"tp\", fx=TRUE)"))
   mod <- gam(eq, family="gaussian", weights=w, select=TRUE, method="REML",
              gamma=1)
-  #mod <- gam(y ~ te(x, k=k, bs="tp", fx=TRUE), family="gaussian",
-  #           weights=w, select=TRUE, method="REML", gamma=1,
-  #           data=data.frame(y=y.expr, x=x.ptime)))
 
   y.pred <- NA
   if(!is.null(n.out)) {

@@ -3,13 +3,13 @@
 \docType{methods}
 \name{pca}
 \alias{pca}
-\alias{pca,CellTrailsSet-method}
+\alias{pca,SingleCellExperiment-method}
 \title{Principal Component Analysis}
 \usage{
-pca(ctset, do_scaling = TRUE, design = NULL)
+pca(sce, do_scaling = TRUE, design = NULL)
 }
 \arguments{
-\item{ctset}{An \code{CellTrailsSet} object}
+\item{sce}{\code{SingleCellExperiment} object}
 
 \item{do_scaling}{FALSE = covariance matrix, TRUE = correlation matrix}
 
@@ -17,12 +17,10 @@ pca(ctset, do_scaling = TRUE, design = NULL)
 }
 \value{
 A \code{list} object containing the following components:
-
-\item{\code{princomp}}{Principal components}
-
-\item{\code{variance}}{Variance explained by each component}
-
-\item{\code{loadings}}{Loading score for each feature}
+  \item{\code{components}}{Principal components}
+  \item{\code{eigenvalues}}{Variance per component}
+  \item{\code{variance}}{Fraction of variance explained by each component}
+  \item{\code{loadings}}{Loading score for each feature}
 }
 \description{
 Performs principal component analysis by spectral decomposition of
@@ -31,9 +29,14 @@ a covariance or correlation matrix
 \details{
 The calculation is done by a spectral decomposition of the
 (scaled) covariance matrix of the trajectory features
-as defined in the \code{CellTrails} object.
-Features with zero variance get automatically removed. To account for
-systematic bias in the expression data (e.g., cell cycle effects), a
+as defined in the \code{SingleCellExperiment} object.
+Features with zero variance get automatically removed.
+Please note that this methods only uses the set of defined trajectory
+features in a \code{SingleCellExperiment} object; spike-in controls are
+ignored and are not listed as trajectory features.
+\cr \cr
+To account for systematic bias in the expression data
+(e.g., cell cycle effects), a
 design matrix can be provided for the learning process. It should list
 the factors that should be blocked and
 their values per sample. It is suggested to construct a design matrix with
@@ -41,18 +44,20 @@ their values per sample. It is suggested to construct a design matrix with
 }
 \examples{
 # Generate example data
-dat <- exDat()
-
-# Create container
-ctset <- as.CellTrailsSet(dat)
+sce <- exDat()
 
 # Principal component analysis
-pca_result <- pca(ctset)
-\dontrun{
-barplot(pca_result$variance[seq_len(10)], ylab="Variance",
-        names.arg=colnames(pca_result$princomp)[seq_len(10)], las=2)
-plot(pca_result$princomp, xlab="PC1", ylab="PC2")
+res <- pca(sce)
+
+# Find relevant number of principal components
+d <- findSpectrum(res$eigenvalues, frac=20)
+
+barplot(res$variance[d] * 100, ylab="Variance (\%)",
+        names.arg=colnames(res$components)[d], las=2)
+plot(res$component, xlab="PC1", ylab="PC2")
 }
+\seealso{
+\code{SingleCellExperiment} \code{model.matrix}
 }
 \author{
 Daniel C. Ellwanger

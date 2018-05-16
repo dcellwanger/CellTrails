@@ -3,37 +3,39 @@
 \docType{methods}
 \name{latentSpace}
 \alias{latentSpace}
-\alias{latentSpace,CellTrailsSet-method}
-\title{GET latentSpace}
+\alias{latentSpace,SingleCellExperiment-method}
+\title{GET CellTrails' latent space}
 \usage{
 latentSpace(object)
 }
 \arguments{
-\item{object}{An object of class \code{CellTrailsSet}}
+\item{object}{A \code{SingleCellExperiment} object}
 }
 \value{
 An object of class \code{matrix}
 }
 \description{
-Retrieve computed latent space from a \code{CellTrailsSet} object.
+Retrieve computed latent space from a \code{SingleCellExperiment} object.
 }
 \details{
-Returns the latent space computed by spectral embedding of samples.
-The corresponding matrix is numeric. Rows are samples and columns are
-\emph{d} components.
+Returns the latent space set for a CellTrails analysis. The
+resulting matrix is numeric. Rows are samples and columns are \emph{d}
+components. It is a wrapper for \code{reducedDim} to ensure
+that the proper matrix is received from a \code{SingleCellExperiment}
+object.
 }
 \examples{
 # Generate example data
-dat <- exDat()
+sce <- exDat()
 
-# Create container
-ctset <- as.CellTrailsSet(dat)
-
-# Embed samples
-ctset <- embedSamples(ctset)
+# Set latent space
+latentSpace(sce) <- pca(sce)$components[, 1:10]
 
 # Get latent space
-latentSpace(ctset)
+latentSpace(sce)
+}
+\seealso{
+\code{SingleCellExperiment} \code{reducedDim}
 }
 \author{
 Daniel C. Ellwanger

@@ -1,12 +1,12 @@
 #' DEF: Filter feaures by Detection Level
 #'
 #' For details see \code{filterFeaturesByPOD}
+#' @param y An expression vector
+#' @param threshold numeric cutoff value
 #' @import ggplot2
 #' @keywords internal
 #' @author Daniel C. Ellwanger
-.filterFeaturesByDL_def <- function(x, threshold) {
-  y <- x[trajectoryFeatures(x), , drop=FALSE]
-
+.filterTrajFeaturesByDL_def <- function(y, threshold) {
   pod <- apply(y, 1L, function(i){sum(i > 0)})
 
   if(threshold >= 1) {
@@ -30,19 +30,21 @@
   print(gp)
 
   #Update attribute
-  trajectoryFeatures(x) <- names(which(f))
-  x
+  #trajFeatureNames(x) <- names(which(f))
+  #x
+  names(which(f))
 }
 
 #' DEF: Filter features by coefficient of variation
 #'
 #' For details see \code{filterFeaturesByCOV}
+#' @param y An expression vector
+#' @param threshold numeric cutoff value
+#' @param design Model matrix
 #' @import ggplot2
 #' @keywords internal
 #' @author Daniel C. Ellwanger
-.filterFeaturesByCOV_def <- function(x, threshold, design=NULL) {
-  y <- x[trajectoryFeatures(x), , drop=FALSE]
-
+.filterTrajFeaturesByCOV_def <- function(y, threshold, design=NULL) {
   if(!is.null(design)) {
     message("Blocking nuisance factors ...")
     y <- t(apply(y, 1L, .denoiseExpression, design))
@@ -68,19 +70,22 @@
   print(gp)
 
   #Update attributes
-  trajectoryFeatures(x) <- names(which(f))
-  x
+  #trajectoryFeatures(x) <- names(which(f))
+  #x
+  names(which(f))
 }
 
-#' DEF: Filter features by index of dispersion
+#' DEF: Filter features by index of dispersion / fano factor
 #'
-#' For details see \code{filterFeaturesByIOD}
+#' For details see \code{filterFeaturesByFF}
+#' @param y An expression vector
+#' @param z A cutoff z-score
+#' @param min_expr Minimum expression level
+#' @param design Model matrix
 #' @import ggplot2
 #' @keywords internal
 #' @author Daniel C. Ellwanger
-.filterFeaturesByIOD_def <- function(x, z, min_expr=0, design=NULL) {
-  y <- x[trajectoryFeatures(x), ,drop=FALSE]
-
+.filterTrajFeaturesByFF_def <- function(y, z, min_expr=0, design=NULL) {
   if(!is.null(design)) {
     message("Blocking nuisance factors ...")
     y <- t(apply(y, 1L, .denoiseExpression, design))
@@ -115,49 +120,52 @@
   print(gp)
 
   #Update attribute
-  trajectoryFeatures(x) <- names(which(f3))
-  x
+  #trajectoryFeatures(x) <- names(which(f3))
+  #x
+  names(which(f3))
 }
 
-#' DEF: Filter samples by reference gene
-#'
-#' Performs filtering of cells using reference gene information.
-#' @param x An \code{ExpressionSet} object
-#' @param refgene Symbol name(s) of reference gene(s)
-#' @param fence Fence to find outlier
-#' @return An \code{ExpressionSet} object
-#' @seealso \code{ExpressionSet}, \code{quantile}, \code{IQR}
-#' @details Identifies outliers (dead cells and multiplets) based on robust
-#' statistics on expression intensities of reference genes. It filters cells
-#' having a reference gene expression of
-#' \eqn{x > Q_{.25} - f * IQR} or \eqn{ x < Q_{.75} + f * IQR},
-#' where \eqn{Q} then quantile, \eqn{IQR} the interquartile function on the
-#' reference gene distribution and \eqn{f} is the fence parameter. If multiple
-#' reference genes are provided their geometric mean is used. As a rule of thumb,
-#' \code{fence} should be
-#' between 3 (extreme values) and 1.5 (outliers). Further, cells
-#' expressing all reference genes are filtered.
-#' @import Biobase
-#' @keywords internal
-#' @author Daniel C. Ellwanger
-.filterSamplesByReference_def <- function(x, refgene, fence=1.5, design=NULL) {
-  #refgene <- toupper(refgene)
-  edat <- exprs(x[refgene, , drop=FALSE])
-
-  if(!is.null(design)) {
-    edat <- apply(edat, 1L, .denoiseExpression, design)
-  }
-
-  # Filter by robust statistic of reference gene expression
-  ref <- apply(edat, 2L, function(x){mean(x, na.rm=TRUE)})
-  lo <- quantile(ref, .25, na.rm=TRUE) - fence * IQR(ref, na.rm=TRUE)
-  hi <- quantile(ref, .75, na.rm=TRUE) + fence * IQR(ref, na.rm=TRUE)
-  f <- ref > lo & ref < hi
-  f[is.na(f)] <- FALSE
-  x <- x[, f]
-
-  # Filter cells not expressing the reference geness
-  edat <- exprs(x[refgene, ])
-  f <- apply(edat, 2L, function(x){!is.na(sum(x, na.rm = FALSE))})
-  x[, f]
-}
+# #' DEF: Filter samples by reference gene
+# #'
+# #' Performs filtering of cells using reference gene information.
+# #' @param x An \code{SingleCellExperiment} object
+# #' @param refgene Symbol name(s) of reference gene(s)
+# #' @param fence Fence to find outlier
+# #' @return An \code{SingleCellExperiment} object
+# #' @seealso \code{SingleCellExperiment}, \code{quantile}, \code{IQR}
+# #' @details Identifies outliers (dead cells and multiplets) based on robust
+# #' statistics on expression intensities of reference genes. It filters cells
+# #' having a reference gene expression of
+# #' \eqn{x > Q_{.25} - f * IQR} or \eqn{x < Q_{.75} + f * IQR},
+# #' where \eqn{Q} then quantile, \eqn{IQR} the interquartile function on the
+# #' reference gene distribution and \eqn{f} is the fence parameter.
+# #' If multiple
+# #' reference genes are provided their geometric mean is used. As a rule of
+# #' thumb, \code{fence} should be
+# #' between 3 (extreme values) and 1.5 (outliers). Further, cells
+# #' expressing all reference genes are filtered.
+# #' @import Biobase
+# #' @keywords internal
+# #' @author Daniel C. Ellwanger
+#.filterSamplesByReference_def <- function(x, refgene,
+#                                          fence=1.5, design=NULL) {
+#   .featureNameExists(x, refgene)
+#   edat <- .exprs(x[refgene, ])
+#
+#   if(!is.null(design)) {
+#     edat <- apply(edat, 1L, .denoiseExpression, design)
+#   }
+#
+#   # Filter by robust statistics of reference gene expression
+#   ref <- apply(edat, 2L, function(x){mean(x, na.rm=TRUE)})
+#   lo <- quantile(ref, .25, na.rm=TRUE) - fence * IQR(ref, na.rm=TRUE)
+#   hi <- quantile(ref, .75, na.rm=TRUE) + fence * IQR(ref, na.rm=TRUE)
+#   f <- ref > lo & ref < hi
+#   f[is.na(f)] <- FALSE
+#   #x <- x[, f]
+#
+#   # Filter cells not expressing the reference genes
+#   #edat <- .exprs(x[refgene, ])
+#   f <- apply(edat, 2L, function(x){all(x[refgene] > 0)}) & f
+#   x[, f]
+# }

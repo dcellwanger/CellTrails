@@ -1,12 +1,15 @@
 #' DEF: Spectral embedding of samples
 #'
 #' For details see \code{embedSamples}
+#' @param x A \code{SingleCellExperiment} object
 #' @param nbins Cubic B-spline discretization is used to compute fuzzy mutual
-#' information between pairs of samples; \code{nbins} defines the number of intervals
-#' used for discretization of expression data. (default: 10)
-#' @param sigma The mutual information matrix is transformed to an adjacency matrix
-#' using a heat kernel; \code{sigma} defines the radius of heat kernel (in quantiles;
-#' default: \code{sigma} = 0.75 which is the third quantile of the mutual information matrix).
+#' information between pairs of samples; \code{nbins} defines the number
+#' of intervals used for discretization of expression data. (default: 10)
+#' @param sigma The mutual information matrix is transformed to an
+#' adjacency matrix using a heat kernel; \code{sigma} defines the radius of
+#' heat kernel (in quantiles; default: \code{sigma} = 0.75 which is the third
+#' quantile of the mutual information matrix).
+#' @param design A numeric matrix describing the factors that should be blocked
 #' @importFrom splines bs
 #' @keywords internal
 #' @author Daniel C. Ellwanger
@@ -54,30 +57,37 @@
 
   f.mi2dist <- function(I) {
     denom <- 1/sqrt(diag(I))
-    I <- sweep(I, MARGIN = 2L, STATS = denom, FUN = "*", check.margin = FALSE)
-    I <- sweep(I, MARGIN = 1L, STATS = denom, FUN = "*", check.margin = FALSE)
+    I <- sweep(I, MARGIN=2L, STATS=denom, FUN="*", check.margin=FALSE)
+    I <- sweep(I, MARGIN=1L, STATS=denom, FUN="*", check.margin=FALSE)
     diag(I) <- 1
     I[I > 1] <- 1 #upper bound
     d <- 1 - I
     sqrt(2 * d)
   }
 
-  #Pre-flight check
-  ze <- apply(x[x@useFeature, ], 1L, function(x){sum(x > 0)})
-  if(sum(ze == 0) > 0) {
-    warning(ze, " samples do not encode trajectory information (i.e. have ",
-            "zero entropy). You may want to select a proper set of trajectory ",
-            "features (see '?trajectoryFeatures').")
-  }
-  ze <- ze > 0
-
   #Expression matrix
-  #M <- t(x[x@useFeature, ]) #No scaling required
-  M <- x[x@useFeature, ] #filter by trajectory features
+  M <- x
+  #M <- .exprs(x[.useFeature(x), ]) #select trajectory features
+
+  #Pre-flight check
+  ze <- apply(M, 1L, function(x){sum(x > 0)})
+  n_ze <- sum(ze == 0)
+  if(n_ze > 0) {
+    warning(n_ze, " feature(s) are not expressed in any sample ",
+            "was/were therefore neglected.")
+  }
+
+  ze <- ze > 0
   M <- M[ze, ] #filter by informative features
   if(nrow(M) < 2) {
     stop("Cannot compute embedding, because less than two features ",
          "were selected. Please, increase the number of trajectory features.")
+  }
+
+  if(nrow(M) == nrow(x) & nrow(M) > 1000) {
+    warning("Please note that trajectory features weren't selected. Thus, ",
+            "spectral embedding will be performed on all features, which ",
+            "may result in lower accuracy and longer computation time.")
   }
 
   if(!is.null(design)) { #block uninteresting factors
@@ -85,6 +95,17 @@
     M <- apply(M, 1L, .denoiseExpression, design)
   } else {
     M <- t(M)
+  }
+
+  ze <- apply(M, 1L, var)
+  n_ze <- sum(ze == 0)
+  if(n_ze > 0) {
+    stop(n_ze, " sample(s) do(es) not encode trajectory information ",
+         "(i.e., all ",
+         "features have identical expression values). Please, filter ",
+         "your expression matrix accordingly (e.g., remove all ",
+         "samples whose features are all non-detected, i.e., remove ",
+         "all samples having only exression values of 0).")
   }
 
   message("Computing adjacency matrix ...")
@@ -112,10 +133,10 @@
   res$X <- sweep(edecomp$vectors, MARGIN=2L, STATS=res$values, FUN="*")
 
   #Set result to obj
-  CellTrails::latentSpace(x) <- res$X
-  CellTrails::eigenvalues(x) <- res$values
+  #CellTrails::latentSpace(x) <- res$X
+  #CellTrails::eigenvalues(x) <- res$values
 
-  x
+  list(components=res$X, eigenvalues=res$values)
 }
 
 #' DEF: Determine number of informative latent dimensions
@@ -124,36 +145,34 @@
 #' @importFrom utils head
 #' @keywords internal
 #' @author Daniel C. Ellwanger
-.findSpectrum_def <- function(x, frac=100) {
-  D <- CellTrails::eigenvalues(x)
-
+.findSpectrum_def <- function(D, frac=100) {
   cs <- cumsum(diff(D))
   f <- ifelse(frac <= 1, length(D) * frac, frac)
   h <- head(cs, f)
   fit <- .linear_fit(x.in=seq_along(h), y.in=h)
+  n <- min(which(diff(which(h > fit$y)) > 1)) + 1
 
-  new("CellTrailsSpectrum",
-      frac=frac,
-      n=min(which(diff(which(h > fit$y)) > 1)) + 1,
-      cs=cs,
-      fit=fit)
+  ggpl <- .plotSpectrum_def(list(frac=frac, n=n, cs=cs, fit=fit))
+  print(ggpl)
+
+  seq_len(n)
 }
 
-#' DEF: Truncate eigenbasis
-#'
-#' For details see \code{reduceDimensions}
-#' @keywords internal
-#' @author Daniel C. Ellwanger
-.reduceDimensions_def <- function(x, s) {
-  CellTrails::latentSpace(x) <- CellTrails::latentSpace(x)[, seq_len(s@n)]
-  CellTrails::eigenvalues(x) <- CellTrails::eigenvalues(x)[seq_len(s@n)]
-  x
-}
+#' #' DEF: Truncate eigenbasis
+#' #'
+#' #' For details see \code{reduceDimensions}
+#' #' @keywords internal
+#' #' @author Daniel C. Ellwanger
+#' .reduceDimensions_def <- function(x, s) {
+#'   CellTrails::latentSpace(x) <- CellTrails::latentSpace(x)[, seq_len(s@n)]
+#'   CellTrails::eigenvalues(x) <- CellTrails::eigenvalues(x)[seq_len(s@n)]
+#'   x
+#' }
 
 #' t-Distributed Stochastic Neighbor Embedding
 #'
 #' Barnes-Hut implementation of t-Distributed Stochastic Neighbor Embedding
-#' @param x An \code{CellTrailsSet} object
+#' @param x A numerical matrix
 #' @param dims Output dimensionality
 #' @param perplexity Perplexity parameter (default: 30)
 #' @param theta Speed/accuracy trade-off (increase for less accuracy),
@@ -168,15 +187,17 @@
 #'   \item{\code{seed}}{See above}
 #' }
 #' @importFrom Rtsne Rtsne
+#' @importFrom SingleCellExperiment reducedDim
 #' @keywords internal
 #' @author Daniel C. Ellwanger
 .bhtsne <- function(x, dims=2, perplexity=30, theta=.5, max_iter=1000,
                     seed=1101){
+
   if(!is.null(seed)) {
     set.seed(seed)
   }
   result <- list()
-  result$Y <- Rtsne(CellTrails::latentSpace(x), dims=dims, pca=FALSE,
+  result$Y <- Rtsne(x, dims=dims, pca=FALSE,
                     perplexity=perplexity, theta=theta, max_iter=max_iter)$Y
   result$perplexity <- perplexity
   result$seed <- seed
@@ -186,23 +207,39 @@
 #' DEF: PCA
 #'
 #' For details see \code{pca}
+#' @param M expression matrix
+#' @param do_scaling use covariance/correlation matrix
+#' @param design Block factors
 #' @keywords internal
 #' @author Daniel C. Ellwanger
-.pca <- function(x, do_scaling=TRUE, design=NULL) {
-  X <- t(x[x@useFeature, ])
+.pca_def <- function(M, do_scaling=TRUE, design=NULL) {
+  #Pre-flight check
+  ze <- apply(M, 1L, var)
+  n_ze <- sum(ze == 0)
+  if(n_ze > 0) {
+    warning(n_ze, " feature(s) do(es) not encode valuable information (i.e., has/have ",
+            "constant expression over all samples) and were therefore ",
+            "neglected.")
+  }
 
-  # Remove features with 0 variance
-  f <- apply(X, 2L, var) > 0
-  X <- X[, f]
+  ze <- ze > 0
+  M <- M[ze, ] #filter by informative features
+  if(nrow(M) < 2) {
+    stop("Cannot compute principal components, because less than two ",
+         "features were selected. Please, increase the number of ",
+         "trajectory features.")
+  }
 
-  if(!is.null(design)) {
+  if(!is.null(design)) { #block uninteresting factors
     message("Blocking nuisance factors ...")
-    X <- apply(X, 2L, .denoiseExpression, design)
+    M <- apply(M, 1L, .denoiseExpression, design)
+  } else {
+    M <- t(M)
   }
 
   message("Performing PCA ...")
 
-  pca_result <- stats::prcomp(X, scale.=do_scaling)
+  pca_result <- stats::prcomp(M, scale.=do_scaling)
 
   # Scale matrix
   #if(do_scaling) {
@@ -222,9 +259,10 @@
   #res$loadings <- sweep(edecomp$vectors, MARGIN = 2,
   #                      STATS = sqrt(edecomp$values), FUN = "*")
 
-  res$princomp <- pca_result$x
-  res$variance <- pca_result$sdev^2
-  res$sdev <- pca_result$sdev
+  res$components <- pca_result$x
+  res$eigenvalues <- pca_result$sdev^2
+  res$variance <- res$eigenvalues / sum(res$eigenvalues)
+  #res$sdev <- pca_result$sdev
   res$loadings <- pca_result$rotation
   res
 }

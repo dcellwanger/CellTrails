@@ -3,20 +3,20 @@
 \docType{methods}
 \name{contrastTrailExpr}
 \alias{contrastTrailExpr}
-\alias{contrastTrailExpr,CellTrailsSet-method}
+\alias{contrastTrailExpr,SingleCellExperiment-method}
 \title{Differential trail expression analysis}
 \usage{
-contrastTrailExpr(ctset, feature_name = featureNames(ctset), trail_names,
+contrastTrailExpr(sce, feature_names = featureNames(sce), trail_names,
   score = "rmsd")
 }
 \arguments{
-\item{ctset}{A \code{CellTrailsSet} object}
+\item{sce}{A \code{SingleCellExperiment} object}
 
-\item{feature_name}{Name of feature; can be multiple names}
+\item{feature_names}{Name of feature; can be multiple names}
 
 \item{trail_names}{Name of trails}
 
-\item{score}{Score type; one of \{"RMSD", "TAD", "ABC"\}}
+\item{score}{Score type; one of \{"rmsd", "tad", "abc", "cor"\}}
 }
 \value{
 Numeric value
@@ -34,30 +34,23 @@ To align different trails, despite these differences, CellTrails employs a
 dynamic programming based algorithm that has long been known in speech
 recognition, called dynamic time warping (Sakoe and Chiba, 1978). RNA
 expression rates are modeled analogous to speaking rates
-(Aach and Church, 2001);  the latter accounts for innate non-linear variation
-in the length of individual phonemes (i.e. states) resulting in stretching
-and shrinking of word (i.e. trail) segments. This allows the computation of
-inter-trail alignment warps of individual expression time series that are
-similar but locally out of phase. \cr \cr
-A trail is defined as a chronologically ordered sequence of samples
-representing feature expression snapshots at distinct points in pseudotime.
-Expression values of given features per trail are fitted and smoothed
-using \code{gam}, which also enables the projection of expression
-values for non-observed time points. Univariate pairwise alignments are
-computed resulting in one warp per feature and per trail set. First,
-the pseudotime axis is unified by projecting feature expression for a
-given sequence of reference pseudotime points. Then, the
-corresponding expression value vectors are normalized by \eqn{x / max(x)}.
-The cross-distance matrix between both time series denotes the input to the
-dynamic time warping algorithm. Similar to a (global) pairwise protein
-sequence alignment, monotonicity (i.e. no time loops) and continuity
-(i.e., no time leaps) constraints have to be imposed on the warping function
-to preserve temporal sequence ordering. To find the optimal warp, a recursion
-rule is applied which selects the local minimum of three moves through a
-dynamic programming matrix: suppose that query snapshot \emph{g} and reference
-snapshot \emph{h} have already been aligned,
-then the alignment of \emph{h}+1 with \emph{g}+1 is a (unit slope) diagonal
-move, \emph{h} with \emph{g}+1 denotes an expansion by repetition of \emph{h},
+(Aach and Church, 2001);  the latter accounts for innate non-linear
+variation in the length of individual phonemes (i.e., states) resulting in
+stretching and shrinking of word (i.e., trail) segments. This allows the
+computation of inter-trail alignment warps of individual expression time
+series that are similar but locally out of phase.
+\cr \cr
+Univariate pairwise alignments are
+computed resulting in one warp per feature and per trail set. Similar to a
+(global) pairwise protein sequence alignment, monotonicity
+(i.e., no time loops) and continuity (i.e., no time leaps) constraints have
+to be imposed on the warping function to preserve temporal sequence ordering.
+To find the optimal warp, a recursion rule is applied which selects the
+local minimum of three moves through a dynamic programming matrix:
+suppose that query snapshot \emph{g} and reference snapshot \emph{h}
+have already been aligned, then the alignment of \emph{h}+1 with
+\emph{g}+1 is a (unit slope) diagonal move, \emph{h} with
+\emph{g}+1 denotes an expansion by repetition of \emph{h},
 and \emph{h}+2 with \emph{g}+1 contracts the query by dropping \emph{h}+1.
 \cr \cr
 The overall dissimilarity between two aligned expression time series
@@ -70,45 +63,31 @@ correlation coefficient (\code{cor}) over all aligned elements.
 }
 \examples{
 # Generate example data
-dat <- exDat()
-
-# Create container
-ctset <- as.CellTrailsSet(dat)
-
-# Embed samples
-ctset <- embedSamples(ctset)
-
-# Find spectrum
-spectr <- findSpectrum(ctset, frac=25)
+sce <- exDat()
 
 # Reduce dimensionality
-ctset <- reduceDimensions(ctset, spectr)
+res <- embedSamples(sce)
+d <- findSpectrum(res$eigenvalues, frac=30)
+latentSpace(sce) <- res$components[, d]
 
-# Find states
-ctset <- findStates(ctset, max_pval=1e-3, min_feat=4)
-
-# Connect states
-ctset <- connectStates(ctset, l=20)
-
-# Select trajectory
-ctset <- selectTrajectory(ctset, component=1)
+# Find and connect states
+states(sce) <- findStates(sce, max_pval=1e-3, min_feat=4)
+sce <- connectStates(sce, l=15)
 
 # Align samples to trajectory
-ctset <- fitTrajectory(ctset)
+sce <- selectTrajectory(sce, component=1)
+sce <- fitTrajectory(sce)
 
-# For illustration purposes a layout for each example dataset
-# is contained in this package.
-# The function trajectoryLayout allows to set a trajectory layout
-# to the object; the parameter adjust='TRUE' adjusts the layout
-# according to the computed pseudotime
-trajectoryLayout(ctset, adjust=TRUE) <- trajLayouts$example
+# Export trajectory graph structure to graphml
+# with write.ygraphml("yourFile") and import layout with
+# trajLayout(sce) <- read.ygraphml("yourFile")
 
-# Define trail
-ctset <- addTrail(ctset, from="H1", to="H3", name="Tr1") # Define trail
-ctset <- addTrail(ctset, from="H1", to="H4", name="Tr2") # Define trail
+# Define trails
+sce <- addTrail(sce, from="H1", to="H3", name="Tr1")
+sce <- addTrail(sce, from="H1", to="H2", name="Tr2")
 
 # Differential expression between trails
-contrastTrailExpr(ctset, feature_name=c("feature_1", "feature_10"),
+contrastTrailExpr(sce, feature_name=c("feature_1", "feature_10"),
                  trail_names=c("Tr1", "Tr2"), score="rmsd")
 }
 \references{
@@ -118,6 +97,9 @@ Speech, and Signaling Processing 26, 43-49.
 
 Aach, J., and Church, G.M. (2001). Aligning gene expression
 time series with time warping algorithms. Bioinformatics 17, 495-508.
+}
+\seealso{
+\code{dtw}
 }
 \author{
 Daniel C. Ellwanger

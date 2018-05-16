@@ -3,25 +3,24 @@
 \docType{methods}
 \name{write.ygraphml}
 \alias{write.ygraphml}
-\alias{write.ygraphml,CellTrailsSet-method}
+\alias{write.ygraphml,SingleCellExperiment-method}
 \title{Export trajectory graph}
 \usage{
-write.ygraphml(object, file, feature_name = NULL, pheno_type = NULL,
-  label = NULL)
+write.ygraphml(sce, file, color_by = c("phenoName", "featureName"), name,
+  node_label = "state")
 }
 \arguments{
-\item{object}{A \code{CellTrailsSet} object}
+\item{sce}{A \code{SingleCellExperiment} object}
 
-\item{file}{A character string naming a file}
+\item{file}{Character string naming a file}
 
-\item{feature_name}{A character string specifying by
-which feature expression nodes should be colorized}
+\item{color_by}{Indicates if nodes are colorized by a feature expression
+('featureName') or phenotype label ('phenoName')}
 
-\item{pheno_type}{A character string specifying by which
-phenotype label nodes should be colorized}
+\item{name}{A character string specifying the featureName or phenoName}
 
-\item{label}{Defines the label name (optional). Can be either set to the
-sample name with \code{NAME} or to a phenotype label name.}
+\item{node_label}{Defines the node label name (optional). Can be either set
+to the samples' states ('state') or the samples' names ('name').}
 }
 \value{
 \code{write.ygraphml} returns an invisible \code{NULL}
@@ -32,7 +31,8 @@ Writes graphml file containing the trajectory graph's structure.
 \details{
 To visualize the trajectory graph, a proper graph layout has
 to be computed. Ideally, edges should not cross and nodes should not
-overlap. CellTrails enables the export and import of the trajectory
+overlap (i.e., a planar embedding of the graph). CellTrails enables the
+export and import of the trajectory
 graph structure using the graphml file format. This file format can be
 interpreted by most third-party graph analysis applications,
 allowing the user to subject the trajectory graph to a wide range of (tree)
@@ -42,51 +42,55 @@ attributes best suited to be used with the Graph Visualization Software
 (http://www.yworks.com/products/yed) for all major platforms.
 \cr\cr
 The colors of the nodes can be defined by the parameters
-\code{feature_name} and \code{pheno_type}.
-Please note that the trajectory landmarks can be colorized via
-\code{pheno_type = 'landmark'}.
+\code{color_by} and \code{name}.
+Please note that the trajectory landmarks are indicated by setting
+\code{color_by='phenoName'} and {name='landmark'}. States can be indicated
+by \code{color_by='phenoName'} and {name='state'}.
+\cr\cr
 If a layout is already present in the provided \code{CellTrailsSet}
 object, the samples' coordinates will be listed in the graphml file.
 \cr \cr
 \emph{Diagnostic messages}
 \cr \cr
 An error is thrown if the trajectory has not been computed yet; function
-\code{fitTrajectory} needs to be called first.
+\code{fitTrajectory} needs to be called first. Feature names and phenotype
+names get checked and will throw an error if not contained in the dataset.
+Please note, the parameter \code{name} is case-sensitive.
 }
 \examples{
 # Generate example data
-dat <- exDat()
+sce <- exDat()
 
 \dontrun{
-# Create container
-ctset <- as.CellTrailsSet(dat)
-
-# Embed samples
-ctset <- embedSamples(ctset)
-
-# Find spectrum
-spectr <- findSpectrum(ctset, frac=25)
-
 # Reduce dimensionality
-ctset <- reduceDimensions(ctset, spectr)
+res <- embedSamples(sce)
+d <- findSpectrum(res$eigenvalues, frac=30)
+latentSpace(sce) <- res$components[, d]
 
-# Find states
-ctset <- findStates(ctset, max_pval=1e-3, min_feat=4)
+# Find and connect states
+states(sce) <- findStates(sce, max_pval=1e-3, min_feat=4)
+sce <- connectStates(sce, l=15)
 
-# Connect states
-ctset <- connectStates(ctset, l=20)
-
-# Select trajectory
-ctset <- selectTrajectory(ctset, component=1)
+# Align samples to trajectory
+sce <- selectTrajectory(sce, component=1)
+sce <- fitTrajectory(sce)
 
 # Export trajectory graph structure to graphml
-# color nodes by gene expression (e.g, feature_10)
-write.ygraphml(ctset, file="yourFilePath",
-              feature_name="feature_10")
-# color nodes by metadata (e.g., simulated age of sample) and
-# label by computed state
-write.ygraphml(ctset, file="yourFilePath",
-              pheno_type="age", label="state")}
+# Color nodes by gene expression (e.g, feature_10)
+write.ygraphml(sce, file="yourFilePath", color_by="featureName",
+              name="feature_10")
+
+# Color nodes by metadata (e.g., state) and
+# label nodes by the (simulated) age of each sample
+write.ygraphml(sce, file="yourFilePath", color_by="phenoName",
+              name="state", node_label="age")
+
+# Color and label nodes by landmark type and id
+write.ygraphml(sce, file="yourFilePath", color_by="phenoName",
+              name="landmark", node_label="landmark")}
+}
+\seealso{
+\code{fitTrajectory} \code{featureNames} \code{phenoNames}
 }
 \author{
 Daniel C. Ellwanger

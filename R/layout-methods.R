@@ -3,15 +3,15 @@
 #' Adjusts the edge distances in the trajectory graph
 #' such that edge distances correlates to edge weights;
 #' pseudotime is stored in edge weights
-#' @param x A \code{CellTrailsSpectrum} object
+#' @param x A \code{SingleCellExperiment} object
+#' @param layout Layout coordinates for each sample
 #' @return An adjusted layout
 #' @importFrom igraph distances mst get.edgelist graph_from_adjacency_matrix
 #' @importFrom igraph get.shortest.paths components delete.vertices
 #' @keywords internal
 #' @author Daniel C. Ellwanger
-.adjustLayoutByPtime <- function(x) {
-  g <- x@trajectory$traj
-  l <- as.matrix(trajectoryLayout(x))
+.adjustLayoutByPtime <- function(x, l) {
+  g <- .trajGraph(x)
   # Rescale
   yrange <- which.max(apply(l, 2L, function(x) diff(range(x))))
   yrange <- range(l[, yrange])
@@ -44,12 +44,14 @@
                                           to=ge[i, 2])$vpath[[1]])
       for(j in seq_len(length(pth) - 1)) {
         npair <- pth[j:(j+1)]
-        d <- max(dist(l_new[npair, ])[1], 1e-7) #avoiding error due to overlapping nodes
+        d <- max(dist(l_new[npair, ])[1], 1e-7) #avoiding error
+                                                #due to overlapping nodes
         eps <- D[npair[1], npair[2]] / d
         va <- l_new[npair[1], ]
         vb <- l_new[npair[2], ]
         vc <- va - vb
-        vb_new <- va + eps * vc #in one line: va + (eps * (va - vb)) / sum((va - vb)^2)
+        vb_new <- va + eps * vc #in one line:
+                                #va + (eps * (va - vb)) / sum((va - vb)^2)
         l_new[npair[2], ] <- vb_new
       }
       delta <- (vb_new - vb)
@@ -77,7 +79,8 @@
                                         to=from_to["Leaf"])$vpath[[1]])
     for(j in seq_len(length(pth) - 1)) {
       npair <- pth[j:(j+1)]
-      d <- max(dist(l_new[npair, ])[1], 1e-7) #avoiding error due to overlapping nodes
+      d <- max(dist(l_new[npair, ])[1], 1e-7) #avoiding error
+                                              #due to overlapping nodes
       eps <- D[npair[1], npair[2]] / d
       va <- l_new[npair[1], ]
       vb <- l_new[npair[2], ]

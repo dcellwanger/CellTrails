@@ -9,16 +9,6 @@ author:
   affiliation: "Department of Otolaryngology - Head & Neck Surgery, and Institute for Stem Cell Biology and Regenerative Medicine, Stanford University School of Medicine, Stanford, CA 94305, USA"
 package: "CellTrails"
 tags: ["Trajectory reconstruction", "Dimensionality reduction", "Clustering", "Single-cell", "Machine learning"]
-abstract: |
-  High-throughput single-cell technologies facilitate the generation of -omic readouts from thousands of cells captured at different cellular maturation stages during development, or other normal or pathological processes with unprecedented resolution. A single snapshot of an asynchronously developing specimen, for example, constitutes a time series in which individual cells represent distinct time points along a continuum. However, recoding of valuable cell-specific information, such as a cell's developmental age, its location in a tissue, or its functional phenotype is limited during sample preparation, and remains hidden in high dimensional cellular expression profiles. This formulates the computational challenge to infer the latent internal time axis of the biological process from the obtained expression matrix alone, while considering common parameters of single-cell measurements, such as noise, dropouts and redundancy. In other words, biological samples need to be placed by means of hidden information onto a non-linear trajectory, which might constitute of branching processes towards distinct functional cell types.
-
-  This manual describes the practical use of the _CellTrails_ implementation, an unsupervised algorithm for the _de novo_ chronological ordering, visualization and analysis of single-cell expression data. _CellTrails_ makes use of a geometrically motivated concept of lower-dimensional manifold learning, which exhibits a multitude of virtues that counteract intrinsic noise of single cell data caused by drop-outs, technical variance, and redundancy of predictive variables. _CellTrails_ enables the reconstruction of branching trajectories and provides an intuitive graphical representation of expression patterns along all branches simultaneously. It allows the user to define and infer the expression dynamics of individual and multiple pathways towards distinct phenotypes.
-
-  _CellTrails_ was developed with a 183-dimensional RT-qPCR gene expression panel of 1,008 cells collected from the developing chicken utricle, a balance organ. Key players in the utricle's function are cohorts of sensory hair cells that display mechanosensing organelles, called hair bundles, protruding from their apical surfaces. Bundle growth and maturation is dictated by an orchestration of distinct sequential and overlapping cellular processes. Our goal was to elucidate the temporal expression program of key hair bundle genes in subtypes of hair cells that occur with distinct spatial distribution. We showed that _CellTrails_ faithfully predicted expression patterns of hair cell maturation with unprecedented resolution.
-  
-  We confirmed that _CellTrails_ can be applied to analysis of single-cell RNA-Seq datasets. We are pleased that you consider using _CellTrails_ in your research. A detailed theoretical description of the algorithm and its application to biological uses has been published in:
-  
-  __Ellwanger DC, Scheibinger M, Dumont RA, Barr-Gillespie PG, and Heller S. "Transcriptional dynamics of hair-bundle morphogenesis revealed with CellTrails". Journal_ Date;Issue.__
 
 output: 
   BiocStyle::html_document:
@@ -41,136 +31,15 @@ knitr::opts_chunk$set(echo=TRUE) #, fig.width=4.5, fig.height=3.5, dpi=300 fig.a
 <!-- ---------------------------------- -->
 # Prerequisites
 <!-- ---------------------------------- -->
+We strongly recommend to download and install the graph visualization software yEd (http://www.yworks.com/products/yed) [^1]. It provides great capabilities to perform planar embedding, visualization, and analysis of a trajectory graph produced by _CellTrails_. 
 
-We recommend to download and install the graph visualization software yEd (http://www.yworks.com/products/yed). It provides great capabilities to visualize and analyze a trajectory graph produced by _CellTrails_.
-
-<!-- ---------------------------------- -->
-# Quickstart Guide
-<!-- ---------------------------------- -->
 Before ready to use, the *CellTrails* libraries must be loaded into the _R_ environment:
 
 ```{r, eval=TRUE, message=FALSE, warning=FALSE}
 library(CellTrails)
 ```
 
-**Please note**, that we recommend to use *CellTrails* with filtered and log-normalized expression data without spike-in controls.
-
-The following illustrates the typical workflow of a *CellTrails* analysis. Shown is the signature of each function as provided in the *CellTrails* package documentation (call `?name_of_function`):
-
-```{r eval=FALSE}
-## Not run:
-
-# -------------------------------
-# Container Creation
-# -------------------------------
-# Either from a numeric matrix, 
-# ExpressionSet or SingleCellExperiment object
-ctset <- as.CellTrailsSet(object) 
-
-# -------------------------------
-# Feature Selection
-# -------------------------------
-# Filter features expressed in a minimum number of samples
-ctset <- filterFeaturesByDL(ctset, threshold)
-
-# Filter features having a minimum coefficient of variation
-ctset <- filterFeaturesByCOV(ctset, threshold, design=NULL) 
-
-# Filter features having a significant high Fano factor
-ctset <- filterFeaturesByFF(ctset, threshold=1.7, min_expr=0, design=NULL)  
-
-# -------------------------------
-# Manifold Learning
-# -------------------------------
-# Spectral Embedding
-ctset <- embedSamples(ctset, design=NULL)
-
-# Dimensionality Reduction
-ctspec <- findSpectrum(ctset, frac=100)
-plot(ctspec)
-ctset <- reduceDimensions(ctset, ctspec)
-plot(ctset, type="latentSpace", feature_name, pheno_type, viz, 
-     perplexity=30, seed=1101)
-plot(ctset, type="latentSpace", pheno_type, viz, perplexity=30, seed=1101)
-
-# -------------------------------
-# Clustering
-# -------------------------------
-ctset <- findStates(ctset, min_size=0.01, min_feat=5, 
-                    max_pval=1e-04, min_fc=2)
-plot(ctspec, type="stateSize")
-plot(ctset, type="stateExpression", feature_name)
-
-# -------------------------------
-# Sample Ordering
-# -------------------------------
-# State Trajectory Graph
-ctset <- connectStates(ctset, l=10)
-plot(ctset, type="stateTrajectoryGraph", feature_name, component, 
-     seed=1101)
-plot(ctset, type="stateTrajectoryGraph", pheno_type, component, 
-     point_size=3, label_offset=2, seed=1101)
-
-ctset <- selectTrajectory(ctset, component)
-
-# Alignment of Samples onto Trajectory
-ctset <- fitTrajectory(ctset)
-plot(ctset, type="trajectoryFit")
-
-# -------------------------------
-# CellTrails Maps
-# -------------------------------
-# Graph Layout
-write.ygraphml(ctset, file, feature_name=NULL, label=NULL)
-write.ygraphml(ctset, file, pheno_type=NULL, label=NULL)
-ctmaps <- read.ygraphml(ctset, file, adjust=TRUE)
-
-# Plot maps
-plot(ctset, type="map", feature_name, map_type=c("full", "se", "single"))
-plot(ctset, type="map", pheno_type)
-
-# -------------------------------
-# Analysis of Expression Dynamics
-# -------------------------------
-# Trail Identification
-plot(ctset, type="trailblazing")
-ctmaps <- addTrail(ctset, from, to, name)
-plot(ctset, type="trail", trail_name)
-
-# Inference of Dynamics
-plot(ctset, type="dynamic", feature_name, trail_name)
-fit <- fitDynamic(ctset, feature_name, trail_name)
-
-# Dynamic Comparison: Within Trails
-plot(ctset, type="dynamic", feature_name, trail_name)
-fit1 <- fitDynamic(ctset, feature_name, trail_name)
-fit2 <- fitDynamic(ctset, feature_name, trail_name)
-cor(fit1$expression, fit2$expression)
-
-# Dynamic Comparison: Between Trails
-contrastTrailExpr(ctset, feature_name, trail_names, score)
-
-## End(Not run)
-```
-
 <!-- ---------------------------------- -->
 # Detailed Tutorial
 <!-- ---------------------------------- -->
 **Each step of an typical _CellTrails_ analysis workflow is illustrated, described and explained in detail in this [tutorial](https://dcellwanger.github.io/CellTrails/).**
-
-<!-- ---------------------------------- -->
-# Example Dataset
-<!-- ---------------------------------- -->
-The *CellTrails* package comes with an example dataset (of class `ExpressionSet` from the `r Biocpkg("Biobase")` package), which can be loaded with the function `data`.
-
-```{r, eval=T}
-# Load example data
-data("gga_e15_utricle")
-```
-
-This dataset contains transcript expression profiles of 183 genes expressed during sensory hair cell bundle maturation and function, which were quantified in the chicken utricle sensory epithelium at embryonic day 15 using multiplex RT-qPCR. Experimental metadata was generated during tissue preparation (cell origin) and cell sorting (uptake of FM1-43 dye indicating cell maturity). This data set is the foundation used for the development of *CellTrails*. If you use this dataset for your research, please cite:
-
-Ellwanger DC, Scheibinger M, Dumont RA, Barr-Gillespie PG, and Heller S. "Transcriptional dynamics of hair-bundle morphogenesis revealed with CellTrails". *Journal* Date;Issue. doi: 
-
-The protocol used to analyze this dataset with *CellTrails* can be obtained [here](https://dcellwanger.github.io/CellTrails/#101_protocols).
-

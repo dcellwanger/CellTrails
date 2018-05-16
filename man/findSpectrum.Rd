@@ -3,19 +3,19 @@
 \docType{methods}
 \name{findSpectrum}
 \alias{findSpectrum}
-\alias{findSpectrum,CellTrailsSet-method}
+\alias{findSpectrum,numeric-method}
 \title{Determine number of informative latent dimensions}
 \usage{
-findSpectrum(ctset, frac = 100)
+findSpectrum(x, frac = 100)
 }
 \arguments{
-\item{ctset}{A \code{CellTrailsSet} object}
+\item{x}{A numeric vector with eigenvalues}
 
 \item{frac}{Fraction or number (if \code{frac > 1}) of eigengaps
 used to perform linear fit. (default: 100)}
 }
 \value{
-An object of class \code{CellTrailsSpectrum}
+A \code{numeric} vector with indices of relevant dimensions
 }
 \description{
 Identifies the dimensionality of the latent space
@@ -28,19 +28,17 @@ to identify informative eigenvectors.
 }
 \examples{
 # Generate example data
-dat <- exDat()
-
-# Create container
-ctset <- as.CellTrailsSet(dat)
+sce <- exDat()
 
 # Embed samples
-ctset <- embedSamples(ctset)
+res <- embedSamples(sce)
 
 # Find spectrum
-spectr <- findSpectrum(ctset, frac=25)
-\dontrun{
-plot(spectr)
+d <- findSpectrum(res$eigenvalues, frac=30)
+d
 }
+\seealso{
+\code{pca} \code{embedSamples}
 }
 \author{
 Daniel C. Ellwanger

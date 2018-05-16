@@ -3,72 +3,55 @@
 \docType{methods}
 \name{trailNames<-}
 \alias{trailNames<-}
-\alias{trailNames<-,CellTrailsSet-method}
+\alias{trailNames<-,SingleCellExperiment-method}
 \title{SET trail names}
 \usage{
 trailNames(object) <- value
 }
 \arguments{
-\item{object}{An object of class \code{CellTrailsSet}}
+\item{object}{An object of class \code{SingleCellExperiment}}
 
 \item{value}{A character vector with the trail names}
 }
 \value{
-An updated object of class \code{CellTrailsSet}
+An updated object of class \code{SingleCellExperiment}
 }
 \description{
-Enables to rename trails stored in a \code{CellTrailsSet}
+Enables to rename trails stored in a \code{SingleCellExperiment}
 object.
 }
 \details{
 \emph{Diagnostic messages}
 \cr \cr
-An error is thrown if the number of names does not correspond to the number of
-trails stored in the object.
+An error is thrown if the number of names does not correspond to the number
+of trails stored in the object. Further, trail names are required
+to be unique.
 }
 \examples{
 # Generate example data
-dat <- exDat()
-
-# Create container
-ctset <- as.CellTrailsSet(dat)
-
-# Embed samples
-ctset <- embedSamples(ctset)
-
-# Find spectrum
-spectr <- findSpectrum(ctset, frac=25)
+sce <- exDat()
 
 # Reduce dimensionality
-ctset <- reduceDimensions(ctset, spectr)
+res <- embedSamples(sce)
+d <- findSpectrum(res$eigenvalues, frac=30)
+latentSpace(sce) <- res$components[, d]
 
-# Find states
-ctset <- findStates(ctset, max_pval=1e-3, min_feat=4)
-
-# Connect states
-ctset <- connectStates(ctset, l=20)
-
-# Select trajectory
-ctset <- selectTrajectory(ctset, component=1)
+# Find and connect states
+states(sce) <- findStates(sce, max_pval=1e-3, min_feat=4)
+sce <- connectStates(sce, l=15)
 
 # Align samples to trajectory
-ctset <- fitTrajectory(ctset)
+sce <- selectTrajectory(sce, component=1)
+sce <- fitTrajectory(sce)
 
-# For illustration purposes a layout for each example dataset
-# is contained in this package.
-# The function trajectoryLayout allows to set a trajectory layout
-# to the object; the parameter adjust='TRUE' adjusts the layout
-# according to the computed pseudotime
-trajectoryLayout(ctset, adjust=TRUE) <- trajLayouts$example
-
-# Define trail
-ctset <- addTrail(ctset, from="H1", to="H3", name="Tr1") # Define trail
-ctset <- addTrail(ctset, from="H1", to="H4", name="Tr2") # Define trail
-trailNames(ctset)
-
-# Update trail names
-trailNames(ctset) <- c("TrA", "TrB")
-trailNames(ctset)
+# Add trail
+sce <- addTrail(sce, "H1", "H2", "myTrail")
+trailNames(sce)
+trailNames(sce) <- "ABC"
+trailNames
+}
+\seealso{
+\code{addTrail}
 }
 \author{
 Daniel C. Ellwanger

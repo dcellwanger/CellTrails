@@ -1,10 +1,12 @@
 #' DEF: Connect states
 #'
 #' For details see \code{connectStates}
-#' @importFrom igraph components induced.subgraph graph_from_adjacency_matrix
+#' @param dmat Distance matrix
+#' @param cl States
+#' @importFrom igraph components induced_subgraph graph_from_adjacency_matrix
 #' @keywords internal
 #' @author Daniel C. Ellwanger
-.connectStates_def <- function(x, l=10, sigma=1){
+.connectStates_def <- function(dmat, cl, l=10, sigma=1){
 
   f.letters <- function(x) {
     n <- ceiling(log(max(x), 26))
@@ -40,8 +42,7 @@
     visited
   }
 
-  dmat <- stats::dist(CellTrails::latentSpace(x))
-  cl <- CellTrails::states(x)
+  dimnames(dmat) <- NULL
   sts <- levels(cl)
 
   lnn <- list()
@@ -72,7 +73,8 @@
   result$ncnt <- ncnt
 
   ### Compute maximum overlap spanning forest (DFS to find circles)
-  #dt <- data.frame(do.call(rbind, strsplit(names(unlist(ncnt)), "\\.")), unlist(ncnt), stringsAsFactors = F)
+  #dt <- data.frame(do.call(rbind, strsplit(names(unlist(ncnt)), "\\.")),
+  #                 unlist(ncnt), stringsAsFactors = F)
   dt <- data.frame(FROM = rep(names(ncnt), lapply(ncnt, length)),
                    TO = unlist(lapply(ncnt, names)),
                    CNT = as.numeric(unlist(ncnt)), stringsAsFactors=FALSE)
@@ -113,108 +115,91 @@
   maxIfForest <- list()
   cmps <- igraph::components(g)
   for(i in seq(cmps$no)) {
-    maxIfForest[[i]] <- induced.subgraph(g, V(g)[cmps$membership == i])
+    maxIfForest[[i]] <- induced_subgraph(g, V(g)[cmps$membership == i])
   }
   #result$maxIfForest <- maxIfForest
   #result
 
-  x@spanForest <- maxIfForest
-  if(length(x@spanForest) == 1) {
-    x@useSample <- rep(TRUE, ncol(x))
-  }
-  x
-}
-
-#' DEF: Select component from trajectory graph
-#'
-#' For details see \code{selectTrajectory}
-#' @importFrom igraph V
-#' @keywords internal
-#' @author Daniel C. Ellwanger
-.selectTrajectory_def <- function(x, component) {
-  x@spanForest <- list(x@spanForest[[component]])
-  vnames <- names(V(x@spanForest[[1]]))
-
-  #Filter CellTrailsSet object
-  x@useSample <- states(x) %in% vnames
-
-  #fltr <- states(x) %in% vnames
-  #x@assayData <- x@assayData[fltr, ]
-  #x@phenoData <- x@phenoData[fltr, ]
-  #x@eigenspace <- x@eigenspace[fltr, ]
-  x
+  maxIfForest
+  #if(length(maxIfForest) == 1) {
+  #  .useSample(x) <- rep(TRUE, ncol(x))
+  #}
+  #x
 }
 
 #' DEF: Trajectory fitting
 #'
-#' For details see \code{selectTrajectory}
-#' @import Biobase
+#' For details see \code{fitTrajectory}
+#' @param cl Trajectory states vector
+#' @param g Trajectory graph; \code{igraph} object
+#' @param X Lower-dimensional ordination of trajectory samples
+#' @param snames Sample names
 #' @importFrom igraph degree V<-
 #' @keywords internal
 #' @author Daniel C. Ellwanger
-.fitTrajectory_def <- function(x) { #use.comp = F
-  orth <- .project_ortho(x)
+.fitTrajectory_def <- function(cl=cl, g=g, X=X, snames) { #use.comp = F
+  orth <- .project_ortho(cl=cl, g=g, X=X)
   orth_graph <- .connect_ortho(orth)
 
   #Check if projection needs to be expanded
-  if(.needsToBeExpanded(x, orth_graph)) {
+  if(.needsToBeExpanded(g=g, cl=cl)) {
     orth_graph <- .deleteMedianCentres(orth_graph)
   } else {
     #Refine and remove mediancentres
-    vizmap <- .generate_ordination(g = orth_graph,
-                                   error = orth$error,
-                                   only.ordi = TRUE)
+    vizmap <- .generate_ordination(g=orth_graph,
+                                   error=orth$error,
+                                   only.ordi=TRUE)
     orth_graph <- .connect_ordi(vizmap$ordi)
   }
 
   #Update x
-  dg <- degree(orth_graph)
+  dg <- igraph::degree(orth_graph)
   hps <- dg == 1 #trail heads
   bps <- dg > 2  #bifurcations
 
-  blaze.type <- rep(NA, length(dg))
-  blaze.type[hps] <- "H"
-  blaze.type[bps] <- "B"
-  blaze.type <- factor(blaze.type, levels = c("H", "B", "U"))
+  lndmrk_type <- rep(NA, length(dg))
+  lndmrk_type[hps] <- "H"
+  lndmrk_type[bps] <- "B"
+  lndmrk_type <- factor(lndmrk_type, levels = c("H", "B", "U"))
 
-  blaze.id <- rep(NA, length(dg))
-  blaze.id[hps] <- paste0("H", seq(sum(hps)))
-  blaze.id[bps] <- paste0("B", seq(sum(bps)))
+  lndmrk_id <- rep(NA, length(dg))
+  lndmrk_id[hps] <- paste0("H", seq_len(sum(hps)))
+  lndmrk_id[bps] <- paste0("B", seq_len(sum(bps)))
 
-  V(orth_graph)$sampleName <- sampleNames(x)[x@useSample]
+  lndmrk_shape <- rep("ellipse", length(lndmrk_type))
+
+  V(orth_graph)$sampleName <- snames
 
   res <- list()
   res$error <- orth$error
   res$traj <- orth_graph
-  res$blaze <- data.frame(type=blaze.type, id=blaze.id,
-                          shape=rep("ellipse", length(blaze.type)),
+  res$lndmrk <- data.frame(type=lndmrk_type, id=lndmrk_id,
+                          shape=lndmrk_shape,
                           stringsAsFactors=FALSE)
-  x@trajectory <- res
-  x
+  res
 }
 
 #' AUX: Orthogonal projection
 #'
 #' Orthogonally projects samples onto trajectory
-#' @param x An \code{CellTrailsSet} object
-#' @return A list containing the following components:
-#' @return \item{\code{Y}}{Projection}
-#' @return \item{\code{X.c}}{Mediancentres}
-#' @return \item{\code{lambda}}{Projection lambda (position: inside/outside of edge)}
-#' @return \item{\code{adjmat}}{Adjacency matrix with sample count per edge}
-#' @return \item{\code{error}}{Projection error per sample}
-#' @return \item{\code{edgeId}}{ID of each edge}
-#' @return \item{\code{edgeId2Edge}}{Mapping of edge to edgeId}
-#' @return \item{\code{edge}}{For each sample its assigned edge}
+#' @param cl Trajectory states; factor vector
+#' @param g Trajectory tree; igraph object
+#' @param X Lower dimensional ordination of trajectory samples
+#' @return A \code{list} containing the following components:
+#' \item{\code{Y}}{Projection}
+#' \item{\code{X.c}}{Mediancentres}
+#' \item{\code{lambda}}{Projection lambda (position: inside/outside of edge)}
+#' \item{\code{adjmat}}{Adjacency matrix with sample count per edge}
+#' \item{\code{error}}{Projection error per sample}
+#' \item{\code{edgeId}}{ID of each edge}
+#' \item{\code{edgeId2Edge}}{Mapping of edge to edgeId}
+#' \item{\code{edge}}{For each sample its assigned edge}
 #' @importFrom igraph V neighbors
 #' @importFrom utils combn
 #' @importFrom depth med
 #' @keywords internal
 #' @author Daniel C. Ellwanger
-.project_ortho <- function(x) {
-  cl <- droplevels(states(x)[x@useSample])
-  g <- stateTrajectoryGraph(x)[[1]]
-  X <- CellTrails::latentSpace(x)[x@useSample, ]
+.project_ortho <- function(cl, g, X) {
   X.c <- t(vapply(levels(cl), function(i){med(X[cl == i, ],
                                               method = "Spatial")$median},
                   rep(0, dim(X)[2])))
@@ -238,7 +223,7 @@
     result
   }
 
-  Y <- matrix(NA, ncol = ncol(X), nrow = nrow(X))
+  Y <- matrix(NA, ncol=ncol(X), nrow=nrow(X))
   lambda <- rep(NA, ncol(X))
   error <- rep(NA, nrow(X))
   edgeId <- rep(NA, nrow(X))
@@ -278,18 +263,22 @@
       Y[i, ] <- min_op$Y
       lambda[i] <- min_op$lambda
       up <- op_adjmat[min_ids[1], min_ids[2]] + 1
-      op_adjmat[min_ids[1], min_ids[2]] <- op_adjmat[min_ids[2], min_ids[1]] <- up
+      op_adjmat[min_ids[1], min_ids[2]] <- up
+      op_adjmat[min_ids[2], min_ids[1]] <- up
       error[i] <- min_dist
       min_ids_num <- as.numeric(substr(min_ids, 2, nrow(X.c)))
-      edgeId[i] <- (min(min_ids_num) - 1) * mx - (min(min_ids_num) * (min(min_ids_num) + 1) / 2) + max(min_ids_num)
+      edgeId[i] <- (min(min_ids_num) - 1) * mx - (min(min_ids_num) *
+                   (min(min_ids_num) + 1) / 2) + max(min_ids_num)
     } else {
       Y[i, ] <- best_op$Y
       lambda[i] <- best_op$lambda
       up <- op_adjmat[best_ids[1], best_ids[2]] + 1
-      op_adjmat[best_ids[1], best_ids[2]] <- op_adjmat[best_ids[2], best_ids[1]] <- up
+      op_adjmat[best_ids[1], best_ids[2]] <- up
+      op_adjmat[best_ids[2], best_ids[1]] <- up
       error[i] <- best_dist
       best_ids_num <- as.numeric(substr(best_ids, 2, nrow(X.c)))
-      edgeId[i] <- (min(best_ids_num) - 1) * mx - (min(best_ids_num) * (min(best_ids_num) + 1) / 2) + max(best_ids_num)
+      edgeId[i] <- (min(best_ids_num) - 1) * mx - (min(best_ids_num) *
+                   (min(best_ids_num) + 1) / 2) + max(best_ids_num)
     }
   }
 
@@ -301,7 +290,9 @@
   res$adjmat <- op_adjmat
   res$error <- error
   res$edgeId <- as.character(edgeId)
-  res$edgeId2Edge <- t(combn(rownames(X.c), 2)) #t(combn(as.numeric(substr(rownames(X.c), 2, nrow(X.c))), 2)) #t(combn(seq(mx), 2))
+  #t(combn(as.numeric(substr(rownames(X.c), 2, nrow(X.c))), 2))
+  #t(combn(seq(mx), 2))
+  res$edgeId2Edge <- t(combn(rownames(X.c), 2))
   rownames(res$edgeId2Edge) <- apply(res$edgeId2Edge, 1, function(x){
     x <- as.numeric(substr(x, 2, nrow(X.c)));
     (min(x) - 1) * mx - (min(x) * (min(x) + 1) / 2) + max(x)})
@@ -350,11 +341,15 @@
     }
 
     # 1.3 Connect cells to coding vector
-    amat[as.character(o1[1]), fromTo[1]] <- amat[fromTo[1], as.character(o1[1])] <- 1
-    amat[as.character(o2[1]), fromTo[2]] <- amat[fromTo[2], as.character(o2[1])] <- 1
+    amat[as.character(o1[1]), fromTo[1]] <- 1
+    amat[fromTo[1], as.character(o1[1])] <- 1
+    amat[as.character(o2[1]), fromTo[2]] <- 1
+    amat[fromTo[2], as.character(o2[1])] <- 1
 
-    #amat[o1[1], nrow(Xorth$Y) + fromTo[1]] <- amat[nrow(Xorth$Y) + fromTo[1], o1[1]] <- 1
-    #amat[o2[1], nrow(Xorth$Y) + fromTo[2]] <- amat[nrow(Xorth$Y) + fromTo[2], o2[1]] <- 1
+    #amat[o1[1], nrow(Xorth$Y) + fromTo[1]] <- 1
+    #amat[nrow(Xorth$Y) + fromTo[1], o1[1]] <- 1
+    #amat[o2[1], nrow(Xorth$Y) + fromTo[2]] <- 1
+    #amat[nrow(Xorth$Y) + fromTo[2], o2[1]] <- 1
 
     # 2. Link cells located outside the two coding vectors
     d1 <- apply(Xorth$Y[cells.out, , drop = FALSE], 1L,
@@ -375,15 +370,18 @@
         amat[j1, j2] <- amat[j2, j1] <- 1
       }
       # Link cells to coding vectors
-      amat[as.character(o1[1]), fromTo[1]] <- amat[fromTo[1], as.character(o1[1])] <- 1
+      amat[as.character(o1[1]), fromTo[1]] <- 1
+      amat[fromTo[1], as.character(o1[1])] <- 1
     } else if(length(cells.out.1) == 1) {
       # Link cell to coding vector
-      amat[as.character(cells.out.1), fromTo[1]] <- amat[fromTo[1], as.character(cells.out.1)] <- 1
+      amat[as.character(cells.out.1), fromTo[1]] <- 1
+      amat[fromTo[1], as.character(cells.out.1)] <- 1
     }
 
     # 2.2 Link cells located outside of vector 2
     if(length(cells.out.2) > 1) {
-      d2 <- apply(Xorth$Y[cells.out.2, ], 1, function(x){sum((x - xcodes[fromTo[2], ])^2)})
+      d2 <- apply(Xorth$Y[cells.out.2, ], 1,
+                  function(x){sum((x - xcodes[fromTo[2], ])^2)})
       o2 <- cells.out.2[order(d2, decreasing = FALSE)]
       for(j in seq(length(o2) - 1)){
         j1 <- as.character(o2[j])
@@ -391,10 +389,12 @@
         amat[j1, j2] <- amat[j2, j1] <- 1
       }
       # Link cells to coding vectors
-      amat[as.character(o2[1]), fromTo[2]] <- amat[fromTo[2], as.character(o2[1])] <- 1
+      amat[as.character(o2[1]), fromTo[2]] <- 1
+      amat[fromTo[2], as.character(o2[1])] <- 1
     } else if(length(cells.out.2) == 1) {
       # Link cell to coding vector
-      amat[as.character(cells.out.2), fromTo[2]] <- amat[fromTo[2], as.character(cells.out.2)] <- 1
+      amat[as.character(cells.out.2), fromTo[2]] <- 1
+      amat[fromTo[2], as.character(cells.out.2)] <- 1
     }
   }
   w <- matrix(1e-10, nrow=nrow(amat), ncol=ncol(amat))
@@ -406,8 +406,8 @@
 #' AUX: Orthogonal projection ordination
 #'
 #' Generates 2D ordination from orthogonal projection
-#' @param g Graph from orthogonal projection, igraph object
-#' @param error Error from orthogonal projection; numeric vector
+#' @param g Graph from orthogonal projection, \code{igraph} object
+#' @param error Error from orthogonal projection; \code{numeric} vector
 #' @param only.ordi Compute only ordination?
 #' @return A list containing the following components:
 #' @return \item{\code{ordi}}{Ordination}
@@ -419,7 +419,8 @@
 .generate_ordination <- function(g, error, factor=7, rev=FALSE,
                                  only.ordi=FALSE) {
   # Offset points
-  # x = Target; x.n = neighbors; size = offset width; side = (-1, 1) is left or right, respectively
+  # x = Target; x.n = neighbors; size = offset width;
+  # side = (-1, 1) is left or right, respectively
   f.offset <- function(x, x.n, size, side = 1) {
     #1. Find line through neighbors
     slope <- (x.n[1, 2] - x.n[2, 2]) / (x.n[1, 1] - x.n[2, 1])
@@ -433,15 +434,17 @@
     v <- NA
     if(side == 1) {
       v <- x[1] + 1
-      v <- c(v, v * slope2 + intercept2)  #(e.g. with x1 = 1, x2 according to slope/intercept eq.)
+      v <- c(v, v * slope2 + intercept2)  #(e.g. with x1 = 1,
+                                          #x2 according to slope/intercept eq.)
     } else {
       v <- x[1] - 1
-      v <- c(v, v * slope2 + intercept2)  #(e.g. with x1 = 1, x2 according to slope/intercept eq.)
+      v <- c(v, v * slope2 + intercept2)  #(e.g. with x1 = 1,
+                                          #x2 according to slope/intercept eq.)
     }
     v <- x - v #use sum of vector equation to identify orthogonal vector
 
     #3. Generate new vector of given size
-    # [https://math.stackexchange.com/questions/897723/how-to-resize-a-vector-to-a-specific-length]
+    #[https://math.stackexchange.com/questions/897723/how-to-resize-a-vector-to-a-specific-length]
     v <- size / sqrt(sum(v^2)) * v #use vector norm to scale it
     v + x #sum of vectors (scaled vector + target point) give new point
   }
@@ -500,7 +503,10 @@
     res$ordi.jitter <- eordi
     terms <- which(degree(g) == 1)
     #backbone <- get.all.shortest.paths(g, from = terms[1], to = terms[-1])$res
-    #res$backbone <- lapply(backbone, function(x) {x <- x[x %in% seq(length(error))]; ordi[x, ]}) #Remove mediancentres
+    #res$backbone <- lapply(backbone,
+    #                       function(x) {
+    #                         x <- x[x %in% seq(length(error))];
+    #                         ordi[x, ]}) #Remove mediancentres
     #res$backbone <- unique(do.call(rbind, Y$backbone))
   }
 
@@ -517,23 +523,22 @@
 #' 2D simplification would collate the states and ignore the bifurcation.
 #' Therefore, the simplification step has to be skipped. This methods
 #' checks whether a siplification is possible or not.
-#' @param ctset An object of class \code{CellTrailsSet}
-#' @param g An object of class \code{igraph}
+#' @param g Trajectory graph; \code{igraph} object
+#' @param cl Trajectory states vector; logical
 #' @return A logical value
 #' @details IF: any node has a degree > 3, return \code{TRUE}; OTHERWISE:
-#' Check all sorthest paths from start node to any leaf in trajectory
+#' Check all shortest paths from start node to any leaf in trajectory
 #' tree. IF any path passes a node with degree > 3, which is not located
 #' on the backbone, return \code{TRUE}; OTHERWISE: return \code{FALSE}.
 #' @importFrom igraph distances get.shortest.paths degree
 #' @keywords internal
 #' @author Daniel C. Ellwanger
-.needsToBeExpanded <- function(x, g) {
+.needsToBeExpanded <- function(g, cl) {
   D <- igraph::distances(g)
   r <- which(D == max(D), arr.ind=TRUE)
-  r.s <- as.character(states(x)[which(x@useSample)[r]]) #backbone in trajectory graph
-  tg <- stateTrajectoryGraph(x)[[1]]
-  bb <- names(get.shortest.paths(tg, from = r.s[1], to = r.s[2])$vpath[[1]])
-  dg <- degree(tg)
+  r.s <- as.character(cl[r]) #backbone in trajectory graph
+  bb <- names(get.shortest.paths(g, from = r.s[1], to = r.s[2])$vpath[[1]])
+  dg <- degree(g)
   if(any(dg > 3)) {
     return(TRUE)
   } else {
@@ -541,7 +546,7 @@
     l <- l[!l %in% r.s]
 
     doExpand <- vapply(l, FUN = function(z) {
-      n <- names(get.shortest.paths(tg, from = r.s[1], to = z)$vpath[[1]])
+      n <- names(get.shortest.paths(g, from = r.s[1], to = z)$vpath[[1]])
       any(any(dg[n[!n %in% bb]] > 3))
     }, TRUE)
     return(any(doExpand))
@@ -600,13 +605,15 @@
 
   onBackbone <- apply(ordi, 1L, f.isOnLine, slope = -1, intercept = 1)
 
-  # 2. Identify side-branches (all of them have same slope = 1 => identify intercepts)
+  # 2. Identify side-branches
+  # (all of them have same slope = 1 => identify intercepts)
   v <- which(!onBackbone)
   branches <- factor(apply(ordi[v, ], 1L, function(x){round(x[2] - x[1], 5)}))
 
   # 3. Create adjacency matrix
   adjmat <- matrix(0, nrow = nrow(ordi), ncol = nrow(ordi))
-  dmat <- as.matrix(stats::dist(ordi)) #geodmat[seq(nrow(adjmat)), seq(nrow(adjmat))] #
+  dmat <- as.matrix(stats::dist(ordi))
+  #geodmat[seq(nrow(adjmat)), seq(nrow(adjmat))]
 
   #backbone
   cells <- which(onBackbone)
@@ -621,14 +628,16 @@
   for(i in levels(branches)){
     #connect branch cells
     cells <- v[branches == i]
-    start <- cells[which(dmat[cells, cells, drop=FALSE] == max(dmat[cells, cells, drop=FALSE]),
+    start <- cells[which(dmat[cells, cells, drop=FALSE] ==
+                         max(dmat[cells, cells, drop=FALSE]),
                          arr.ind=TRUE)[1, 1]]
     traj <- cells[order(dmat[start, cells])]
     for(i in seq(length(traj) - 1)) {
       adjmat[traj[i], traj[i + 1]] <- adjmat[traj[i + 1], traj[i]] <- 1
     }
     #connect to backbone
-    anker <- which(dmat[cells, onBackbone, drop=FALSE] == min(dmat[cells, onBackbone, drop=FALSE]),
+    anker <- which(dmat[cells, onBackbone, drop=FALSE] ==
+                   min(dmat[cells, onBackbone, drop=FALSE]),
                    arr.ind=TRUE)[1, ]
     anker <- c(cells[anker[1]], which(onBackbone)[anker[2]])
     adjmat[anker[1], anker[2]] <- adjmat[anker[2], anker[1]] <- 1

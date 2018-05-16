@@ -21,29 +21,32 @@ enrichment.test(sample_true, sample_size, pop_true, pop_size,
 }
 \value{
 A list containing the following components:
-
-\item{\code{p.value}}{P-value of the test}
-
-\item{\code{odds.ratio}}{Odds ratio}
-
-\item{\code{conf.int}}{Confidence interval for the odds ratio (only shown with method="fisher")}
-
-\item{\code{method}}{Used statistical test}
+  \item{\code{p.value}}{P-value of the test}
+  \item{\code{odds.ratio}}{Odds ratio}
+  \item{\code{conf.int}}{Confidence interval for the odds ratio
+  (only shown with method="fisher")}
+  \item{\code{method}}{Used statistical test}
 }
 \description{
 Statistical enrichment analysis using either a Hypergeometric
 or Fisher's test
 }
 \details{
-Hypergeometric or one-tailed Fisher exact test is useful for enrichment analyses.
-For example, one needs to estimate which features are enriched among
+Hypergeometric or one-tailed Fisher exact test is
+useful for enrichment analyses.
+For example, one needs to estimate which features
+are enriched among
 a set of instances sampled from a population.
 }
 \examples{
 # Population has 13 of total 52 instances positive for a given feature
 # Sample has 1 of total 5 instances positive for a given feature
 # Test for significance of enrichment in sample
-enrichment.test(sample_true=1, sample_size=5, pop_true=13, pop_size=52, method="fisher")
+enrichment.test(sample_true=1, sample_size=5,
+                pop_true=13, pop_size=52, method="fisher")
+}
+\seealso{
+\code{Hypergeometric} and \code{fisher.test}
 }
 \author{
 Daniel C. Ellwanger

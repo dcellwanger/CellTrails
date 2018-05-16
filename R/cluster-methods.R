@@ -1,23 +1,23 @@
 #' DEF: Find states
 #'
 #' For details see \code{findStates}
+#' @param X Expression matrix
+#' @param ordi Ordination of samples
 #' @keywords internal
-#' @import Biobase
 #' @importFrom graphics par plot points abline axis box text
 #' @importFrom maptree clip.clust draw.clust
 #' @importFrom cba order.optimal
 #' @importFrom dendextend rotate
 #' @author Daniel C. Ellwanger
-.findStates_def <- function(x, link.method="ward.D2", min.size,
+.findStates_def <- function(X, ordi, link.method="ward.D2", min.size,
                             max.pval=1e-4, min.fc=2, min.g=5, show.plots=FALSE,
                             reverse=FALSE, verbose=FALSE) {
 
-  X <- t(x[x@useFeature, ])
-  d <- stats::dist(CellTrails::latentSpace(x))
-  ordi <- CellTrails::latentSpace(x)
-  if(is.null(rownames(ordi))){
-    rownames(ordi) <- sampleNames(x)
-  }
+  d <- stats::dist(ordi)
+  dimnames(d) <- NULL
+  #if(is.null(rownames(ordi))){
+  #  rownames(ordi) <- colnames(x)
+  #}
 
   res <- list()
 
@@ -29,12 +29,12 @@
   n <- attributes(d)$Size
 
   #find maximal fragmentation
-  hcl <- stats::hclust(d = d, method = link.method)
+  hcl <- stats::hclust(d=d, method=link.method)
   k <- 0
   ms <- rep(NA, n)
   ms[1] <- n
   for(i in (seq_len(n-2+1)+1)) {
-    clsize <- table(stats::cutree(hcl, k = i))
+    clsize <- table(stats::cutree(hcl, k=i))
     ms[i] <- min(clsize)
     if(ms[i] > min.size) {
       k <- i
@@ -53,7 +53,7 @@
   #merge cluster based on differential expression
   rownames(X) <- seq_len(n)
 
-  clclip <- clip.clust(hcl, X, k = k) #prune dendrogram
+  clclip <- clip.clust(hcl, X, k=k) #prune dendrogram
   #plot(clclip)
   #cophenetic distance between cluster
   cldist <- as.matrix(cophenetic(clclip))
@@ -93,14 +93,16 @@
           de <- .diffExpr(X[cl == i, l], X[cl == j, l])
           pvals[l] <- de$p.value
           fc[l] <- median(X[cl == i, l]) - median(X[cl == j, l])
-          #suppressWarnings(pvals[l] <- wilcox.test(X[cl == i, l], X[cl == j, l])$p.value)
+          #suppressWarnings(pvals[l] <- wilcox.test(X[cl == i, l],
+          #                                         X[cl == j, l])$p.value)
         }
         pvals[is.na(pvals)] <- 1
         fc[is.na(fc)] <- 0
         pvals <- p.adjust(pvals, method = "fdr")
         #cat(sum(pvals < max.pval), " ", sum(abs(fc) > min.fc), "\n")
 
-        if(sum(pvals < max.pval & abs(fc) > min.fc) < min.g) { #no difference between clusters => join
+        #no difference between clusters => join
+        if(sum(pvals < max.pval & abs(fc) > min.fc) < min.g) {
           cl[cl == i] <- j
           cldist[i, ] <- cldist[, i] <- NA
 
@@ -108,13 +110,14 @@
             cat("Merged ", i, " in ", j, "\n")
           }
 
-          pos <- which(apply(mrgtree, 1, function(x){sum(x %in% c(-i, -j)) == 2}))
+          pos <- which(apply(mrgtree, 1,
+                             function(x){sum(x %in% c(-i, -j)) == 2}))
 
           f <- apply(mrgtree, 1, function(x){pos %in% x})
           mrgtree[f, ] <- c(-j, mrgtree[f, ][mrgtree[f, ] != pos])
           mrgtree[pos, ] <- c(NA, NA)
 
-          change <- length(unique(cl)) > 1 #continue only if > 2 clusters remain
+          change <- length(unique(cl)) > 1 #continue only if >2 clusters remain
           merge.log[[log.index]] <- c(i, j) #merged i in j
           log.index <- log.index + 1
           break;
@@ -148,26 +151,30 @@
     #calculate optimal ordering of clusters
     lbls <- sort(unique(cl))
     ncl <- length(lbls)
-    #bari <- matrix(NA, ncol = ifelse(is.null(ordi), ncol(X), ncol(ordi)), nrow = ncl)
+    #bari <- matrix(NA, ncol = ifelse(is.null(ordi),
+    #                                 ncol(X), ncol(ordi)), nrow = ncl)
+
     dmat <- matrix(ncol = ncl, nrow = ncl)
     cl <- (-cl)
     for(i in seq(ncl)) {
       cl[cl == -lbls[i]] <- i
       mrgtree[mrgtree == -lbls[i]] <- -i
       #if(is.null(ordi)) {
-      #   bari[i, ] <- med(X[cl == i, ], method = "Spatial")$median  #apply(X[cl == i, ], 2L, mean, na.rm = T)
+      #   bari[i, ] <- med(X[cl == i, ], method = "Spatial")$median
+      #   apply(X[cl == i, ], 2L, mean, na.rm = T)
       # } else {
-      #   bari[i, ] <- med(ordi[cl == i, ], method = "Spatial")$median #apply(ordi[cl == i, ], 2L, mean, na.rm = T)
+      #   bari[i, ] <- med(ordi[cl == i, ], method = "Spatial")$median
+      #   apply(ordi[cl == i, ], 2L, mean, na.rm = T)
       # }
 
       if(link.method == "average") {
         for(j in seq(ncl)) {
           if(is.null(ordi)) {
-            dmat[i, j] <- dmat[j, i] <- f.average_linkage_dist(a=X[cl == i,],
-                                                               b=X[cl == j,])
+            ald <- f.average_linkage_dist(a=X[cl == i,], b=X[cl == j,])
+            dmat[i, j] <- dmat[j, i] <- ald
           } else {
-            dmat[i, j] <- dmat[j, i] <- f.average_linkage_dist(a=ordi[cl == i, ],
-                                                               b=ordi[cl == j, ])
+            ald <- f.average_linkage_dist(a=ordi[cl == i, ], b=ordi[cl == j, ])
+            dmat[i, j] <- dmat[j, i] <- ald
           }
         }
       }
@@ -176,10 +183,15 @@
     if(link.method != "average") {
       #amat <- as.matrix(dist(f.adjust_cluster_center(ordi, cl)))
       barycenters <- as.matrix(dist(aggregate(ordi, list(cl), mean)[, -1]))
-      #g <- igraph::graph_from_adjacency_matrix(amat, mode = "undirected", weighted = T)
+
+      #g <- igraph::graph_from_adjacency_matrix(amat,
+      #                                         mode="undirected", weighted=T)
       #res$mst <- igraph::mst(g)
       #dmat <- distances(igraph::mst(g))
-      #res$mcentres <- t(sapply(seq(max(cl)), function(i){med(ordi[cl == i, ], method = "Spatial")$median}))
+      #res$mcentres <- t(sapply(seq(max(cl)),
+      #                         function(i){med(ordi[cl == i, ],
+      #                                         method = "Spatial")$median}))
+
       dmat <- as.matrix(stats::dist(barycenters))
     }
 
@@ -195,7 +207,8 @@
       cells <- cells[order(hcl$order[cells])]
       hcd.new.order <- c(hcd.new.order, cells)
     }
-    hcd <- rotate(hcd, order = as.character(hcd.new.order)) #rownames(ordi)[hcd.new.order]
+    hcd <- rotate(hcd, order = as.character(hcd.new.order))
+    #rownames(ordi)[hcd.new.order]
   }
 
   # Bugfixing
@@ -227,7 +240,7 @@
   f.find_cluster_plots <- function(i) {
     if(i == 1) {
       par(mar = c(3, 3, 0.5, 0.5), mgp = c(2, 0.65, 0))
-      plot(seq_len(k), ms[seq_len(k)], ylab = expression("<" * italic(S) * ">"),
+      plot(seq_len(k), ms[seq_len(k)], ylab=expression("<" * italic(S) * ">"),
            type = "b",
            xlab = "Number of clusters", col = "blue", axes = FALSE,
            ylim = c(0, max(ms[seq_len(k)])))
@@ -279,13 +292,17 @@
   res
 
   # Update object
-  states <- paste0("S", cl)
-  s <- unique(states)
-  o <- order(as.numeric(substring(s, 2)))
-  phenoData(x)$STATE <- factor(states, levels = s[o])
+  s <- unique(cl)
+  o <- order(s)
+  s <- paste0("S", s)
+  sts <- paste0("S", cl)
+
+  #sts <- paste0("S", cl)
+  #s <- unique(sts)
+  #o <- order(as.numeric(substring(s, 2)))
+  #phenoData(x)$STATE <- factor(sts, levels = s[o])
 
   message("Found ", length(s), " states.")
-
-  #factor(paste0("S", cl), levels = paste0("S", seq(max(cl))))
-  x
+  factor(sts, levels=s[o])
+  #x
 }

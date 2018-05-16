@@ -3,61 +3,44 @@
 \docType{methods}
 \name{trailNames}
 \alias{trailNames}
-\alias{trailNames,CellTrailsSet-method}
+\alias{trailNames,SingleCellExperiment-method}
 \title{GET trail names}
 \usage{
 trailNames(object)
 }
 \arguments{
-\item{object}{An object of class \code{CellTrailsSet}}
+\item{object}{An object of class \code{SingleCellExperiment}}
 }
 \value{
 A \code{character} vector
 }
 \description{
-Get names of trails from \code{CellTrailsSet} object.
+Function to extract trail names from \code{SingleCellExperiment}
+object.
 }
 \examples{
 # Generate example data
-dat <- exDat()
-
-# Create container
-ctset <- as.CellTrailsSet(dat)
-
-# Embed samples
-ctset <- embedSamples(ctset)
-
-# Find spectrum
-spectr <- findSpectrum(ctset, frac=25)
+sce <- exDat()
 
 # Reduce dimensionality
-ctset <- reduceDimensions(ctset, spectr)
+res <- embedSamples(sce)
+d <- findSpectrum(res$eigenvalues, frac=30)
+latentSpace(sce) <- res$components[, d]
 
-# Find states
-ctset <- findStates(ctset, max_pval=1e-3, min_feat=4)
-
-# Connect states
-ctset <- connectStates(ctset, l=20)
-
-# Select trajectory
-ctset <- selectTrajectory(ctset, component=1)
+# Find and connect states
+states(sce) <- findStates(sce, max_pval=1e-3, min_feat=4)
+sce <- connectStates(sce, l=15)
 
 # Align samples to trajectory
-ctset <- fitTrajectory(ctset)
+sce <- selectTrajectory(sce, component=1)
+sce <- fitTrajectory(sce)
 
-# For illustration purposes a layout for each example dataset
-# is contained in this package.
-# The function trajectoryLayout allows to set a trajectory layout
-# to the object; the parameter adjust='TRUE' adjusts the layout
-# according to the computed pseudotime
-trajectoryLayout(ctset, adjust=TRUE) <- trajLayouts$example
-
-# Define trail
-ctset <- addTrail(ctset, from="H1", to="H3", name="Tr1") # Define trail
-ctset <- addTrail(ctset, from="H1", to="H4", name="Tr2") # Define trail
-
-# Get trail names
-trailNames(ctset)
+# Add trail
+sce <- addTrail(sce, "H1", "H2", "myTrail")
+trailNames(sce)
+}
+\seealso{
+\code{addTrail}
 }
 \author{
 Daniel C. Ellwanger

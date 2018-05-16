@@ -3,23 +3,23 @@
 \docType{methods}
 \name{connectStates}
 \alias{connectStates}
-\alias{connectStates,CellTrailsSet-method}
+\alias{connectStates,SingleCellExperiment-method}
 \title{Connect trajectory states}
 \usage{
-connectStates(ctset, l = 10)
+connectStates(sce, l = 10)
 }
 \arguments{
-\item{ctset}{A \code{CellTrailsSet} object}
+\item{sce}{A \code{SingleCellExperiment} object}
 
 \item{l}{Neighborhood size (default: 10)}
 }
 \value{
-An updated \code{CellTrailsSet} object
+An updated \code{SingleCellExperiment} object
 }
 \description{
 Connects states using maximum interface scoring. For each state an
 interface score is defined by the relative distribution of states in
-its local neighborhood. A filter is applied to remove outliers
+its local l-neighborhood. A filter is applied to remove outliers
 (ie. false positive neighbors). States are spanned by
 maximizing the total interface score.
 }
@@ -27,22 +27,22 @@ maximizing the total interface score.
 CellTrails assumes that the arrangement of samples
 in the computed lower-dimensional latent space constitutes a trajectory.
 Therefore, CellTrails aims to place single samples along a maximum parsimony
-tree, which resembles a
-branching developmental continuum. Distances between samples in the latent
-space are computed using the Euclidean distance. \cr \cr
-To avoid overfitting and to facilitate
-the accurate identification of bifurcations, CellTrails simplifies the
-problem. Analogous to the idea of a ‘broken-stick regression’, CellTrails
-groups the data and perform linear
+tree, which resembles a branching developmental continuum. Distances between
+samples in the latent space are computed using the Euclidean distance.
+\cr \cr
+To avoid overfitting and to facilitate the accurate identification of
+bifurcations, CellTrails simplifies the problem. Analogous to the idea of
+a ‘broken-stick regression’, CellTrails groups the data and perform linear
 fits to separate trajectory segments, which are determined by the branching
 chronology of states. This leaves the optimization problem of finding the
 minimum number of associations between states while maximizing the total
 parsimony, which in theory can be solved by any minimum spanning tree
 algorithm. CellTrails adapts this concept by assuming that adjacent states
 should be located nearby and therefore share a relative high number of
-neighboring cells. \cr \cr
+neighboring cells.
+\cr \cr
 Each state defines a submatrix of samples that is composed of a distinct
-set of data vectors, i.e. each state is a distinct set of samples
+set of data vectors, i.e., each state is a distinct set of samples
 represented in the lower-dimensional space. For each state CellTrails
 identifies the \emph{l}-nearest neighbors to each state's data
 vector and takes note of their state memberships and distances.
@@ -53,7 +53,8 @@ CellTrails removes spurious neighbors (outliers),
 whose distance to a state is greater than or equal to
 \deqn{e^{median(log(D)) + MAD(log(D))}}
 where D is a matrix containing all collected {l}-nearest neighbor sample
-distances to any state in the latent space. \cr \cr
+distances to any state in the latent space.
+\cr \cr
 For each state CellTrails calculates the relative frequency on
 how often a state occurs in the neighborhood
 of a given state, which is refered to as the interface cardinality scores.
@@ -86,38 +87,31 @@ needs to be called first.
 }
 \examples{
 # Generate example data
-dat <- exDat()
-
-# Create container
-ctset <- as.CellTrailsSet(dat)
-
-# Embed samples
-ctset <- embedSamples(ctset)
-
-# Find spectrum
-spectr <- findSpectrum(ctset, frac=25)
+sce <- exDat()
 
 # Reduce dimensionality
-ctset <- reduceDimensions(ctset, spectr)
+res <- embedSamples(sce)
+d <- findSpectrum(res$eigenvalues, frac=30)
+latentSpace(sce) <- res$components[, d]
 
 # Find states
-ctset <- findStates(ctset, max_pval=1e-3, min_feat=4)
+states(sce) <- findStates(sce, max_pval=1e-3, min_feat=4)
 
 # Connect states
-ctset <- connectStates(ctset, l=20)
-ctset
+sce <- connectStates(sce, l=15)
 
 \dontrun{
-plot(ctset, type = "stateTrajectoryGraph",
-    feature_name="feature_1", component=1)
-plot(ctset, type="stateTrajectoryGraph", pheno_type="age",
-    component=1, point_size=2)
+plotStateTrajGraph(sce, featureName="feature_1", component=1)
+plotStateTrajGraph(sce, phenoType="age", component=1, point_size=2)
 }
 }
 \references{
 Kruskal, J.B. (1956). On the shortest
 spanning subtree of a graph and the traveling salesman problem.
 Proc Amer Math Soc 7, 48-50.
+}
+\seealso{
+\code{findStates} \code{states}
 }
 \author{
 Daniel C. Ellwanger

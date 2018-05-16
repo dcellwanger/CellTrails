@@ -3,16 +3,16 @@
 \docType{methods}
 \name{fitTrajectory}
 \alias{fitTrajectory}
-\alias{fitTrajectory,CellTrailsSet-method}
+\alias{fitTrajectory,SingleCellExperiment-method}
 \title{Align samples to trajectory}
 \usage{
-fitTrajectory(ctset)
+fitTrajectory(sce)
 }
 \arguments{
-\item{ctset}{A \code{CellTrailsSet} object}
+\item{sce}{A \code{SingleCellExperiment} object}
 }
 \value{
-An updated \code{CellTrailsSet} object
+An updated \code{SingleCellExperiment} object
 }
 \description{
 Orthogonal projection of each sample to the trajectory backbone.
@@ -25,13 +25,13 @@ through \emph{k} mediancentres (Bedall & Zimmermann, 1979) of adjacent
 states. Then, a fitting function is learned. Each sample is projected to
 its most proximal straight line passing through the mediancentre of its
 assigned state. Here, whenever possible, projections on line segments
-\emph{between} two mediancentres are preferred. Residuals (fitting deviations)
-are given by the Euclidean distance between the sample's location and the
-straight line. Finally, a weighted acyclic trajectory graph can be constructed
-based on each sample’s position along its straight
-line. In addition, data vectors are connected to mediancentres to enable
-the proper determination of branching points. Each edge is weighted by the
-distance between each node
+\emph{between} two mediancentres are preferred. Residuals
+(fitting deviations) are given by the Euclidean distance between the
+sample's location and the straight line. Finally, a weighted acyclic
+trajectory graph can be constructed based on each sample’s position along
+its straight line. In addition, data vectors are connected to mediancentres
+to enable the proper determination of branching points. Each edge is
+weighted by the distance between each node
 (sample) after orthogonal projection.
 \cr \cr
 Of note, the fitting function implies potential side branches in the
@@ -47,39 +47,35 @@ and \code{selectTrajectory} need to be run first.
 }
 \examples{
 # Generate example data
-dat <- exDat()
-
-# Create container
-ctset <- as.CellTrailsSet(dat)
-
-# Embed samples
-ctset <- embedSamples(ctset)
-
-# Find spectrum
-spectr <- findSpectrum(ctset, frac=25)
+sce <- exDat()
 
 # Reduce dimensionality
-ctset <- reduceDimensions(ctset, spectr)
+res <- embedSamples(sce)
+d <- findSpectrum(res$eigenvalues, frac=30)
+latentSpace(sce) <- res$components[, d]
 
 # Find states
-ctset <- findStates(ctset, max_pval=1e-3, min_feat=4)
+states(sce) <- findStates(sce, max_pval=1e-3, min_feat=4)
 
 # Connect states
-ctset <- connectStates(ctset, l=20)
+sce <- connectStates(sce, l=15)
 
 # Select trajectory
-ctset <- selectTrajectory(ctset, component=1)
+sce <- selectTrajectory(sce, component=1)
 
 # Align samples to trajectory
-ctset <- fitTrajectory(ctset)
+sce <- fitTrajectory(sce)
 
 \dontrun{
-plot(ctset, type="trajectoryFit")
+plotTrajectoryFit(sce)
 }
 }
 \references{
 Bedall, F.K., and Zimmermann, H. (1979).
 Algorithm AS143. The mediancentre. Appl Statist 28, 325-328.
+}
+\seealso{
+\code{connectStates} \code{selectTrajectory}
 }
 \author{
 Daniel C. Ellwanger
