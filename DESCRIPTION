@@ -44,10 +44,12 @@ Imports:
   splines,
   utils
 Suggests: 
+  AnnotationDbi,
   destiny,
   scater,
   scran,
   knitr,
+  org.Mm.eg.db,
   rmarkdown
 RoxygenNote: 6.0.1
 biocViews: 
