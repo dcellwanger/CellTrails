@@ -1,2 +1,2 @@
-#' @import stats methods BiocStyle SingleCellExperiment GenomeInfoDbData
+#' @import stats methods BiocStyle SingleCellExperiment
 NULL
