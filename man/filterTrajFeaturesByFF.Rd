@@ -6,7 +6,8 @@
 \alias{filterTrajFeaturesByFF,SingleCellExperiment-method}
 \title{Filter features by Fano Factor}
 \usage{
-filterTrajFeaturesByFF(sce, threshold = 1.7, min_expr = 0, design = NULL)
+filterTrajFeaturesByFF(sce, threshold = 1.7, min_expr = 0, design = NULL,
+  show_plot = TRUE)
 }
 \arguments{
 \item{sce}{An \code{SingleCellExperiment} object}
@@ -15,8 +16,9 @@ filterTrajFeaturesByFF(sce, threshold = 1.7, min_expr = 0, design = NULL)
 
 \item{min_expr}{Minimum average expression of feature to be considered}
 
-\item{design}{A numeric matrix describing the factors that should be blocked
-for filter procedure (default: 0)}
+\item{design}{A numeric matrix describing the factors that should be blocked}
+
+\item{show_plot}{Indicates if plot should be shown (default: TRUE)}
 }
 \value{
 A \code{character} vector

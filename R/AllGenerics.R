@@ -8,6 +8,7 @@ NULL
 #' @param sce An \code{SingleCellExperiment} object
 #' @param threshold Minimum number of samples; if value < 1 it is interpreted
 #' as fraction, otherwise as absolute sample count
+#' @param show_plot Indicates if plot should be shown (default: TRUE)
 #' @return A \code{character} vector
 #' @details The detection level denotes the fraction of samples in which a
 #' feature was detected. For each trajectory feature listed in the
@@ -43,12 +44,12 @@ NULL
 #' @aliases filterTrajFeaturesByDL,SingleCellExperiment-method
 #' @export
 #' @author Daniel C. Ellwanger
-setGeneric("filterTrajFeaturesByDL", function(sce, threshold)
+setGeneric("filterTrajFeaturesByDL", function(sce, threshold, show_plot=TRUE)
   standardGeneric("filterTrajFeaturesByDL"))
 setMethod("filterTrajFeaturesByDL", "SingleCellExperiment",
-          function(sce, threshold){
+          function(sce, threshold, show_plot){
    y <- .exprs(sce[.useFeature(sce), ])
-  .filterTrajFeaturesByDL_def(y=y, threshold=threshold)
+  .filterTrajFeaturesByDL_def(y=y, threshold=threshold, show_plot=show_plot)
 })
 
 #' Filter features by Coefficient of Variation (COV)
@@ -58,6 +59,7 @@ setMethod("filterTrajFeaturesByDL", "SingleCellExperiment",
 #' @param threshold Minimum coefficient of variation;
 #' numeric value between 0 and 1
 #' @param design A numeric matrix describing the factors that should be blocked
+#' @param show_plot Indicates if plot should be shown (default: TRUE)
 #' @return A \code{character} vector
 #' @details For each trajectory feature \emph{x} listed in the
 #' \code{SingleCellExperiment} object the coefficient of variation is
@@ -93,12 +95,14 @@ setMethod("filterTrajFeaturesByDL", "SingleCellExperiment",
 #' @aliases filterTrajFeaturesByCOV,SingleCellExperiment-method
 #' @export
 #' @author Daniel C. Ellwanger
-setGeneric("filterTrajFeaturesByCOV", function(sce, threshold, design=NULL)
+setGeneric("filterTrajFeaturesByCOV", function(sce, threshold,
+                                               design=NULL, show_plot=TRUE)
   standardGeneric("filterTrajFeaturesByCOV"))
 setMethod("filterTrajFeaturesByCOV", "SingleCellExperiment",
-          function(sce, threshold, design){
+          function(sce, threshold, design, show_plot){
   y <- .exprs(sce[.useFeature(sce), ])
-  .filterTrajFeaturesByCOV_def(y=y, threshold=threshold, design)
+  .filterTrajFeaturesByCOV_def(y=y, threshold=threshold, design,
+                               show_plot=show_plot)
 })
 
 #' Filter features by Fano Factor
@@ -109,7 +113,7 @@ setMethod("filterTrajFeaturesByCOV", "SingleCellExperiment",
 #' @param threshold A Z-score cutoff (default: 1.7)
 #' @param min_expr Minimum average expression of feature to be considered
 #' @param design A numeric matrix describing the factors that should be blocked
-#' for filter procedure (default: 0)
+#' @param show_plot Indicates if plot should be shown (default: TRUE)
 #' @return A \code{character} vector
 #' @details To identify the most variable features an unsupervised strategy
 #' that controls for the relationship between a features’s average expression
@@ -152,12 +156,14 @@ setMethod("filterTrajFeaturesByCOV", "SingleCellExperiment",
 #' @export
 #' @author Daniel C. Ellwanger
 setGeneric("filterTrajFeaturesByFF",
-           function(sce, threshold=1.7, min_expr=0, design=NULL)
+           function(sce, threshold=1.7, min_expr=0,
+                    design=NULL, show_plot=TRUE)
   standardGeneric("filterTrajFeaturesByFF"))
 setMethod("filterTrajFeaturesByFF", "SingleCellExperiment",
-          function(sce, threshold, min_expr, design){
+          function(sce, threshold, min_expr, design, show_plot){
   y <- .exprs(sce[.useFeature(sce), ])
-  .filterTrajFeaturesByFF_def(y=y, z=threshold, min_expr=min_expr, design)
+  .filterTrajFeaturesByFF_def(y=y, z=threshold,
+                              min_expr=min_expr, design, show_plot=show_plot)
 })
 
 #' Spectral embedding of biological samples
@@ -1143,9 +1149,10 @@ setMethod("plotStateExpression", "SingleCellExperiment",
 #' ('featureName') or phenotype label ('phenoName')
 #' @param name A character string specifying the featureName or phenoName
 #' @param seed Seed for tSNE computation (default: 1101)
-#' @param perplexity Perplexity parameter for tSNE computation
-#' (default: 30)
-#' @return A \code{ggplot} object
+#' @param perplexity Perplexity parameter for tSNE computation (default: 30)
+#' @param only_plot Indicates if only plot should be shown or the tSNE result
+#' should be returned (default: FALSE)
+#' @return A \code{ggplot} object or a list with the tSNE results and the plot
 #' @details Visualizes the learned lower-dimensional manifold in two dimensions
 #' using an approximation obtained by Barnes-Hut implementation of
 #' t-Distributed Stochastic Neighbor Embedding
@@ -1177,11 +1184,12 @@ setMethod("plotStateExpression", "SingleCellExperiment",
 #' @author Daniel C. Ellwanger
 setGeneric("plotManifold", function(sce,
                                     color_by=c("phenoName", "featureName"),
-                                    name, seed=1101, perplexity=30)
+                                    name, seed=1101, perplexity=30,
+                                    only_plot=FALSE)
   standardGeneric("plotManifold"))
 setMethod("plotManifold", "SingleCellExperiment",
           function(sce, color_by=c("phenoName", "featureName"),
-                   name, seed, perplexity){
+                   name, seed, perplexity, only_plot){
   #Fetch plot color data
   dat <- .validatePlotParams(sce, color_by=color_by, name=name)
   #Fetch tSNE data
@@ -1197,7 +1205,9 @@ setMethod("plotManifold", "SingleCellExperiment",
                           axis_label = "CellTrails tSNE",
                           type="raw", setND=(dat$color_by=="featurename"))
   print(gp)
-  list(tsne=list(X=X, seed=seed, perplexity=perplexity), plot=gp)
+  if(!only_plot) {
+    list(tsne=list(X=X, seed=seed, perplexity=perplexity), plot=gp)
+  }
 })
 
 #' Visualize state trajectory graph

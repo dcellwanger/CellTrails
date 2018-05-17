@@ -3,10 +3,11 @@
 #' For details see \code{filterFeaturesByPOD}
 #' @param y An expression vector
 #' @param threshold numeric cutoff value
+#' @param show_plot Show plot?
 #' @import ggplot2
 #' @keywords internal
 #' @author Daniel C. Ellwanger
-.filterTrajFeaturesByDL_def <- function(y, threshold) {
+.filterTrajFeaturesByDL_def <- function(y, threshold, show_plot=TRUE) {
   pod <- apply(y, 1L, function(i){sum(i > 0)})
 
   if(threshold >= 1) {
@@ -21,13 +22,15 @@
   dat <- data.frame(X = x.steps, Y = y.ecdf,
                     COLOR = c("Rejected",
                               "Accepted")[(x.steps > threshold) + 1])
-  gp <- ggplot(dat, aes_string(x = "X", y = "Y")) +
-        geom_step(alpha = .5) +
-        geom_point(aes_string(color = "COLOR")) +
-        labs(colour = "Filter") +
-        xlab("Detection level") + ylab("Features (cumulative fraction)") +
-        theme(axis.line = element_line(colour = "black"))
-  print(gp)
+  if(show_plot){
+    gp <- ggplot(dat, aes_string(x = "X", y = "Y")) +
+          geom_step(alpha = .5) +
+          geom_point(aes_string(color = "COLOR")) +
+          labs(colour = "Filter") +
+          xlab("Detection level") + ylab("Features (cumulative fraction)") +
+          theme(axis.line = element_line(colour = "black"))
+    print(gp)
+  }
 
   #Update attribute
   #trajFeatureNames(x) <- names(which(f))
@@ -41,10 +44,12 @@
 #' @param y An expression vector
 #' @param threshold numeric cutoff value
 #' @param design Model matrix
+#' @param show_plot Show plot?
 #' @import ggplot2
 #' @keywords internal
 #' @author Daniel C. Ellwanger
-.filterTrajFeaturesByCOV_def <- function(y, threshold, design=NULL) {
+.filterTrajFeaturesByCOV_def <- function(y, threshold,
+                                         design=NULL, show_plot=TRUE) {
   if(!is.null(design)) {
     message("Blocking nuisance factors ...")
     y <- t(apply(y, 1L, .denoiseExpression, design))
@@ -61,13 +66,15 @@
   dat <- data.frame(X = x.steps, Y = y.ecdf,
                     COLOR = c("Rejected",
                               "Accepted")[(x.steps > threshold) + 1])
-  gp <- ggplot(dat, aes_string(x = "X", y = "Y")) +
-    geom_step(alpha = .5) +
-    geom_point(aes_string(color = "COLOR")) +
-    labs(colour = "Filter") +
-    xlab("Coefficient of variation") + ylab("Features (cumulative fraction)") +
-    theme(axis.line = element_line(colour = "black"))
-  print(gp)
+  if(show_plot){
+    gp <- ggplot(dat, aes_string(x = "X", y = "Y")) +
+      geom_step(alpha = .5) +
+      geom_point(aes_string(color = "COLOR")) +
+      labs(colour = "Filter") +
+      xlab("Coefficient of variation") + ylab("Features (cumulative fraction)") +
+      theme(axis.line = element_line(colour = "black"))
+    print(gp)
+  }
 
   #Update attributes
   #trajectoryFeatures(x) <- names(which(f))
@@ -82,10 +89,12 @@
 #' @param z A cutoff z-score
 #' @param min_expr Minimum expression level
 #' @param design Model matrix
+#' @param show_plot Show plot?
 #' @import ggplot2
 #' @keywords internal
 #' @author Daniel C. Ellwanger
-.filterTrajFeaturesByFF_def <- function(y, z, min_expr=0, design=NULL) {
+.filterTrajFeaturesByFF_def <- function(y, z, min_expr=0,
+                                        design=NULL, show_plot=TRUE) {
   if(!is.null(design)) {
     message("Blocking nuisance factors ...")
     y <- t(apply(y, 1L, .denoiseExpression, design))
@@ -111,13 +120,15 @@
 
   #Diagnostic plot
   dat <- data.frame(mean = stat.mean, dispersion = stat.disp, f = f)
-  gp <- ggplot() +
-        geom_point(data = dat, aes_string(x = "mean", y = "dispersion",
-                                          color = "f")) +
-        theme(axis.line = element_line(colour = "black")) +
-        labs(colour = "Filter") +
-        xlab("Mean") + ylab("Fano factor")
-  print(gp)
+  if(show_plot){
+    gp <- ggplot() +
+          geom_point(data = dat, aes_string(x = "mean", y = "dispersion",
+                                            color = "f")) +
+          theme(axis.line = element_line(colour = "black")) +
+          labs(colour = "Filter") +
+          xlab("Mean") + ylab("Fano factor")
+    print(gp)
+  }
 
   #Update attribute
   #trajectoryFeatures(x) <- names(which(f3))

@@ -7,7 +7,7 @@
 \title{Visualize the learned manifold}
 \usage{
 plotManifold(sce, color_by = c("phenoName", "featureName"), name,
-  seed = 1101, perplexity = 30)
+  seed = 1101, perplexity = 30, only_plot = FALSE)
 }
 \arguments{
 \item{sce}{A \code{SingleCellExperiment} object}
@@ -19,11 +19,13 @@ plotManifold(sce, color_by = c("phenoName", "featureName"), name,
 
 \item{seed}{Seed for tSNE computation (default: 1101)}
 
-\item{perplexity}{Perplexity parameter for tSNE computation
-(default: 30)}
+\item{perplexity}{Perplexity parameter for tSNE computation (default: 30)}
+
+\item{only_plot}{Indicates if only plot should be shown or the tSNE result
+should be returned (default: FALSE)}
 }
 \value{
-A \code{ggplot} object
+A \code{ggplot} object or a list with the tSNE results and the plot
 }
 \description{
 Method visualizes an approximation of the manifold in the latent space

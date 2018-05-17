@@ -6,13 +6,15 @@
 \alias{filterTrajFeaturesByDL,SingleCellExperiment-method}
 \title{Filter trajectory features by Detection Level (DL)}
 \usage{
-filterTrajFeaturesByDL(sce, threshold)
+filterTrajFeaturesByDL(sce, threshold, show_plot = TRUE)
 }
 \arguments{
 \item{sce}{An \code{SingleCellExperiment} object}
 
 \item{threshold}{Minimum number of samples; if value < 1 it is interpreted
 as fraction, otherwise as absolute sample count}
+
+\item{show_plot}{Indicates if plot should be shown (default: TRUE)}
 }
 \value{
 A \code{character} vector

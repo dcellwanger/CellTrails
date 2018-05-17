@@ -6,7 +6,7 @@
 \alias{filterTrajFeaturesByCOV,SingleCellExperiment-method}
 \title{Filter features by Coefficient of Variation (COV)}
 \usage{
-filterTrajFeaturesByCOV(sce, threshold, design = NULL)
+filterTrajFeaturesByCOV(sce, threshold, design = NULL, show_plot = TRUE)
 }
 \arguments{
 \item{sce}{An \code{SingleCellExperiment} object}
@@ -15,6 +15,8 @@ filterTrajFeaturesByCOV(sce, threshold, design = NULL)
 numeric value between 0 and 1}
 
 \item{design}{A numeric matrix describing the factors that should be blocked}
+
+\item{show_plot}{Indicates if plot should be shown (default: TRUE)}
 }
 \value{
 A \code{character} vector

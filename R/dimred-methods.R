@@ -217,9 +217,9 @@
   ze <- apply(M, 1L, var)
   n_ze <- sum(ze == 0)
   if(n_ze > 0) {
-    warning(n_ze, " feature(s) do(es) not encode valuable information (i.e., has/have ",
-            "constant expression over all samples) and were therefore ",
-            "neglected.")
+    warning(n_ze, " feature(s) do(es) not encode valuable information ",
+            "(i.e., has/have constant expression over all samples) and ",
+            "was/were therefore neglected.")
   }
 
   ze <- ze > 0
