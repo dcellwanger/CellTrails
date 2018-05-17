@@ -29,6 +29,7 @@ Imports:
   depth,
   dtw,
   EnvStats,
+  GenomeInfoDbData,
   ggplot2,
   ggrepel,
   grDevices,
