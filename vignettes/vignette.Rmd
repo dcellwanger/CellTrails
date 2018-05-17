@@ -447,15 +447,6 @@ The second dataset, `exBundle`, contains transcript expression profiles of 183 g
 
 Ellwanger DC, Scheibinger M, Dumont RA, Barr-Gillespie PG, and Heller S. "Transcriptional dynamics of hair-bundle morphogenesis revealed with CellTrails". *Cell Reports* Date;Issue. doi: 
 
-<!-- For illustration purposes, we assumed that we were able to observe for some samples their "maturity" indirectly by a discrete cellular characteristic (e.g., the FM1-45 dye uptake by mature sensory hair cells, or the cell stage during embryogenesis). Please note that this metainformation is _not_ used by _CellTrails_ for trajectory reconstruction, but it helps to better understand the workflow described in this vignette. 
-```{r, eval=TRUE}
-# Create SingleCellExperiment object
-exSmall <- exDat()
-show(exSmall)
-head(exSmall$age)
-```
--->
-
 ```{r, eval=TRUE}
 # Load bundle data
 exBundle <- readRDS(system.file("exdata", "bundle.rds", package="CellTrails"))
@@ -949,7 +940,7 @@ Next, we layout the graph. Since the trajectory resembles a tree structre, we us
 
 ```{r, eval=TRUE, echo=FALSE}
 pth <- system.file("img", "yEd_2-3.gif", package="CellTrails") #"img/yEd_2-3.gif"
-knitr::include_graphics(path=pth) #, dpi=300 system.file("doc", "yEd_2.gif", package="CellTrails")) #
+knitr::include_graphics(path=pth)
 ```
 
 Let's run the algorithm to compute the layout:
@@ -964,7 +955,6 @@ knitr::include_graphics(path=pth)
 ```{r, eval=TRUE, echo=FALSE}
 pth <- system.file("img", "yEd_5-6.gif", package="CellTrails") #"img/yEd_6-7.gif"
 knitr::include_graphics(path=pth)
-#knitr::include_graphics(path="img/yEd_8.gif") #, dpi=300 system.file("doc", "yEd_8.gif", package="CellTrails")) #
 ```
 
 Finally, the file can be saved via _File_ $\rightarrow$ _Save_ and reimported to R. 
@@ -1554,82 +1544,9 @@ In this section, we illustrate that a *CellTrails* analysis can be performed in 
 This dataset consists of 183 features and 1,008 samples. The computation time of the whole protocol as listed above took less then two minutes. Let's assume that computing the layout takes about two minutes (starting *yEd*, running the layouter, saving the file), then the total runtime is up to five minutes.
 
 <!-- test with proc.time(); ... ; ptm <- proc.time() -->
-<!-- 
-```{r, echo=FALSE}
-f <- matrix(c("**Total Computation**", "**66.89**",
-              "`CellTrailsSet`", "0.12",
-              "`embedSamples`", "35.77",
-              "`findSpectrum`", "0.01",
-              "`reduceDimensions`", "0.00",
-              "`findStates`", "9.67",
-              "`connectStates`", "0.26",
-              "`selectTrajectory`", "0.00", 
-              "`fitTrajectory`", "2.18",
-              "`write.ygraphml`", "1.68",
-              "`read.ygraphml`", "0.17",
-              "`addTrail`", "0.01",
-              "`contrastTrailExpr`", "17.02",
-              "**Total Visualization**", "**11.41**",
-              "`plot(ctspec)`", "0.01",
-              "`plot(ctset, type='stateSize')`", "0.01",
-              "`plot(ctset, type='stateExpression')`", "0.01",
-              "`plot(ctset, type='latentSpace')`", "7.59",
-              "`plot(ctset, type='latentSpace', viz)`", "0.01",
-              "`plot(ctset, type='stateTrajectoryGraph', pheno_type)`", "1.02",
-              "`plot(ctset, type='stateTrajectoryGraph', feature_name)`", "0.08", 
-              "`plot(ctset, type='trajectoryFit')`", "0.51",
-              "`plot(ctset, type='map', pheno_type)`", "0.02",
-              "`plot(ctset, type='map', feature_name)`", "2.08",
-              "`plot(ctset, type='trailblazing')`", "0.02",
-              "`plot(ctset, type='trail')`", "0.02",
-              "`plot(ctset, type='dynamic')`", "0.03"), byrow=TRUE, ncol=2)
-df <- data.frame(f)
-knitr::kable(df, col.names=c("Function", "Elapsed time (seconds)"), align=c("l", "r"))
-```
-
-Total time: about one to two minutes. Let's assume that computing the layout takes about two minutes (starting *yEd*, running the layouter, saving the file), then the total runtime is up to five minutes.
--->
 
 ### Protocol: Mouse P1 Utricle Data
 This dataset consists of 14,313 features and 120 samples. The computation time of the whole protocol as listed above (with parallelization of the inter-trail dynamics comparison) took less then seven minutes. Let's assume that computing the layout takes about two minutes (starting *yEd*, running the layouter, saving the file), then the total runtime is up to 10 minutes.
-
-<!--
-```{r, echo=FALSE}
-f <- matrix(c("**Total Computation**", "**620.759**",
-              "`CellTrailsSet`", "0.11",
-              "`filterFeaturesByDL`", "1.36",
-              "`filterFeaturesByCOV`", "2.02",
-              "`filterFeaturesByFF`", "1.50",
-              "`embedSamples`", "1.19",
-              "`findSpectrum`", "0.00",
-              "`reduceDimensions`", "0.00",
-              "`findStates`", "6.77",
-              "`connectStates`", "0.01",
-              "`fitTrajectory`", "0.26",
-              "`write.ygraphml`", "0.20",
-              "`read.ygraphml`", "0.17",
-              "`addTrail`", "0.01",
-              "`contrastTrailExpr`*", "607.159",
-              "**Total Visualization**", "**2.24**",
-              "`plot(ctspec)`", "0.01",
-              "`plot(ctset, type='stateSize')`", "0.01",
-              "`plot(ctset, type='stateExpression')`", "0.01",
-              "`plot(ctset, type='latentSpace')`", "0.87",
-              "`plot(ctset, type='latentSpace', viz)`", "0.02",
-              "`plot(ctset, type='stateTrajectoryGraph', pheno_type)`", "0.43",
-              "`plot(ctset, type='stateTrajectoryGraph', feature_name)`", "0.08", 
-              "`plot(ctset, type='trajectoryFit')`", "0.02",
-              "`plot(ctset, type='map', pheno_type)`", "0.01",
-              "`plot(ctset, type='map', feature_name)`", "0.71",
-              "`plot(ctset, type='trailblazing')`", "0.01",
-              "`plot(ctset, type='trail')`", "0.03",
-              "`plot(ctset, type='dynamic')`", "0.03"), byrow=TRUE, ncol=2)
-df <- data.frame(f)
-knitr::kable(df, col.names=c("Function", "Elapsed time (seconds)"), align=c("l", "r"))
-```
-
-Total time: about 10 to 11 minutes. Let's assume that computing the layout takes about two minutes (starting *yEd*, running the layouter, saving the file), then the total runtime is up to 15 minutes. Of note, the runtime of `contrastTrailExpr` can be reduced to about 4 minutes (241.95s) from about 10 minutes using parallel computing.
---> 
 
 ## Session Info
 We used _yEd_ version 3.14.4.  
