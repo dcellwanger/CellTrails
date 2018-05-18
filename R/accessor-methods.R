@@ -343,8 +343,8 @@ setMethod(".pheno", "SingleCellExperiment", function(object, name){
 #' @aliases featureNames,SingleCellExperiment-method
 #' @export
 #' @author Daniel C. Ellwanger
-#setGeneric("featureNames", function(object)
-#  standardGeneric("featureNames"))
+setGeneric("featureNames", function(object)
+  standardGeneric("featureNames"))
 setMethod("featureNames", "SingleCellExperiment", function(object){
   rownames(object)})
 
@@ -364,8 +364,8 @@ setMethod("featureNames", "SingleCellExperiment", function(object){
 #' @aliases sampleNames,SingleCellExperiment-method
 #' @export
 #' @author Daniel C. Ellwanger
-#setGeneric("sampleNames", function(object)
-#  standardGeneric("sampleNames"))
+setGeneric("sampleNames", function(object)
+  standardGeneric("sampleNames"))
 setMethod("sampleNames", "SingleCellExperiment", function(object){
   colnames(object)})
 
