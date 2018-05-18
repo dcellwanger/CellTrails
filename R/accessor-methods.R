@@ -1134,7 +1134,7 @@ setMethod("trajLayout<-", "SingleCellExperiment", function(object,
   } else if(all(!rownames(value) %in% trajSampleNames(object))) {
     stop("Rownames of layout do not correspond to trajectory sample names.")
   }
-  colvars <- apply(value[, 1:2], 2L, var)
+  colvars <- apply(value[, seq_len(2)], 2L, var)
   if(sum(colvars)  == 0) {
     stop("All data points have same coordiates.")
   } else if(colvars[1] == 0) { #make diagonal for linear trajectory
@@ -1144,7 +1144,7 @@ setMethod("trajLayout<-", "SingleCellExperiment", function(object,
   }
 
   # Run
-  X <- value[, 1:2]
+  X <- value[, seq_len(2)]
 
   if(adjust){
     X <- .adjustLayoutByPtime(object, X)
