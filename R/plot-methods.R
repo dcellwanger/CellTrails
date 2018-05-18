@@ -529,8 +529,8 @@
   edgelist <- data.frame(X1=V(g)[edgelist[,1]]$sampleName,
                          X2=V(g)[edgelist[,2]]$sampleName,
                          stringsAsFactors=FALSE)
-  edges <- data.frame(X[edgelist[,1], 1:2],
-                      X[edgelist[,2], 1:2],
+  edges <- data.frame(X[edgelist[,1], seq_len(2)],
+                      X[edgelist[,2], seq_len(2)],
                       row.names = seq(nrow(edgelist)))
 
   #edgelist <- get.edgelist(g)

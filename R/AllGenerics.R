@@ -1049,7 +1049,7 @@ setMethod("contrastTrailExpr", "SingleCellExperiment",
   if(length(trail_names) > 2) {
     warning("Provided more than two trail names. Only the first ",
             "two will be used.")
-    trail_names <- trail_names[1:2]
+    trail_names <- trail_names[seq_len(2)]
   }
   if(length(trail_names) < 2) {
     stop("Please, provide two trail names.")
