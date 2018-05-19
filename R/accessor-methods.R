@@ -340,12 +340,13 @@ setMethod(".pheno", "SingleCellExperiment", function(object, name){
 #'
 #' featureNames(exSCE)
 #' @seealso \code{SingleCellExperiment}
+#' @importFrom Biobase featureNames
 #' @docType methods
 #' @aliases featureNames,SingleCellExperiment-method
 #' @export
 #' @author Daniel C. Ellwanger
-setGeneric("featureNames", function(object)
-  standardGeneric("featureNames"))
+#setGeneric("featureNames", function(object)
+#  standardGeneric("featureNames"))
 setMethod("featureNames", "SingleCellExperiment", function(object){
   rownames(object)})
 
@@ -361,12 +362,13 @@ setMethod("featureNames", "SingleCellExperiment", function(object){
 #'
 #' sampleNames(exSCE)[seq_len(5)]
 #' @seealso \code{SingleCellExperiment}
+#' @importFrom Biobase sampleNames
 #' @docType methods
 #' @aliases sampleNames,SingleCellExperiment-method
 #' @export
 #' @author Daniel C. Ellwanger
-setGeneric("sampleNames", function(object)
-  standardGeneric("sampleNames"))
+#setGeneric("sampleNames", function(object)
+#  standardGeneric("sampleNames"))
 setMethod("sampleNames", "SingleCellExperiment", function(object){
   colnames(object)})
 
