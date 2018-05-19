@@ -1,5 +1,6 @@
 test_findSpectrum <- function(){
-  dat <- CellTrails:::.exDat()
+  data(exSCE)
+  dat <- SingleCellExperiment(assay=list(logcounts=logcounts(exSCE)))
   se <- embedSamples(dat)
 
   #TEST

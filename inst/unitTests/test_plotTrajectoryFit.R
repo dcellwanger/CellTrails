@@ -1,8 +1,7 @@
 test_plotTrajectoryFit <- function() {
-  dat <- CellTrails:::.exDat()
-  RUnit::checkException(plotTrajectoryFit(dat)) #Empty
-
   data(exSCE)
+  dat <- SingleCellExperiment(assay=list(logcounts=logcounts(exSCE)))
+  RUnit::checkException(plotTrajectoryFit(dat)) #Empty
   ggp <- plotTrajectoryFit(exSCE)
   RUnit::checkTrue(length(ggp$layers) > 1)
 }

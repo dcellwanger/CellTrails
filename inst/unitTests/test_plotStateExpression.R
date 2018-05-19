@@ -1,9 +1,8 @@
 test_plotStateExpression <- function() {
-  dat <- CellTrails:::.exDat()
+  data(exSCE)
+  dat <- SingleCellExperiment(assay=list(logcounts=logcounts(exSCE)))
   RUnit::checkException(plotStateExpression(dat, #Empty
                                             feature_name=rownames(dat)))
-
-  data(exSCE)
   RUnit::checkException(plotStateExpression(exSCE,
                                             feature_name="A")) #wrong input
   ggp <- plotStateExpression(exSCE,

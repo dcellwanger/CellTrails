@@ -1,5 +1,7 @@
 test_addTrail <- function(){
-  dat <- CellTrails:::.exDat()
+  data(exSCE)
+  dat <- SingleCellExperiment(assay=list(logcounts=logcounts(exSCE)))
+
   se <- embedSamples(dat)
   d <- findSpectrum(se$eigenvalues, frac=30)
   latentSpace(dat) <- se$components[, d]

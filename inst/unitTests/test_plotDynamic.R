@@ -1,10 +1,9 @@
 test_plotDynamic <- function() {
-  dat <- CellTrails:::.exDat()
-  RUnit::checkException(plotDynamic(dat,
-                                    feature_name=rownames(dat), #wrong input
-                                    trail_name=trailNames(dat)[1]))
-
   data(exSCE)
+  dat <- SingleCellExperiment(assay=list(logcounts=logcounts(exSCE)))
+  RUnit::checkException(plotDynamic(dat,#empty
+                                    feature_name=rownames(dat),
+                                    trail_name=trailNames(dat)[1]))
   RUnit::checkException(plotDynamic(exSCE,
                                     feature_name="A", #wrong input
                                     trail_name=trailNames(exSCE)[1]))

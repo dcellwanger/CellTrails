@@ -7,7 +7,7 @@
 \title{Visualize the learned manifold}
 \usage{
 plotManifold(sce, color_by = c("phenoName", "featureName"), name,
-  seed = 1101, perplexity = 30, only_plot = FALSE)
+  perplexity = 30, seed = 1101, only_plot = FALSE)
 }
 \arguments{
 \item{sce}{A \code{SingleCellExperiment} object}
@@ -17,9 +17,9 @@ plotManifold(sce, color_by = c("phenoName", "featureName"), name,
 
 \item{name}{A character string specifying the featureName or phenoName}
 
-\item{seed}{Seed for tSNE computation (default: 1101)}
-
 \item{perplexity}{Perplexity parameter for tSNE computation (default: 30)}
+
+\item{seed}{Seed for tSNE computation (default: 1101)}
 
 \item{only_plot}{Indicates if only plot should be shown or the tSNE result
 should be returned (default: FALSE)}

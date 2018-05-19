@@ -196,12 +196,13 @@
 #' \item{\code{edge}}{For each sample its assigned edge}
 #' @importFrom igraph V neighbors
 #' @importFrom utils combn
-#' @importFrom depth med
 #' @keywords internal
 #' @author Daniel C. Ellwanger
 .project_ortho <- function(cl, g, X) {
-  X.c <- t(vapply(levels(cl), function(i){med(X[cl == i, ],
-                                              method = "Spatial")$median},
+  #X.c <- t(vapply(levels(cl), function(i){med(X[cl == i, ],
+  #                                            method = "Spatial")$median},
+  #                rep(0, dim(X)[2])))
+  X.c <- t(vapply(levels(cl), function(i){.spatmed(X[cl == i, ])},
                   rep(0, dim(X)[2])))
   mx <- max(as.numeric(substr(rownames(X.c), 2, nrow(X.c))))
   cl <- as.character(cl) #avoid automatic factor to number conversion

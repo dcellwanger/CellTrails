@@ -1,11 +1,10 @@
 test_plotStateTrajectory <- function() {
-  dat <- CellTrails:::.exDat()
+  data(exSCE)
+  dat <- SingleCellExperiment(assay=list(logcounts=logcounts(exSCE)))
   RUnit::checkException(plotStateTrajectory(dat, #Empty
                                             color_by="featureName",
                                             name=rownames(dat)[1],
                                             component=1))
-
-  data(exSCE)
   RUnit::checkException(plotStateTrajectory(exSCE,
                                             color_by="A", #wrong input
                                             name=rownames(exSCE)[1],

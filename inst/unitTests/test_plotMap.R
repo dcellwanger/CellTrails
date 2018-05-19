@@ -1,12 +1,11 @@
 test_plotMap <- function() {
-  dat <- CellTrails:::.exDat()
+  data(exSCE)
+  dat <- SingleCellExperiment(assay=list(logcounts=logcounts(exSCE)))
   RUnit::checkException(plotMap(dat, #Empty
                                 color_by="featureName",
                                 name=rownames(dat)[1],
                                 type="surface.fit",
                                 samples_only=FALSE))
-
-  data(exSCE)
   RUnit::checkException(plotMap(exSCE,
                                 color_by="A", #wrong input
                                 name=rownames(exSCE)[1],

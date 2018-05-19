@@ -1,11 +1,10 @@
 test_plotManifold <- function() {
-  dat <- CellTrails:::.exDat()
+  data(exSCE)
+  dat <- SingleCellExperiment(assay=list(logcounts=logcounts(exSCE)))
   RUnit::checkException(plotManifold(dat, #Empty
                                      color_by="featureName",
                                      name=rownames(dat)[1],
                                      only_plot=TRUE))
-
-  data(exSCE)
   RUnit::checkException(plotManifold(exSCE,
                                      color_by="A", #wrong input
                                      name=rownames(exSCE)[1],

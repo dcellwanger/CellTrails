@@ -26,6 +26,25 @@
   }
 }
 
+#' Spatial median
+#'
+#' Computes mediancentres
+#' @param x A numeric matrix
+#' @return A numeric vector
+# #' @importFrom depth med
+#' @importFrom ICSNP spatial.median
+#' @keywords internal
+#' @author Daniel C. Ellwanger
+.spatmed <- function(x) {
+  if(is.null(dim(x))) {
+    x
+  } else if(nrow(x) == 1){
+    x[1, ]
+  } else {
+    spatial.median(x)
+  }
+}
+
 #' Capitalizes first character of string
 #'
 #' Capitalizes first character of string and sets the rest to

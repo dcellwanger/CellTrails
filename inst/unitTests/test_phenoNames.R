@@ -1,5 +1,7 @@
 test_phenoNames <- function(){
-  dat <- CellTrails:::.exDat()
+  data(exSCE)
+  dat <- SingleCellExperiment(assay=list(logcounts=logcounts(exSCE)))
+  colData(dat)$age <- exSCE$age
   se <- embedSamples(dat)
   d <- findSpectrum(se$eigenvalues, frac=30)
   latentSpace(dat) <- se$components[, d]

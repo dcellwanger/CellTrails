@@ -32,39 +32,39 @@ simulate_exprs <- function(n_features, n_samples,
   s_counts
 }
 
-#' Simulation of example data for trajectory reconstruction
-#'
-#' This method serves to generate the example data used to
-#' demonstrate the usage of individual functions of this package
-# #' @param n_features Number of features
-# #' @param n_samples Number of samples
-# #' @param n_cond Number of conditions
-#' @return A \code{SingleCellExperiment} object
-#' @details RNA-Seq counts are generated using the Negative Binomial
-#' Distribution. Distribution parameters for each feature are sampled from a
-#' Gamma distribution. The resulting expression matrix is then log2-scaled.
-#' The assay data consist of 25 features and 100 samples.
-#' @seealso \code{SingleCellExperiment} \code{simulate_exprs}
-#' @examples
-#' # Generate example data
-#' exDat()
-#' @docType methods
-#' @import SingleCellExperiment
-#' @keywords internal
-#' @author Daniel C. Ellwanger
-.exDat <- function() { #n_features=25, n_samples=10, n_cond=10
-  expr <- lapply(seq_len(10), function(i){
-    set.seed(1101 + i)
-    simulate_exprs(n_features=25,
-                   n_samples=10,
-                   prefix_sample=paste0("C", i, "_"))})
-  expr <- do.call(cbind, expr)
-  meta <- rep(c("2.Mid", "2.Mid", "3.Late", "1.Early", NA,
-                "3.Late", "3.Late", NA, NA, "2.Mid"), each = 10)
-  SingleCellExperiment(assays=list(logcounts=expr),
-                       colData=data.frame(age=meta))
-  #ExpressionSet(expr,
-  #              phenoData = new("AnnotatedDataFrame",
-  #                              data.frame(age=meta,
-  #                                         row.names=colnames(expr))))
-}
+# #' Simulation of example data for trajectory reconstruction
+# #'
+# #' This method serves to generate the example data used to
+# #' demonstrate the usage of individual functions of this package
+# # #' @param n_features Number of features
+# # #' @param n_samples Number of samples
+# # #' @param n_cond Number of conditions
+# #' @return A \code{SingleCellExperiment} object
+# #' @details RNA-Seq counts are generated using the Negative Binomial
+# #' Distribution. Distribution parameters for each feature are sampled from a
+# #' Gamma distribution. The resulting expression matrix is then log2-scaled.
+# #' The assay data consist of 25 features and 100 samples.
+# #' @seealso \code{SingleCellExperiment} \code{simulate_exprs}
+# #' @examples
+# #' # Generate example data
+# #' exDat()
+# #' @docType methods
+# #' @import SingleCellExperiment
+# #' @keywords internal
+# #' @author Daniel C. Ellwanger
+# .exDat <- function() { #n_features=25, n_samples=10, n_cond=10
+#   expr <- lapply(seq_len(10), function(i){
+#     set.seed(1101 + i)
+#     simulate_exprs(n_features=25,
+#                    n_samples=10,
+#                    prefix_sample=paste0("C", i, "_"))})
+#   expr <- do.call(cbind, expr)
+#   meta <- rep(c("2.Mid", "2.Mid", "3.Late", "1.Early", NA,
+#                 "3.Late", "3.Late", NA, NA, "2.Mid"), each = 10)
+#   SingleCellExperiment(assays=list(logcounts=expr),
+#                        colData=data.frame(age=meta))
+#   #ExpressionSet(expr,
+#   #              phenoData = new("AnnotatedDataFrame",
+#   #                              data.frame(age=meta,
+#   #                                         row.names=colnames(expr))))
+# }

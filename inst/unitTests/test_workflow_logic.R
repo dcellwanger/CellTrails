@@ -1,5 +1,6 @@
 test_workflow_logic <- function(){
-  dat <- CellTrails:::.exDat()
+  data(exSCE)
+  dat <- SingleCellExperiment(assay=list(logcounts=logcounts(exSCE)))
   # FIND STATES
   RUnit::checkException(findStates(dat))
   # CONNECT STATES

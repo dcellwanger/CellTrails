@@ -1,5 +1,6 @@
 test_embedSamples <- function(){
-  dat <- CellTrails:::.exDat()
+  data(exSCE)
+  dat <- SingleCellExperiment(assay=list(logcounts=logcounts(exSCE)))
 
   #TEST
   se <- embedSamples(dat)

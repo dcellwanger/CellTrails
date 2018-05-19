@@ -1074,12 +1074,12 @@ setMethod("plotStateExpression", "SingleCellExperiment",
 #' @author Daniel C. Ellwanger
 setGeneric("plotManifold", function(sce,
                                     color_by=c("phenoName", "featureName"),
-                                    name, seed=1101, perplexity=30,
+                                    name, perplexity=30, seed=1101,
                                     only_plot=FALSE)
   standardGeneric("plotManifold"))
 setMethod("plotManifold", "SingleCellExperiment",
           function(sce, color_by=c("phenoName", "featureName"),
-                   name, seed, perplexity, only_plot){
+                   name, perplexity, seed, only_plot){
   #Fetch plot color data
   dat <- .validatePlotParams(sce, color_by=color_by, name=name)
   #Fetch tSNE data
