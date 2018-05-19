@@ -38,26 +38,11 @@ to the number of trajectory samples or if the number of columns is
 less than 2, or if the row names do not correspond to \code{sampleNames}.
 }
 \examples{
-# Create example data
-sce <- exDat()
+# Example data
+data(exSCE)
+tl <- trajLayout(exSCE)
 
-# Sample embedding and trajectory fit
-res <- embedSamples(sce)
-d <- findSpectrum(res$eigenvalues, frac=30)
-latentSpace(sce) <- res$components[, d]
-states(sce) <- findStates(sce, max_pval=1e-3, min_feat=4)
-sce <- connectStates(sce, l = 15)
-sce <- selectTrajectory(sce, component=1)
-sce <- fitTrajectory(sce)
-
-# For illustration purposes a graphml file for the example dataset
-# is contained in this package.
-# The function trajLayout allows to set a trajectory layout
-# to the object; the parameter adjust='TRUE' adjusts the layout
-# to represent the computed pseudotime
-fn <- system.file("exdata", "exdat.graphml", package="CellTrails")
-tl <- read.ygraphml(fn)
-trajLayout(sce, adjust=TRUE) <- tl
+trajLayout(exSCE) <- tl
 }
 \seealso{
 \code{write.ygraphml} \code{trajSampleNames}

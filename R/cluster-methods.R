@@ -3,14 +3,21 @@
 #' For details see \code{findStates}
 #' @param X Expression matrix
 #' @param ordi Ordination of samples
+#' @param link.method Linkage criteria
+#' @param min.size Min size of inital clusters
+#' @param max.pval Pval threshold
+#' @param min.fc Fold-change threshold
+#' @param ming.g Feature cound threshold
+#' @param reverse Reverse order
+#' @param verbose For debug
 #' @keywords internal
-#' @importFrom graphics par plot points abline axis box text
 #' @importFrom maptree clip.clust draw.clust
 #' @importFrom cba order.optimal
 #' @importFrom dendextend rotate
 #' @author Daniel C. Ellwanger
 .findStates_def <- function(X, ordi, link.method="ward.D2", min.size,
-                            max.pval=1e-4, min.fc=2, min.g=5, show.plots=FALSE,
+                            max.pval=1e-4, min.fc=2, min.g=5,
+                            #show.plots=FALSE,
                             reverse=FALSE, verbose=FALSE) {
 
   d <- stats::dist(ordi)
@@ -237,52 +244,52 @@
     #res$mcentres <- res$mcentres[rev(seq(max(nrow(mcentres)))), ]
   }
 
-  f.find_cluster_plots <- function(i) {
-    if(i == 1) {
-      par(mar = c(3, 3, 0.5, 0.5), mgp = c(2, 0.65, 0))
-      plot(seq_len(k), ms[seq_len(k)], ylab=expression("<" * italic(S) * ">"),
-           type = "b",
-           xlab = "Number of clusters", col = "blue", axes = FALSE,
-           ylim = c(0, max(ms[seq_len(k)])))
-      #f.grid(x.grid = seq_len(k))
-      points(seq_len(k), ms[seq_len(k)], type = "b", col = "blue")
-      abline(h=min.size, lty = 2)
-      axis(1, at = seq_len(k)); axis(2); box(bty = "L")
-    } else if(i == 2) {
-      par(mar = c(0.5, 3, 0.5, 0.5), mgp = c(2, 0.65, 0))
-      plot(as.hclust(hcl), main = "", xlab = "", sub = "",
-           labels = rep("", length(hcl$order)))
-      rect.hclust(as.hclust(hcd), k)
-    } else if(i == 3) {
-      par(mar = c(0.5, 3, 0.5, 0.5), mgp = c(2, 0.65, 0))
-      if(k > 2) {
-        draw.clust(clip.clust(as.hclust(hcl), X, k=k), size=1.5,
-                   pch=NA, cex=.1)
-        #axis(2, font = 2, las = 2)
-      }
-    } else if(i == 4) {
-      par(mar = c(0, 1, 0.5, 0.5), mgp = c(2, 0.65, 0))
-      n <- length(merge.log)
-      plot(0, 0, type = "n", ylim = c(-2, n), xlim = c(0, 10), axes=FALSE,
-           xlab = "", ylab = "")
-      text(1, n - 0.5, "Log", adj = c(0,0), font = 2)
-      if(n > 0) {
-        for(i in seq(n)) {
-          text(1, n - i, paste(i, ". Merged: ", merge.log[[i]][1], " & ",
-                               merge.log[[i]][2], " => ",
-                               merge.log[[i]][2], sep = ""), adj = c(0,0))
-        }
-      }
-      text(1, -1, paste("Number of clusters found:", max(cl)), adj = c(0,0))
-    }
-  }
-
-  if(show.plots) {
-    par(mfrow = c(2,2), mar = c(4, 4, 0.5, 0.5), mgp = c(2, 0.65, 0))
-    for(i in seq_len(4)){
-      f.find_cluster_plots(i)
-    }
-  }
+  # f.find_cluster_plots <- function(i) {
+  #   if(i == 1) {
+  #     par(mar = c(3, 3, 0.5, 0.5), mgp = c(2, 0.65, 0))
+  #     plot(seq_len(k), ms[seq_len(k)], ylab=expression("<" * italic(S) * ">"),
+  #          type = "b",
+  #          xlab = "Number of clusters", col = "blue", axes = FALSE,
+  #          ylim = c(0, max(ms[seq_len(k)])))
+  #     #f.grid(x.grid = seq_len(k))
+  #     points(seq_len(k), ms[seq_len(k)], type = "b", col = "blue")
+  #     abline(h=min.size, lty = 2)
+  #     axis(1, at = seq_len(k)); axis(2); box(bty = "L")
+  #   } else if(i == 2) {
+  #     par(mar = c(0.5, 3, 0.5, 0.5), mgp = c(2, 0.65, 0))
+  #     plot(as.hclust(hcl), main = "", xlab = "", sub = "",
+  #          labels = rep("", length(hcl$order)))
+  #     rect.hclust(as.hclust(hcd), k)
+  #   } else if(i == 3) {
+  #     par(mar = c(0.5, 3, 0.5, 0.5), mgp = c(2, 0.65, 0))
+  #     if(k > 2) {
+  #       draw.clust(clip.clust(as.hclust(hcl), X, k=k), size=1.5,
+  #                  pch=NA, cex=.1)
+  #       #axis(2, font = 2, las = 2)
+  #     }
+  #   } else if(i == 4) {
+  #     par(mar = c(0, 1, 0.5, 0.5), mgp = c(2, 0.65, 0))
+  #     n <- length(merge.log)
+  #     plot(0, 0, type = "n", ylim = c(-2, n), xlim = c(0, 10), axes=FALSE,
+  #          xlab = "", ylab = "")
+  #     text(1, n - 0.5, "Log", adj = c(0,0), font = 2)
+  #     if(n > 0) {
+  #       for(i in seq(n)) {
+  #         text(1, n - i, paste(i, ". Merged: ", merge.log[[i]][1], " & ",
+  #                              merge.log[[i]][2], " => ",
+  #                              merge.log[[i]][2], sep = ""), adj = c(0,0))
+  #       }
+  #     }
+  #     text(1, -1, paste("Number of clusters found:", max(cl)), adj = c(0,0))
+  #   }
+  # }
+  #
+  # if(show.plots) {
+  #   par(mfrow = c(2,2), mar = c(4, 4, 0.5, 0.5), mgp = c(2, 0.65, 0))
+  #   for(i in seq_len(4)){
+  #     f.find_cluster_plots(i)
+  #   }
+  # }
 
   # Result
   res$cl <- cl

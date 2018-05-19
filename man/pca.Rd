@@ -43,11 +43,11 @@ their values per sample. It is suggested to construct a design matrix with
 \code{model.matrix}.
 }
 \examples{
-# Generate example data
-sce <- exDat()
+# Example data
+data(exSCE)
 
 # Principal component analysis
-res <- pca(sce)
+res <- pca(exSCE)
 
 # Find relevant number of principal components
 d <- findSpectrum(res$eigenvalues, frac=20)

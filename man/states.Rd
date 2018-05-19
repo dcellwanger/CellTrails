@@ -22,15 +22,10 @@ State information is extracted from \code{colData};
 factor levels are alphanumerically ordered by ID.
 }
 \examples{
-# Generate example data
-sce <- exDat()
+# Example data
+data(exSCE)
 
-# Assign clusters
-cl <- kmeans(logcounts(sce), centers=5)$cluster
-states(sce) <- cl
-
-# Get clusters
-states(sce)
+states(exSCE)[seq_len(5)]
 }
 \seealso{
 \code{SingleCellExperiment} \code{findStates}

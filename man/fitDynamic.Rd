@@ -44,31 +44,11 @@ non-detects of feature \emph{j} in state \emph{h}; detected values are
 always assigned weight = 1.
 }
 \examples{
-# Generate example data
-sce <- exDat()
-
-# Reduce dimensionality
-res <- embedSamples(sce)
-d <- findSpectrum(res$eigenvalues, frac=30)
-latentSpace(sce) <- res$components[, d]
-
-# Find and connect states
-states(sce) <- findStates(sce, max_pval=1e-3, min_feat=4)
-sce <- connectStates(sce, l=15)
-
-# Align samples to trajectory
-sce <- selectTrajectory(sce, component=1)
-sce <- fitTrajectory(sce)
-
-# Export trajectory graph structure to graphml
-# with write.ygraphml("yourFile") and import layout with
-# trajLayout(sce) <- read.ygraphml("yourFile")
-
-# Define trail
-sce <- addTrail(sce, from="H1", to="H3", name="Tr1")
+# Example data
+data(exSCE)
 
 # Fit dynamic
-fit <- fitDynamic(sce, feature_name="feature_3", trail_name="Tr1")
+fit <- fitDynamic(exSCE, feature_name="feature_3", trail_name="Tr1")
 
 summary(fit)
 }

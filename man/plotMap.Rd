@@ -48,43 +48,22 @@ To show all landmarks on the map, please use the parameters
 \code{color_by="phenoName"} and \code{name="landmark"}.
 }
 \examples{
-# Generate example data
-sce <- exDat()
-
-# Reduce dimensionality
-res <- embedSamples(sce)
-d <- findSpectrum(res$eigenvalues, frac=30)
-latentSpace(sce) <- res$components[, d]
-
-# Fit trajectory
-states(sce) <- findStates(sce, max_pval=1e-3, min_feat=4)
-sce <- connectStates(sce, l=15)
-sce <- selectTrajectory(sce, component=1)
-sce <- fitTrajectory(sce)
-
-# Set layout
-# Please note that the trajectory graph structure can be exported
-# and the layout computed by any graph layout software
-# For illustration purposes the layout for the example dataset
-# is contained in this package
-tl <- read.ygraphml(system.file("exdata",
-                                "exdat.graphml",
-                                package="CellTrails"))
-trajLayout(sce, adjust=TRUE) <- tl
+# Example data
+data(exSCE)
 
 # Plot landmarks
-plotMap(sce, color_by="phenoName", name="landmark")
+plotMap(exSCE, color_by="phenoName", name="landmark")
 
 # Plot phenotype
-plotMap(sce, color_by="phenoName", name="age")
+plotMap(exSCE, color_by="phenoName", name="age")
 
 # Plot feature expression map
-plotMap(sce, color_by="featureName", name="feature_10", type="surface.fit")
-plotMap(sce, color_by="featureName", name="feature_10", type="surface.fit",
+plotMap(exSCE, color_by="featureName", name="feature_10", type="surface.fit")
+plotMap(exSCE, color_by="featureName", name="feature_10", type="surface.fit",
         samples_only=TRUE)
 
 #Plot surface fit standard errors
-plotMap(sce, color_by="featureName", name="feature_10", type="surface.se")
+plotMap(exSCE, color_by="featureName", name="feature_10", type="surface.se")
 }
 \seealso{
 \code{gam}

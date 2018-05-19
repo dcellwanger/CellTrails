@@ -21,10 +21,10 @@ Retrieve feature names from a \code{SingleCellExperiment} object
 Wrapper for \code{rownames(object)}
 }
 \examples{
-# Generate example data
-sce <- exDat()
+# Example data
+data(exSCE)
 
-featureNames(sce)
+featureNames(exSCE)
 }
 \seealso{
 \code{SingleCellExperiment}

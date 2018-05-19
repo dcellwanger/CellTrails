@@ -45,20 +45,11 @@ undefined. The points' coloration can be defined via the attributes
 recovered using nearest neighbor learning.
 }
 \examples{
-# Generate example data
-sce <- exDat()
+# Example data
+data(exSCE)
 
-# Reduce dimensionality
-res <- embedSamples(sce)
-d <- findSpectrum(res$eigenvalues, frac=30)
-latentSpace(sce) <- res$components[, d]
-
-# Find and connect states
-states(sce) <- findStates(sce, max_pval=1e-3, min_feat=4)
-sce <- connectStates(sce, l=15)
-
-plotStateTrajectory(sce, color_by="phenoName", name="age", component=1)
-plotStateTrajectory(sce, color_by="featureName", name="feature_1",
+plotStateTrajectory(exSCE, color_by="phenoName", name="age", component=1)
+plotStateTrajectory(exSCE, color_by="featureName", name="feature_1",
                     component=1)
 }
 \seealso{

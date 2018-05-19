@@ -17,11 +17,13 @@
 #' http://www.yworks.com/products/yed).
 #' @seealso \code{write.ygraphml}
 #' @examples
-#' # Generate example data
-#' sce <- exDat()
+#' # Example data
+#' data(exSCE)
 #'
+#' \dontrun{
 #' fn <- system.file("exdata", "exDat.graphml", package="CellTrails")
 #' tl <- read.ygraphml(fn)
+#' }
 #' @docType methods
 #' @export
 #' @author Daniel C. Ellwanger

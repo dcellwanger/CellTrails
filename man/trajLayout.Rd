@@ -19,10 +19,10 @@ Returns trajectory layout from
 \code{SingleCellExperiment} object
 }
 \examples{
-# Create example data
-sce <- exDat()
+# Example data
+data(exSCE)
 
-trajLayout(sce)
+trajLayout(exSCE)[seq_len(5), ]
 }
 \author{
 Daniel C. Ellwanger

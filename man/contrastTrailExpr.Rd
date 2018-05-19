@@ -62,32 +62,11 @@ the area between the aligned dynamic curves (\code{ABC}), or Pearson's
 correlation coefficient (\code{cor}) over all aligned elements.
 }
 \examples{
-# Generate example data
-sce <- exDat()
-
-# Reduce dimensionality
-res <- embedSamples(sce)
-d <- findSpectrum(res$eigenvalues, frac=30)
-latentSpace(sce) <- res$components[, d]
-
-# Find and connect states
-states(sce) <- findStates(sce, max_pval=1e-3, min_feat=4)
-sce <- connectStates(sce, l=15)
-
-# Align samples to trajectory
-sce <- selectTrajectory(sce, component=1)
-sce <- fitTrajectory(sce)
-
-# Export trajectory graph structure to graphml
-# with write.ygraphml("yourFile") and import layout with
-# trajLayout(sce) <- read.ygraphml("yourFile")
-
-# Define trails
-sce <- addTrail(sce, from="H1", to="H3", name="Tr1")
-sce <- addTrail(sce, from="H1", to="H2", name="Tr2")
+# Example data
+data(exSCE)
 
 # Differential expression between trails
-contrastTrailExpr(sce, feature_name=c("feature_1", "feature_10"),
+contrastTrailExpr(exSCE, feature_name=c("feature_1", "feature_10"),
                  trail_names=c("Tr1", "Tr2"), score="rmsd")
 }
 \references{

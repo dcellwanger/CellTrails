@@ -26,12 +26,12 @@ vector containing the cluster assignments is numeric, the prefix
 "S" is added and the vector is converted to type factor.
 }
 \examples{
-# Generate example data
-sce <- exDat()
+# Example data
+data(exSCE)
 
 # Assign clusters
-cl <- kmeans(logcounts(sce), centers=10)$cluster
-states(sce) <- cl
+cl <- kmeans(logcounts(exSCE), centers=10)$cluster
+states(exSCE) <- cl
 }
 \seealso{
 colData

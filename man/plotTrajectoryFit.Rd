@@ -30,20 +30,10 @@ undefined. The points' coloration can be defined via the attributes
 recovered using nearest neighbor learning.
 }
 \examples{
-# Generate example data
-sce <- exDat()
+# Example data
+data(exSCE)
 
-# Reduce dimensionality
-res <- embedSamples(sce)
-d <- findSpectrum(res$eigenvalues, frac=30)
-latentSpace(sce) <- res$components[, d]
-
-# Find and connect states
-states(sce) <- findStates(sce, max_pval=1e-3, min_feat=4)
-sce <- connectStates(sce, l=15)
-sce <- selectTrajectory(sce, component=1)
-sce <- fitTrajectory(sce)
-plotTrajectoryFit(sce)
+plotTrajectoryFit(exSCE)
 }
 \seealso{
 \code{fitTrajectory} \code{trajResiduals}

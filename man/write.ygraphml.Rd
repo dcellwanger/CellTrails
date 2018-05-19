@@ -58,23 +58,10 @@ names get checked and will throw an error if not contained in the dataset.
 Please note, the parameter \code{name} is case-sensitive.
 }
 \examples{
-# Generate example data
-sce <- exDat()
+# Example data
+data(exSCE)
 
 \dontrun{
-# Reduce dimensionality
-res <- embedSamples(sce)
-d <- findSpectrum(res$eigenvalues, frac=30)
-latentSpace(sce) <- res$components[, d]
-
-# Find and connect states
-states(sce) <- findStates(sce, max_pval=1e-3, min_feat=4)
-sce <- connectStates(sce, l=15)
-
-# Align samples to trajectory
-sce <- selectTrajectory(sce, component=1)
-sce <- fitTrajectory(sce)
-
 # Export trajectory graph structure to graphml
 # Color nodes by gene expression (e.g, feature_10)
 write.ygraphml(sce, file="yourFilePath", color_by="featureName",

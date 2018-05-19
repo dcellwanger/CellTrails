@@ -58,7 +58,7 @@
 #' @author Daniel C. Ellwanger
 .trailNameExists <- function(x, trail_name) {
   test <- trail_name %in% trailNames(x)
-  if(!all(test)) {
+  if(!all(test) | is.null(trail_name)) {
     stop("Trail(s) ' ", paste0(trail_name[!test], " "),
          "' is/are not contained in the data set. ",
          "Please, check for correct spelling (e.g., case sensitivity). ",

@@ -20,16 +20,11 @@ An updated object of class \code{SingleCellExperiment}
 Stores tSNE representation in \code{SingleCellExperiment} object
 }
 \examples{
-#' # Generate example data
-sce <- exDat()
+# Example data
+data(exSCE)
 
-# Reduce dimensionality
-res <- embedSamples(sce)
-d <- findSpectrum(res$eigenvalues, frac=30)
-latentSpace(sce) <- res$components[, d]
-
-gp <- plotManifold(sce, color_by="featureName", name="feature_10")
-latentSpaceSNE(sce) <- gp
+gp <- plotManifold(exSCE, color_by="featureName", name="feature_10")
+latentSpaceSNE(exSCE) <- gp
 }
 \author{
 Daniel C. Ellwanger

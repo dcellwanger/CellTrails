@@ -24,11 +24,11 @@ is performed on one component. This function returns the names of the
 samples which are member of the selected component.
 }
 \examples{
-# Generate example data
-sce <- exDat()
+# Example data
+data(exSCE)
 
 # Get trajectory samples
-trajSampleNames(sce)
+trajSampleNames(exSCE)[seq_len(5)]
 }
 \author{
 Daniel C. Ellwanger

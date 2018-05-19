@@ -431,6 +431,7 @@ The first dataset, `exSim`, is composed of expression values of 15,000 features 
 ```{r, eval=TRUE}
 # Create example expression data
 # with 15,000 features and 100 samples
+set.seed(1101)
 emat <- simulate_exprs(n_features=15000, n_samples=100)
 
 # Create SingleCellExperiment object
@@ -475,6 +476,7 @@ The following illustrates the typical sequence of steps performed during a *Cell
 *  Determination of the trajectory topology
     + ``connectStates``
     + ``showTrajInfo``
+    + ``trajComponents``
     + ``selectTrajectory``
     + ``plotStateTrajectory``
 * Chronologically ordering of samples
@@ -861,7 +863,13 @@ In our example dataset, we identified two components, as indicated by the _Traje
 showTrajInfo(exBundle)
 ```
 
-The inferred state trajectory graph can be visualized using `plotStateTrajectory`. If the graph is a forest, the parameter `component` can be used to define which tree should be shown. Let's have a look at the FM1-43 uptake and the _CALB2_ expression in component 1:
+The function `trajComponents` provides us information about the states contained in each component.
+```{r, eval=TRUE}
+# Show trajectory information
+trajComponents(exBundle)
+```
+
+Further, the inferred state trajectory graph can be visualized using `plotStateTrajectory`. If the graph is a forest, the parameter `component` can be used to define which tree should be shown. Let's have a look at the FM1-43 uptake and the _CALB2_ expression in component 1:
 
 ```{r, eval=TRUE}
 # FM1-43 uptake

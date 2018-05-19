@@ -86,24 +86,11 @@ function \code{findStates}
 needs to be called first.
 }
 \examples{
-# Generate example data
-sce <- exDat()
-
-# Reduce dimensionality
-res <- embedSamples(sce)
-d <- findSpectrum(res$eigenvalues, frac=30)
-latentSpace(sce) <- res$components[, d]
-
-# Find states
-states(sce) <- findStates(sce, max_pval=1e-3, min_feat=4)
+# Example data
+data(exSCE)
 
 # Connect states
-sce <- connectStates(sce, l=15)
-
-\dontrun{
-plotStateTrajGraph(sce, featureName="feature_1", component=1)
-plotStateTrajGraph(sce, phenoType="age", component=1, point_size=2)
-}
+exSCE <- connectStates(exSCE, l=30)
 }
 \references{
 Kruskal, J.B. (1956). On the shortest

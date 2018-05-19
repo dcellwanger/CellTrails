@@ -33,24 +33,11 @@ function \code{connectStates} needs to be called first. An
 error is thrown if an unknown component (number) is selected.
 }
 \examples{
-# Generate example data
-sce <- exDat()
-
-# Reduce dimensionality
-res <- embedSamples(sce)
-d <- findSpectrum(res$eigenvalues, frac=30)
-latentSpace(sce) <- res$components[, d]
-
-# Find states
-states(sce) <- findStates(sce, max_pval=1e-3, min_feat=4)
-
-# Connect states
-sce <- connectStates(sce, l=15)
+# Example data
+data(exSCE)
 
 # Select trajectory
-ctset <- selectTrajectory(sce, component=1)
-
-length(trajSampleNames(ctset))
+exSCE <- selectTrajectory(exSCE, component=1)
 }
 \seealso{
 \code{connectStates}

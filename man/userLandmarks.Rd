@@ -23,11 +23,11 @@ with \code{userLandmarks}. Landmarks can be used to extract single
 trails from a trajectory.
 }
 \examples{
-# Generate example data
-sce <- exDat()
+# Example data
+data(exSCE)
 
 # Get landmarks
-userLandmarks(sce)
+userLandmarks(exSCE)
 }
 \seealso{
 \code{SingleCellExperiment}

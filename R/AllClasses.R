@@ -1,2 +1,2 @@
-#' @import stats methods BiocStyle SingleCellExperiment
+#' @import stats methods
 NULL

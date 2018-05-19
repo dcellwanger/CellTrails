@@ -21,10 +21,10 @@ Retrieve sample names from a \code{SingleCellExperiment} object
 Wrapper for \code{colnames(object)}
 }
 \examples{
-# Generate example data
-sce <- exDat()
+# Example data
+data(exSCE)
 
-sampleNames(sce)
+sampleNames(exSCE)[seq_len(5)]
 }
 \seealso{
 \code{SingleCellExperiment}

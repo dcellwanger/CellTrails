@@ -187,7 +187,6 @@
 #'   \item{\code{seed}}{See above}
 #' }
 #' @importFrom Rtsne Rtsne
-#' @importFrom SingleCellExperiment reducedDim
 #' @keywords internal
 #' @author Daniel C. Ellwanger
 .bhtsne <- function(x, dims=2, perplexity=30, theta=.5, max_iter=1000,

@@ -21,14 +21,10 @@ Shows barplot of state size distribution
 Barplot showing the absolute number of samples per state.
 }
 \examples{
-# Generate example data
-sce <- exDat()
+# Example data
+data(exSCE)
 
-# Define states
-X <- logcounts(sce)
-X <- t(X)
-states(sce) <- kmeans(X, centers=5)$cluster
-plotStateSize(sce)
+plotStateSize(exSCE)
 }
 \seealso{
 \code{ggplot} \code{states}

@@ -25,7 +25,7 @@ in the pruned dendrogram get joined. (default: 5)}
 computation. (default: 1e-4)}
 
 \item{min_fc}{Mimimum fold-change for differential expression
-computation. (default: 2)}
+computation (default: 2)}
 }
 \value{
 A \code{factor} vector
@@ -51,6 +51,13 @@ non-parametric linear rank test accounting for censored values
 (Peto & Peto, 1972). The null hypothesis is rejected using the
 Benjamini-Hochberg (Benjamini & Hochberg, 1995) procedure for
 a given significance level. \cr
+Since this methods performs pairwise comparisons, the fold change threshold
+value is valid in both directions: higher and lower
+expressed than \code{min_fc}. Thus, input values < 0 are interpreted as a
+fold-change of 0. For example, \code{min_fc=2} checks for features
+that are 2-fold differentially expressed in two given states (e.g., S1, S2).
+Thus, a feature can be either 2-fold higher expressed in state S1 or two-fold
+lower expressed in state S2 to be validated as differentially expressed. \cr
 Please note that this methods only uses the set of defined trajectory
 features in a \code{SingleCellExperiment} object; spike-in controls are
 ignored and are not listed as trajectory features.
@@ -63,20 +70,12 @@ does not contain a latent space matrix object; \code{latentSpace(object)}is
 \code{NULL}).
 }
 \examples{
-# Generate example data
-sce <- exDat()
-
-# Reduce dimensionality
-res <- embedSamples(sce)
-d <- findSpectrum(res$eigenvalues, frac=30)
-latentSpace(sce) <- res$components[, d]
+# Example data
+data(exSCE)
 
 # Find states
-states(sce) <- findStates(sce, max_pval=1e-3, min_feat=4)
-
-\dontrun{
-plotStateSize(sce)
-}
+cl <- findStates(exSCE, min_feat=2)
+head(cl)
 }
 \references{
 Ward, J.H. (1963). Hierarchical Grouping to Optimize

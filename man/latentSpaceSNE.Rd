@@ -19,10 +19,10 @@ Returns tSNE representation of latent space from
 \code{SingleCellExperiment} object
 }
 \examples{
-# Generate example data
-sce <- exDat()
+# Example data
+data(exSCE)
 
-latentSpaceSNE(sce)
+latentSpaceSNE(exSCE)[seq_len(5), ]
 }
 \author{
 Daniel C. Ellwanger

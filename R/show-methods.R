@@ -1,21 +1,18 @@
 # #' @include AllClasses.R
 #NULL
 
-###############################################################################
-### CellTrails
-###############################################################################
 #' Shows relevant content of a SingleCellExperiment object for a CellTrails
 #' analysis
 #' @param object A \code{SingleCellExperiment} object
 #' @return \code{showTrajInfo} returns an invisible \code{NULL}
 #' @examples
-#' # Generate example data
-#' dat <- exDat()
+#' # Example data
+#' data(exSCE)
 #'
-#' # Show content
-#' showTrajInfo(dat)
+#' showTrajInfo(exSCE)
+#' @import SingleCellExperiment
+#' @importFrom SummarizedExperiment rowData colData
 #' @importFrom igraph vcount ecount
-#' @importFrom SummarizedExperiment rowData
 #' @export
 #' @docType methods
 #' @aliases showTrajInfo,SingleCellExperiment-method
@@ -56,10 +53,10 @@ setMethod("showTrajInfo", "SingleCellExperiment", function(object){
   out <- paste0("[[ CellTrails ]] \n",
          "logcounts: ", d[1], " features, ", d[2], " samples\n",
          "Pheno data: \n",
-         "  sampleNames: ", .prettyString(sampleNames(object)), "\n",
+         "  sampleNames: ", .prettyString(colnames(object)), "\n",
          "  phenoNames: ", .prettyString(phenoNames(object)), "\n",
          "Feature data: \n",
-         "  featureNames: ", .prettyString(featureNames(object)), "\n",
+         "  featureNames: ", .prettyString(rownames(object)), "\n",
          "  rowData: ", .prettyString(colnames(rowData(object))), "\n",
          "Trajectory data: \n",
          "  trajFeatureNames: ", .prettyString(trajFeatureNames(object)), "\n",

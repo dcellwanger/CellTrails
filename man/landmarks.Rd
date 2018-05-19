@@ -23,11 +23,11 @@ landmarks can also be defined on the trajectory by the user (U).
 Landmarks can be used to extract single trails from a trajectory.
 }
 \examples{
-# Generate example data
-sce <- exDat()
+# Example data
+data(exSCE)
 
 # Get landmarks
-landmarks(sce)
+landmarks(exSCE)[seq_len(5)]
 }
 \seealso{
 \code{userLandmarks}

@@ -31,9 +31,9 @@ were exluded for trajectory reconstruction are \code{NA}.
 }
 \examples{
 # Example data
-sce <- exDat()
+data(exSCE)
 
-trajResiduals(sce)
+trajResiduals(exSCE)[seq_len(5)]
 }
 \seealso{
 \code{fitTrajectory} \code{trajSampleNames}

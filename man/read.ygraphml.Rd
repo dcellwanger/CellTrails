@@ -31,11 +31,13 @@ information ("<y:Geometry x=... y=... >" entries) as provided by the
 http://www.yworks.com/products/yed).
 }
 \examples{
-# Generate example data
-sce <- exDat()
+# Example data
+data(exSCE)
 
+\dontrun{
 fn <- system.file("exdata", "exDat.graphml", package="CellTrails")
 tl <- read.ygraphml(fn)
+}
 }
 \seealso{
 \code{write.ygraphml}

@@ -5,7 +5,7 @@
 \alias{simulate_exprs}
 \title{Simulation of RNA-Seq expression data}
 \usage{
-simulate_exprs(n_features, n_samples, prefix_sample = "", seed = 1101)
+simulate_exprs(n_features, n_samples, prefix_sample = "")
 }
 \arguments{
 \item{n_features}{Number of genes}
@@ -13,9 +13,6 @@ simulate_exprs(n_features, n_samples, prefix_sample = "", seed = 1101)
 \item{n_samples}{Number of samples}
 
 \item{prefix_sample}{Prefix of sample name}
-
-\item{seed}{Seed of pseudo-random number generator; used for random
-generation of data}
 }
 \value{
 A numeric matrix with genes in rows and samples in columns
@@ -27,8 +24,7 @@ on the negative binomial distribution
 \details{
 RNA-Seq counts are generated using the Negative Binomial
 Distribution. Distribution parameters for each feature are sampled
-from a Gamma distribution. The
-resulting expression matrix is log2-scaled.
+from a Gamma distribution. The resulting expression matrix is log2-scaled.
 }
 \examples{
 # Matrix with 100 genes and 50 cells

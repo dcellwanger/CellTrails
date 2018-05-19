@@ -25,11 +25,11 @@ This method retrieves the user-defined features from a
 vector containing the feature names.
 }
 \examples{
-# Generate example data
-sce <- exDat()
+# Example data
+data(exSCE)
 
 # Get trajectory features
-trajFeatureNames(sce)
+trajFeatureNames(exSCE)[seq_len(5)]
 }
 \author{
 Daniel C. Ellwanger

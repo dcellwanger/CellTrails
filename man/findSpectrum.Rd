@@ -27,11 +27,11 @@ segement plot showing the lagged differences between ordered eigenvalues
 to identify informative eigenvectors.
 }
 \examples{
-# Generate example data
-sce <- exDat()
+# Example data
+data(exSCE)
 
-# Embed samples
-res <- embedSamples(sce)
+# Embedding
+res <- embedSamples(exSCE)
 
 # Find spectrum
 d <- findSpectrum(res$eigenvalues, frac=30)

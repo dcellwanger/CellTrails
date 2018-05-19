@@ -25,11 +25,11 @@ Rows need to be samples and columns to be \emph{d} components
 (spanning the lower-dimensional latent space).
 }
 \examples{
-# Generate example data
-sce <- exDat()
+# Example data
+data(exSCE)
 
 # Set latent space
-latentSpace(sce) <- pca(sce)$components[, 1:10]
+latentSpace(exSCE) <- pca(exSCE)$components[, seq_len(10)]
 }
 \seealso{
 \code{SingleCellExperiment} \code{reducedDim}

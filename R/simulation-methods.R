@@ -5,13 +5,10 @@
 #' @param n_features Number of genes
 #' @param n_samples Number of samples
 #' @param prefix_sample Prefix of sample name
-#' @param seed Seed of pseudo-random number generator; used for random
-#' generation of data
 #' @return A numeric matrix with genes in rows and samples in columns
 #' @details RNA-Seq counts are generated using the Negative Binomial
 #' Distribution. Distribution parameters for each feature are sampled
-#' from a Gamma distribution. The
-#' resulting expression matrix is log2-scaled.
+#' from a Gamma distribution. The resulting expression matrix is log2-scaled.
 #' @seealso \code{NegBinomial} and \code{GammaDist}
 #' @examples
 #' # Matrix with 100 genes and 50 cells
@@ -20,8 +17,8 @@
 #' @export
 #' @author Daniel C. Ellwanger
 simulate_exprs <- function(n_features, n_samples,
-                           prefix_sample="", seed=1101) {
-  set.seed(seed)
+                           prefix_sample="") {
+  #set.seed(seed)
   s_means <- 2^rgamma(n_features, shape=3.5, rate=1.2)
   s_vars <- 2^rgamma(n_features, shape=12, rate=1)
   s_counts <- suppressWarnings(
@@ -52,19 +49,19 @@ simulate_exprs <- function(n_features, n_samples,
 #' # Generate example data
 #' exDat()
 #' @docType methods
-#' @import SingleCellExperiment SingleCellExperiment
-#' @export
+#' @import SingleCellExperiment
+#' @keywords internal
 #' @author Daniel C. Ellwanger
-exDat <- function() { #n_features=25, n_samples=10, n_cond=10
-  expr <- lapply(seq_len(10), function(i)
-    simulate_exprs(seed = 1101 + i,
-                   n_features=25,
+.exDat <- function() { #n_features=25, n_samples=10, n_cond=10
+  expr <- lapply(seq_len(10), function(i){
+    set.seed(1101 + i)
+    simulate_exprs(n_features=25,
                    n_samples=10,
-                   prefix_sample=paste0("C", i, "_")))
+                   prefix_sample=paste0("C", i, "_"))})
   expr <- do.call(cbind, expr)
   meta <- rep(c("2.Mid", "2.Mid", "3.Late", "1.Early", NA,
                 "3.Late", "3.Late", NA, NA, "2.Mid"), each = 10)
-  SingleCellExperiment(assays = list(logcounts=expr),
+  SingleCellExperiment(assays=list(logcounts=expr),
                        colData=data.frame(age=meta))
   #ExpressionSet(expr,
   #              phenoData = new("AnnotatedDataFrame",

@@ -42,26 +42,13 @@ shown if a trail with the same name already exists and gets
 re-defined.
 }
 \examples{
-# Generate example data
-sce <- exDat()
-
-# Reduce dimensionality
-res <- embedSamples(sce)
-d <- findSpectrum(res$eigenvalues, frac=30)
-latentSpace(sce) <- res$components[, d]
-
-# Find and connect states
-states(sce) <- findStates(sce, max_pval=1e-3, min_feat=4)
-sce <- connectStates(sce, l=15)
-
-# Align samples to trajectory
-sce <- selectTrajectory(sce, component=1)
-sce <- fitTrajectory(sce)
+# Example data
+data(exSCE)
 
 # Add trail
-sce <- addTrail(sce, "H1", "H2", "myTrail")
-trailNames(sce)
-phenoNames(sce)
+sce <- addTrail(exSCE, "H1", "H2", "Tr1")
+trailNames(exSCE)
+phenoNames(exSCE)
 }
 \seealso{
 \code{fitTrajectory} \code{landmarks} \code{plotMap}

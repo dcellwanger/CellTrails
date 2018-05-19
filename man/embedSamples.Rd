@@ -90,11 +90,11 @@ with zero entropy (e.g., the samples exclusively contain non-detects, that
 is all expression values are zero).
 }
 \examples{
-# Generate example data
-sce <- exDat()
+# Example data
+data(exSCE)
 
 # Embed samples
-res <- embedSamples(sce)
+res <- embedSamples(exSCE)
 }
 \references{
 Daub, C.O., Steuer, R., Selbig, J., and Kloska, S. (2004).

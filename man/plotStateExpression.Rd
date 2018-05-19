@@ -25,15 +25,10 @@ single sample. A violine plot shows the density (mirrored on the y-axis) of
 the expression distribution per sample.
 }
 \examples{
-# Generate example data
-sce <- exDat()
-X <- logcounts(sce)
-X <- t(X)
+# Example data
+data(exSCE)
 
-# Define states
-states(sce) <- kmeans(X, centers=5)$cluster
-plotStateExpression(sce, feature_name="feature_1")
-
+plotStateExpression(exSCE, feature_name="feature_1")
 }
 \seealso{
 \code{ggplot} \code{states}

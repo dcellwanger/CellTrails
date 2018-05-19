@@ -23,7 +23,8 @@ NULL
 #' are ignored and are not listed as trajectory features.
 #' @seealso \code{trajFeatureNames} \code{isSpike}
 #' @examples
-#' # Simulate example data
+#' # Example data
+#' set.seed(1101)
 #' dat <- simulate_exprs(n_features=15000, n_samples=100)
 #'
 #' # Create container
@@ -78,6 +79,7 @@ setMethod("filterTrajFeaturesByDL", "SingleCellExperiment",
 #' @seealso \code{trajFeatureNames} \code{isSpike} \code{model.matrix}
 #' @examples
 #' # Simulate example data
+#' set.seed(1101)
 #' dat <- simulate_exprs(n_features=15000, n_samples=100)
 #'
 #' # Create container
@@ -137,6 +139,7 @@ setMethod("filterTrajFeaturesByCOV", "SingleCellExperiment",
 #' @seealso \code{trajFeatureNames} \code{isSpike} \code{model.matrix}
 #' @examples
 #' # Simulate example data
+#' set.seed(1101)
 #' dat <- simulate_exprs(n_features=15000, n_samples=100)
 #'
 #' # Create container
@@ -240,11 +243,11 @@ setMethod("filterTrajFeaturesByFF", "SingleCellExperiment",
 #' @seealso \code{SingleCellExperiment} \code{trajectoryFeatureNames}
 #' \code{model.matrix}
 #' @examples
-#' # Generate example data
-#' sce <- exDat()
+#' # Example data
+#' data(exSCE)
 #'
 #' # Embed samples
-#' res <- embedSamples(sce)
+#' res <- embedSamples(exSCE)
 #' @references Daub, C.O., Steuer, R., Selbig, J., and Kloska, S. (2004).
 #' Estimating mutual information using B-spline functions -- an improved
 #' similarity measure for analysing gene expression data.
@@ -286,11 +289,11 @@ setMethod("embedSamples", "matrix", function(x, design){
 #' to identify informative eigenvectors.
 #' @seealso \code{pca} \code{embedSamples}
 #' @examples
-#' # Generate example data
-#' sce <- exDat()
+#' # Example data
+#' data(exSCE)
 #'
-#' # Embed samples
-#' res <- embedSamples(sce)
+#' # Embedding
+#' res <- embedSamples(exSCE)
 #'
 #' # Find spectrum
 #' d <- findSpectrum(res$eigenvalues, frac=30)
@@ -333,11 +336,11 @@ setMethod("findSpectrum", "numeric", function(x, frac){
 #' \code{model.matrix}.
 #' @seealso \code{SingleCellExperiment} \code{model.matrix}
 #' @examples
-#' # Generate example data
-#' sce <- exDat()
+#' # Example data
+#' data(exSCE)
 #'
 #' # Principal component analysis
-#' res <- pca(sce)
+#' res <- pca(exSCE)
 #'
 #' # Find relevant number of principal components
 #' d <- findSpectrum(res$eigenvalues, frac=20)
@@ -376,7 +379,7 @@ setMethod("pca", "SingleCellExperiment", function(sce, do_scaling, design){
 #' @param max_pval Maximum \emph{P}-value for differential expression
 #' computation. (default: 1e-4)
 #' @param min_fc Mimimum fold-change for differential expression
-#' computation. (default: 2)
+#' computation (default: 2)
 #' @return A \code{factor} vector
 #' @details To identify cellular subpopulations, CellTrails performs
 #' hierarchical clustering via minimization of a square error criterion
@@ -394,6 +397,13 @@ setMethod("pca", "SingleCellExperiment", function(sce, do_scaling, design){
 #' (Peto & Peto, 1972). The null hypothesis is rejected using the
 #' Benjamini-Hochberg (Benjamini & Hochberg, 1995) procedure for
 #' a given significance level. \cr
+#' Since this methods performs pairwise comparisons, the fold change threshold
+#' value is valid in both directions: higher and lower
+#' expressed than \code{min_fc}. Thus, input values < 0 are interpreted as a
+#' fold-change of 0. For example, \code{min_fc=2} checks for features
+#' that are 2-fold differentially expressed in two given states (e.g., S1, S2).
+#' Thus, a feature can be either 2-fold higher expressed in state S1 or two-fold
+#' lower expressed in state S2 to be validated as differentially expressed. \cr
 #' Please note that this methods only uses the set of defined trajectory
 #' features in a \code{SingleCellExperiment} object; spike-in controls are
 #' ignored and are not listed as trajectory features.
@@ -406,20 +416,12 @@ setMethod("pca", "SingleCellExperiment", function(sce, do_scaling, design){
 #' \code{NULL}).
 #' @seealso \code{latentSpace} \code{trajectoryFeatureNames}
 #' @examples
-#' # Generate example data
-#' sce <- exDat()
-#'
-#' # Reduce dimensionality
-#' res <- embedSamples(sce)
-#' d <- findSpectrum(res$eigenvalues, frac=30)
-#' latentSpace(sce) <- res$components[, d]
+#' # Example data
+#' data(exSCE)
 #'
 #' # Find states
-#' states(sce) <- findStates(sce, max_pval=1e-3, min_feat=4)
-#'
-#' \dontrun{
-#' plotStateSize(sce)
-#' }
+#' cl <- findStates(exSCE, min_feat=2)
+#' head(cl)
 #' @references Ward, J.H. (1963). Hierarchical Grouping to Optimize
 #' an Objective Function. Journal of the American Statistical
 #' Association, 58, 236-244.
@@ -454,7 +456,7 @@ setMethod("findStates", "SingleCellExperiment", function(sce, min_size,
   ordi <- CellTrails::latentSpace(sce)
   .findStates_def(X=X, ordi=ordi, link.method="ward.D2", min.size=min_size,
                  max.pval=max_pval, min.fc=min_fc, min.g=min_feat,
-                 show.plots=FALSE, reverse=FALSE, verbose=FALSE)
+                 reverse=FALSE, verbose=FALSE)
 })
 
 # #' Differential feature expression between trajectory states
@@ -576,24 +578,11 @@ setMethod("findStates", "SingleCellExperiment", function(sce, min_size,
 #' needs to be called first.
 #' @seealso \code{findStates} \code{states}
 #' @examples
-#' # Generate example data
-#' sce <- exDat()
-#'
-#' # Reduce dimensionality
-#' res <- embedSamples(sce)
-#' d <- findSpectrum(res$eigenvalues, frac=30)
-#' latentSpace(sce) <- res$components[, d]
-#'
-#' # Find states
-#' states(sce) <- findStates(sce, max_pval=1e-3, min_feat=4)
+#' # Example data
+#' data(exSCE)
 #'
 #' # Connect states
-#' sce <- connectStates(sce, l=15)
-#'
-#' \dontrun{
-#' plotStateTrajGraph(sce, featureName="feature_1", component=1)
-#' plotStateTrajGraph(sce, phenoType="age", component=1, point_size=2)
-#' }
+#' exSCE <- connectStates(exSCE, l=30)
 #' @references Kruskal, J.B. (1956). On the shortest
 #' spanning subtree of a graph and the traveling salesman problem.
 #' Proc Amer Math Soc 7, 48-50.
@@ -636,24 +625,11 @@ setMethod("connectStates", "SingleCellExperiment", function(sce, l){
 #' @seealso \code{connectStates}
 #' @seealso \code{findStates} \code{states}
 #' @examples
-#' # Generate example data
-#' sce <- exDat()
-#'
-#' # Reduce dimensionality
-#' res <- embedSamples(sce)
-#' d <- findSpectrum(res$eigenvalues, frac=30)
-#' latentSpace(sce) <- res$components[, d]
-#'
-#' # Find states
-#' states(sce) <- findStates(sce, max_pval=1e-3, min_feat=4)
-#'
-#' # Connect states
-#' sce <- connectStates(sce, l=15)
+#' # Example data
+#' data(exSCE)
 #'
 #' # Select trajectory
-#' ctset <- selectTrajectory(sce, component=1)
-#'
-#' length(trajSampleNames(ctset))
+#' exSCE <- selectTrajectory(exSCE, component=1)
 #' @docType methods
 #' @aliases selectTrajectory,SingleCellExperiment-method
 #' @export
@@ -710,29 +686,11 @@ setMethod("selectTrajectory", "SingleCellExperiment", function(sce, component){
 #' and \code{selectTrajectory} need to be run first.
 #' @seealso \code{connectStates} \code{selectTrajectory}
 #' @examples
-#' # Generate example data
-#' sce <- exDat()
-#'
-#' # Reduce dimensionality
-#' res <- embedSamples(sce)
-#' d <- findSpectrum(res$eigenvalues, frac=30)
-#' latentSpace(sce) <- res$components[, d]
-#'
-#' # Find states
-#' states(sce) <- findStates(sce, max_pval=1e-3, min_feat=4)
-#'
-#' # Connect states
-#' sce <- connectStates(sce, l=15)
-#'
-#' # Select trajectory
-#' sce <- selectTrajectory(sce, component=1)
+#' # Example data
+#' data(exSCE)
 #'
 #' # Align samples to trajectory
-#' sce <- fitTrajectory(sce)
-#'
-#' \dontrun{
-#' plotTrajectoryFit(sce)
-#' }
+#' exSCE <- fitTrajectory(exSCE)
 #' @references Bedall, F.K., and Zimmermann, H. (1979).
 #' Algorithm AS143. The mediancentre. Appl Statist 28, 325-328.
 #' @docType methods
@@ -803,23 +761,10 @@ setMethod("fitTrajectory", "SingleCellExperiment", function(sce){
 #' Please note, the parameter \code{name} is case-sensitive.
 #' @seealso \code{fitTrajectory} \code{featureNames} \code{phenoNames}
 #' @examples
-#' # Generate example data
-#' sce <- exDat()
+#' # Example data
+#' data(exSCE)
 #'
 #' \dontrun{
-#' # Reduce dimensionality
-#' res <- embedSamples(sce)
-#' d <- findSpectrum(res$eigenvalues, frac=30)
-#' latentSpace(sce) <- res$components[, d]
-#'
-#' # Find and connect states
-#' states(sce) <- findStates(sce, max_pval=1e-3, min_feat=4)
-#' sce <- connectStates(sce, l=15)
-#'
-#' # Align samples to trajectory
-#' sce <- selectTrajectory(sce, component=1)
-#' sce <- fitTrajectory(sce)
-#'
 #' # Export trajectory graph structure to graphml
 #' # Color nodes by gene expression (e.g, feature_10)
 #' write.ygraphml(sce, file="yourFilePath", color_by="featureName",
@@ -906,31 +851,11 @@ setMethod("write.ygraphml", "SingleCellExperiment", function(sce, file,
 #' always assigned weight = 1.
 #' @seealso \code{addTrail} \code{gamObject}
 #' @examples
-#' # Generate example data
-#' sce <- exDat()
-#'
-#' # Reduce dimensionality
-#' res <- embedSamples(sce)
-#' d <- findSpectrum(res$eigenvalues, frac=30)
-#' latentSpace(sce) <- res$components[, d]
-#'
-#' # Find and connect states
-#' states(sce) <- findStates(sce, max_pval=1e-3, min_feat=4)
-#' sce <- connectStates(sce, l=15)
-#'
-#' # Align samples to trajectory
-#' sce <- selectTrajectory(sce, component=1)
-#' sce <- fitTrajectory(sce)
-#'
-#' # Export trajectory graph structure to graphml
-#' # with write.ygraphml("yourFile") and import layout with
-#' # trajLayout(sce) <- read.ygraphml("yourFile")
-#'
-#' # Define trail
-#' sce <- addTrail(sce, from="H1", to="H3", name="Tr1")
+#' # Example data
+#' data(exSCE)
 #'
 #' # Fit dynamic
-#' fit <- fitDynamic(sce, feature_name="feature_3", trail_name="Tr1")
+#' fit <- fitDynamic(exSCE, feature_name="feature_3", trail_name="Tr1")
 #'
 #' summary(fit)
 #' @docType methods
@@ -1006,32 +931,11 @@ setMethod("fitDynamic", "SingleCellExperiment", function(sce, feature_name,
 #' time series with time warping algorithms. Bioinformatics 17, 495-508.
 #' @seealso \code{dtw}
 #' @examples
-#' # Generate example data
-#' sce <- exDat()
-#'
-#' # Reduce dimensionality
-#' res <- embedSamples(sce)
-#' d <- findSpectrum(res$eigenvalues, frac=30)
-#' latentSpace(sce) <- res$components[, d]
-#'
-#' # Find and connect states
-#' states(sce) <- findStates(sce, max_pval=1e-3, min_feat=4)
-#' sce <- connectStates(sce, l=15)
-#'
-#' # Align samples to trajectory
-#' sce <- selectTrajectory(sce, component=1)
-#' sce <- fitTrajectory(sce)
-#'
-#' # Export trajectory graph structure to graphml
-#' # with write.ygraphml("yourFile") and import layout with
-#' # trajLayout(sce) <- read.ygraphml("yourFile")
-#'
-#' # Define trails
-#' sce <- addTrail(sce, from="H1", to="H3", name="Tr1")
-#' sce <- addTrail(sce, from="H1", to="H2", name="Tr2")
+#' # Example data
+#' data(exSCE)
 #'
 #' # Differential expression between trails
-#' contrastTrailExpr(sce, feature_name=c("feature_1", "feature_10"),
+#' contrastTrailExpr(exSCE, feature_name=c("feature_1", "feature_10"),
 #'                  trail_names=c("Tr1", "Tr2"), score="rmsd")
 #' @docType methods
 #' @aliases contrastTrailExpr,SingleCellExperiment-method
@@ -1083,14 +987,10 @@ setMethod("contrastTrailExpr", "SingleCellExperiment",
 #' @details Barplot showing the absolute number of samples per state.
 #' @seealso \code{ggplot} \code{states}
 #' @examples
-#' # Generate example data
-#' sce <- exDat()
+#' # Example data
+#' data(exSCE)
 #'
-#' # Define states
-#' X <- logcounts(sce)
-#' X <- t(X)
-#' states(sce) <- kmeans(X, centers=5)$cluster
-#' plotStateSize(sce)
+#' plotStateSize(exSCE)
 #' @docType methods
 #' @aliases plotStateSize,SingleCellExperiment-method
 #' @export
@@ -1115,15 +1015,10 @@ setMethod("plotStateSize", "SingleCellExperiment", function(sce){
 #' the expression distribution per sample.
 #' @seealso \code{ggplot} \code{states}
 #' @examples
-#' # Generate example data
-#' sce <- exDat()
-#' X <- logcounts(sce)
-#' X <- t(X)
+#' # Example data
+#' data(exSCE)
 #'
-#' # Define states
-#' states(sce) <- kmeans(X, centers=5)$cluster
-#' plotStateExpression(sce, feature_name="feature_1")
-#'
+#' plotStateExpression(exSCE, feature_name="feature_1")
 #' @docType methods
 #' @aliases plotStateExpression,SingleCellExperiment-method
 #' @export
@@ -1168,16 +1063,11 @@ setMethod("plotStateExpression", "SingleCellExperiment",
 #' 9, pp.2579-2605.
 #' @seealso \code{Rtsne} \code{latentSpace}
 #' @examples
-#' # Generate example data
-#' sce <- exDat()
+#' # Example data
+#' data(exSCE)
 #'
-#' # Reduce dimensionality
-#' res <- embedSamples(sce)
-#' d <- findSpectrum(res$eigenvalues, frac=30)
-#' latentSpace(sce) <- res$components[, d]
-#'
-#' plotManifold(sce, color_by="featureName", name="feature_10")
-#'
+#' plotManifold(exSCE, color_by="featureName", name="feature_10", only_plot=TRUE)
+#' plotManifold(exSCE, color_by="phenoName", name="age", only_plot=TRUE)
 #' @docType methods
 #' @aliases plotManifold,SingleCellExperiment-method
 #' @export
@@ -1193,6 +1083,10 @@ setMethod("plotManifold", "SingleCellExperiment",
   #Fetch plot color data
   dat <- .validatePlotParams(sce, color_by=color_by, name=name)
   #Fetch tSNE data
+  if(is.null(CellTrails::latentSpace(sce))) {
+    stop("Please, define CellTrails' latent space first (see function",
+         "latentSpace<-).")
+  }
   tsne_params <- c("seed"=seed, "perplexity"=perplexity)
   if(is.null(latentSpaceSNE(sce)) |
      any(!tsne_params == .tsneParams(sce))) { #recalc
@@ -1235,20 +1129,11 @@ setMethod("plotManifold", "SingleCellExperiment",
 #' recovered using nearest neighbor learning.
 #' @seealso \code{connectStates}
 #' @examples
-#' # Generate example data
-#' sce <- exDat()
+#' # Example data
+#' data(exSCE)
 #'
-#' # Reduce dimensionality
-#' res <- embedSamples(sce)
-#' d <- findSpectrum(res$eigenvalues, frac=30)
-#' latentSpace(sce) <- res$components[, d]
-#'
-#' # Find and connect states
-#' states(sce) <- findStates(sce, max_pval=1e-3, min_feat=4)
-#' sce <- connectStates(sce, l=15)
-#'
-#' plotStateTrajectory(sce, color_by="phenoName", name="age", component=1)
-#' plotStateTrajectory(sce, color_by="featureName", name="feature_1",
+#' plotStateTrajectory(exSCE, color_by="phenoName", name="age", component=1)
+#' plotStateTrajectory(exSCE, color_by="featureName", name="feature_1",
 #'                     component=1)
 #' @docType methods
 #' @aliases plotStateTrajectory,SingleCellExperiment-method
@@ -1303,20 +1188,10 @@ setMethod("plotStateTrajectory", "SingleCellExperiment",
 #' recovered using nearest neighbor learning.
 #' @seealso \code{fitTrajectory} \code{trajResiduals}
 #' @examples
-#' # Generate example data
-#' sce <- exDat()
+#' # Example data
+#' data(exSCE)
 #'
-#' # Reduce dimensionality
-#' res <- embedSamples(sce)
-#' d <- findSpectrum(res$eigenvalues, frac=30)
-#' latentSpace(sce) <- res$components[, d]
-#'
-#' # Find and connect states
-#' states(sce) <- findStates(sce, max_pval=1e-3, min_feat=4)
-#' sce <- connectStates(sce, l=15)
-#' sce <- selectTrajectory(sce, component=1)
-#' sce <- fitTrajectory(sce)
-#' plotTrajectoryFit(sce)
+#' plotTrajectoryFit(exSCE)
 #' @docType methods
 #' @aliases plotTrajectoryFit,SingleCellExperiment-method
 #' @export
@@ -1365,43 +1240,22 @@ setMethod("plotTrajectoryFit", "SingleCellExperiment", function(sce){
 #' \code{color_by="phenoName"} and \code{name="landmark"}.
 #' @seealso \code{gam}
 #' @examples
-#' # Generate example data
-#' sce <- exDat()
-#'
-#' # Reduce dimensionality
-#' res <- embedSamples(sce)
-#' d <- findSpectrum(res$eigenvalues, frac=30)
-#' latentSpace(sce) <- res$components[, d]
-#'
-#' # Fit trajectory
-#' states(sce) <- findStates(sce, max_pval=1e-3, min_feat=4)
-#' sce <- connectStates(sce, l=15)
-#' sce <- selectTrajectory(sce, component=1)
-#' sce <- fitTrajectory(sce)
-#'
-#' # Set layout
-#' # Please note that the trajectory graph structure can be exported
-#' # and the layout computed by any graph layout software
-#' # For illustration purposes the layout for the example dataset
-#' # is contained in this package
-#' tl <- read.ygraphml(system.file("exdata",
-#'                                 "exdat.graphml",
-#'                                 package="CellTrails"))
-#' trajLayout(sce, adjust=TRUE) <- tl
+#' # Example data
+#' data(exSCE)
 #'
 #' # Plot landmarks
-#' plotMap(sce, color_by="phenoName", name="landmark")
+#' plotMap(exSCE, color_by="phenoName", name="landmark")
 #'
 #' # Plot phenotype
-#' plotMap(sce, color_by="phenoName", name="age")
+#' plotMap(exSCE, color_by="phenoName", name="age")
 #'
 #' # Plot feature expression map
-#' plotMap(sce, color_by="featureName", name="feature_10", type="surface.fit")
-#' plotMap(sce, color_by="featureName", name="feature_10", type="surface.fit",
+#' plotMap(exSCE, color_by="featureName", name="feature_10", type="surface.fit")
+#' plotMap(exSCE, color_by="featureName", name="feature_10", type="surface.fit",
 #'         samples_only=TRUE)
 #'
 #' #Plot surface fit standard errors
-#' plotMap(sce, color_by="featureName", name="feature_10", type="surface.se")
+#' plotMap(exSCE, color_by="featureName", name="feature_10", type="surface.se")
 #' @docType methods
 #' @aliases plotMap,SingleCellExperiment-method
 #' @export
@@ -1467,35 +1321,11 @@ setMethod("plotMap", "SingleCellExperiment", function(sce, color_by, name,
 #' @seealso \code{addTrail} \code{userLandmarks} \code{trailNames}
 #' \code{trails}
 #' @examples
-#' # Generate example data
-#' sce <- exDat()
-#'
-#' # Reduce dimensionality
-#' res <- embedSamples(sce)
-#' d <- findSpectrum(res$eigenvalues, frac=30)
-#' latentSpace(sce) <- res$components[, d]
-#'
-#' # Fit trajectory
-#' states(sce) <- findStates(sce, max_pval=1e-3, min_feat=4)
-#' sce <- connectStates(sce, l=15)
-#' sce <- selectTrajectory(sce, component=1)
-#' sce <- fitTrajectory(sce)
-#'
-#' # Set layout
-#' # Please note that the trajectory graph structure can be exported
-#' # and the layout computed by any graph layout software
-#' # For illustration purposes the layout for the example dataset
-#' # is contained in this package
-#' tl <- read.ygraphml(system.file("exdata",
-#'                                 "exdat.graphml",
-#'                                 package="CellTrails"))
-#' trajLayout(sce, adjust=TRUE) <- tl
-#'
-#' # Define trail
-#' sce <- addTrail(sce, from = "H1", to = "H2", name = "Tr1")
+#' # Example data
+#' data(exSCE)
 #'
 #' # Plot trail
-#' plotTrail(sce, name="Tr1")
+#' plotTrail(exSCE, name="Tr1")
 #' @docType methods
 #' @aliases plotTrail,SingleCellExperiment-method
 #' @export
@@ -1530,37 +1360,13 @@ setMethod("plotTrail", "SingleCellExperiment", function(sce, name){
 #' listed by \code{trailNames}, all features with \code{featureNames}.
 #' @seealso \code{addTrail} \code{trailNames} \code{featureNames}
 #' @examples
-#' # Generate example data
-#' sce <- exDat()
-#'
-#' # Reduce dimensionality
-#' res <- embedSamples(sce)
-#' d <- findSpectrum(res$eigenvalues, frac=30)
-#' latentSpace(sce) <- res$components[, d]
-#'
-#' # Fit trajectory
-#' states(sce) <- findStates(sce, max_pval=1e-3, min_feat=4)
-#' sce <- connectStates(sce, l=15)
-#' sce <- selectTrajectory(sce, component=1)
-#' sce <- fitTrajectory(sce)
-#'
-#' # Set layout
-#' # Please note that the trajectory graph structure can be exported
-#' # and the layout computed by any graph layout software
-#' # For illustration purposes the layout for the example dataset
-#' # is contained in this package
-#' tl <- read.ygraphml(system.file("exdata",
-#'                                 "exdat.graphml",
-#'                                 package="CellTrails"))
-#' trajLayout(sce, adjust=TRUE) <- tl
-#'
-#' # Define trail
-#' sce <- addTrail(sce, from = "H1", to = "H2", name = "Tr1")
+#' # Example data
+#' data(exSCE)
 #'
 #' # Plot dynamic of feature_10
-#' plotDynamic(sce, trail_name="Tr1", feature_name="feature_1")
+#' plotDynamic(exSCE, trail_name="Tr1", feature_name="feature_1")
 #' # Plot dynamic of feature_1 and feature_10
-#' plotDynamic(sce, trail_name="Tr1",
+#' plotDynamic(exSCE, trail_name="Tr1",
 #'             feature_name=c("feature_1", "feature_10"))
 #' @docType methods
 #' @aliases plotDynamic,SingleCellExperiment-method

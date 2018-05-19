@@ -37,7 +37,8 @@ fraction of the total sample count. Please note that spike-in controls
 are ignored and are not listed as trajectory features.
 }
 \examples{
-# Simulate example data
+# Example data
+set.seed(1101)
 dat <- simulate_exprs(n_features=15000, n_samples=100)
 
 # Create container

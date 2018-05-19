@@ -42,6 +42,7 @@ matrix with \code{model.matrix}.
 }
 \examples{
 # Simulate example data
+set.seed(1101)
 dat <- simulate_exprs(n_features=15000, n_samples=100)
 
 # Create container

@@ -44,16 +44,11 @@ respectively. A previously computed tSNE visualization will be reused
 and \code{tsne_perplexity} are used for the tSNE calculation.
 }
 \examples{
-# Generate example data
-sce <- exDat()
+# Example data
+data(exSCE)
 
-# Reduce dimensionality
-res <- embedSamples(sce)
-d <- findSpectrum(res$eigenvalues, frac=30)
-latentSpace(sce) <- res$components[, d]
-
-plotManifold(sce, color_by="featureName", name="feature_10")
-
+plotManifold(exSCE, color_by="featureName", name="feature_10", only_plot=TRUE)
+plotManifold(exSCE, color_by="phenoName", name="age", only_plot=TRUE)
 }
 \references{
 van der Maaten, L.J.P. & Hinton, G.E., 2008. Visualizing

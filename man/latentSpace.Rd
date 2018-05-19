@@ -25,14 +25,11 @@ that the proper matrix is received from a \code{SingleCellExperiment}
 object.
 }
 \examples{
-# Generate example data
-sce <- exDat()
-
-# Set latent space
-latentSpace(sce) <- pca(sce)$components[, 1:10]
+# Example data
+data(exSCE)
 
 # Get latent space
-latentSpace(sce)
+latentSpace(exSCE)[seq_len(5), ]
 }
 \seealso{
 \code{SingleCellExperiment} \code{reducedDim}

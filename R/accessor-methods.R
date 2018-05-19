@@ -30,7 +30,7 @@ setMethod(".useFeature<-", "SingleCellExperiment", function(object, value){
 #' reconstruction. Spike-in controls are removed.
 #' @param object An object of class \code{SingleCellExperiment}
 #' @return A \code{logical} vector
-#' @importFrom SingleCellExperiment isSpike
+#' @import SingleCellExperiment
 #' @docType methods
 #' @aliases .useFeature,SingleCellExperiment-method
 #' @keywords internal
@@ -93,6 +93,7 @@ setMethod(".useSample", "SingleCellExperiment", function(object){
 #' @docType methods
 #' @aliases .exprs,SingleCellExperiment-method
 #' @keywords internal
+#' @import SingleCellExperiment
 #' @importFrom SummarizedExperiment assay
 #' @author Daniel C. Ellwanger
 setGeneric(".exprs", function(object)
@@ -201,9 +202,9 @@ setMethod(".trajResiduals<-", "SingleCellExperiment", function(object, value){
 #' @seealso \code{fitTrajectory} \code{trajSampleNames}
 #' @examples
 #' # Example data
-#' sce <- exDat()
+#' data(exSCE)
 #'
-#' trajResiduals(sce)
+#' trajResiduals(exSCE)[seq_len(5)]
 #' @docType methods
 #' @aliases trajResiduals,SingleCellExperiment-method
 #' @export
@@ -334,10 +335,10 @@ setMethod(".pheno", "SingleCellExperiment", function(object, name){
 #' @return A \code{character} vector
 #' @details Wrapper for \code{rownames(object)}
 #' @examples
-#' # Generate example data
-#' sce <- exDat()
+#' # Example data
+#' data(exSCE)
 #'
-#' featureNames(sce)
+#' featureNames(exSCE)
 #' @seealso \code{SingleCellExperiment}
 #' @docType methods
 #' @aliases featureNames,SingleCellExperiment-method
@@ -355,10 +356,10 @@ setMethod("featureNames", "SingleCellExperiment", function(object){
 #' @return A \code{character} vector
 #' @details Wrapper for \code{colnames(object)}
 #' @examples
-#' # Generate example data
-#' sce <- exDat()
+#' # Example data
+#' data(exSCE)
 #'
-#' sampleNames(sce)
+#' sampleNames(exSCE)[seq_len(5)]
 #' @seealso \code{SingleCellExperiment}
 #' @docType methods
 #' @aliases sampleNames,SingleCellExperiment-method
@@ -376,13 +377,14 @@ setMethod("sampleNames", "SingleCellExperiment", function(object){
 #' @return A \code{character} vector
 #' @details Wrapper for \code{colnames(colData(object))}
 #' @examples
-#' # Generate example data
-#' sce <- exDat()
+#' # Example data
+#' data(exSCE)
 #'
-#' phenoNames(sce)
+#' phenoNames(exSCE)
 #' @seealso \code{SingleCellExperiment}
 #' @docType methods
 #' @aliases phenoNames,SingleCellExperiment-method
+#' @import SingleCellExperiment
 #' @importFrom SummarizedExperiment colData
 #' @export
 #' @author Daniel C. Ellwanger
@@ -410,16 +412,16 @@ setMethod("phenoNames", "SingleCellExperiment", function(object){
 #' "S" is added and the vector is converted to type factor.
 #' @seealso colData
 #' @examples
-#' # Generate example data
-#' sce <- exDat()
+#' # Example data
+#' data(exSCE)
 #'
 #' # Assign clusters
-#' cl <- kmeans(logcounts(sce), centers=10)$cluster
-#' states(sce) <- cl
+#' cl <- kmeans(logcounts(exSCE), centers=10)$cluster
+#' states(exSCE) <- cl
+#' @import SingleCellExperiment
 #' @importFrom SummarizedExperiment colData<-
 #' @docType methods
 #' @aliases states<-,SingleCellExperiment-method
-#' @importFrom SingleCellExperiment colData
 #' @export
 #' @author Daniel C. Ellwanger
 setGeneric("states<-", function(object, value)
@@ -446,15 +448,10 @@ setMethod("states<-", "SingleCellExperiment", function(object, value){
 #' @details State information is extracted from \code{colData};
 #' factor levels are alphanumerically ordered by ID.
 #' @examples
-#' # Generate example data
-#' sce <- exDat()
+#' # Example data
+#' data(exSCE)
 #'
-#' # Assign clusters
-#' cl <- kmeans(logcounts(sce), centers=5)$cluster
-#' states(sce) <- cl
-#'
-#' # Get clusters
-#' states(sce)
+#' states(exSCE)[seq_len(5)]
 #' @seealso \code{SingleCellExperiment} \code{findStates}
 #' @docType methods
 #' @aliases states,SingleCellExperiment-method
@@ -472,11 +469,11 @@ setMethod("states", "SingleCellExperiment", function(object){
 #' @param value A character vector
 #' @return An updated object of class \code{SingleCellExperiment}
 #' @examples
-#' # Generate example data
-#' sce <- exDat()
+#' # Example data
+#' data(exSCE)
 #'
 #' # Set trajectory features
-#' trajFeatureNames(sce) <- featureNames(sce)[1:10]
+#' trajFeatureNames(exSCE) <- rownames(exSCE)[seq_len(5)]
 #' @docType methods
 #' @aliases trajFeatureNames<-,SingleCellExperiment-method
 #' @export
@@ -500,11 +497,11 @@ setMethod("trajFeatureNames<-", "SingleCellExperiment", function(object,
 #' \code{SingleCellExperiment} object. The return value is a character
 #' vector containing the feature names.
 #' @examples
-#' # Generate example data
-#' sce <- exDat()
+#' # Example data
+#' data(exSCE)
 #'
 #' # Get trajectory features
-#' trajFeatureNames(sce)
+#' trajFeatureNames(exSCE)[seq_len(5)]
 #' @docType methods
 #' @aliases trajFeatureNames,SingleCellExperiment-method
 #' @export
@@ -524,11 +521,11 @@ setMethod("trajFeatureNames", "SingleCellExperiment", function(object){
 #' is performed on one component. This function returns the names of the
 #' samples which are member of the selected component.
 #' @examples
-#' # Generate example data
-#' sce <- exDat()
+#' # Example data
+#' data(exSCE)
 #'
 #' # Get trajectory samples
-#' trajSampleNames(sce)
+#' trajSampleNames(exSCE)[seq_len(5)]
 #' @docType methods
 #' @aliases trajSampleNames,SingleCellExperiment-method
 #' @export
@@ -549,15 +546,14 @@ setMethod("trajSampleNames", "SingleCellExperiment", function(object){
 #' (spanning the lower-dimensional latent space).
 #' @seealso \code{SingleCellExperiment} \code{reducedDim}
 #' @examples
-#' # Generate example data
-#' sce <- exDat()
+#' # Example data
+#' data(exSCE)
 #'
 #' # Set latent space
-#' latentSpace(sce) <- pca(sce)$components[, 1:10]
-#' @importFrom SingleCellExperiment reducedDim
+#' latentSpace(exSCE) <- pca(exSCE)$components[, seq_len(10)]
+#' @import SingleCellExperiment
 #' @docType methods
 #' @aliases latentSpace<-,SingleCellExperiment-method
-#' @importFrom SingleCellExperiment reducedDim
 #' @export
 #' @author Daniel C. Ellwanger
 setGeneric("latentSpace<-", function(object, value)
@@ -578,17 +574,14 @@ setMethod("latentSpace<-", "SingleCellExperiment", function(object, value){
 #' object.
 #' @seealso \code{SingleCellExperiment} \code{reducedDim}
 #' @examples
-#' # Generate example data
-#' sce <- exDat()
-#'
-#' # Set latent space
-#' latentSpace(sce) <- pca(sce)$components[, 1:10]
+#' # Example data
+#' data(exSCE)
 #'
 #' # Get latent space
-#' latentSpace(sce)
+#' latentSpace(exSCE)[seq_len(5), ]
 #' @docType methods
 #' @aliases latentSpace,SingleCellExperiment-method
-#' @importFrom SingleCellExperiment reducedDim
+#' @import SingleCellExperiment
 #' @export
 #' @author Daniel C. Ellwanger
 setGeneric("latentSpace", function(object) standardGeneric("latentSpace"))
@@ -609,24 +602,11 @@ setMethod("latentSpace", "SingleCellExperiment", function(object){
 #' An error is thrown if the trajectory has not been reconstructed yet.
 #' @seealso \code{SingleCellExperiment} \code{fitTrajectory}
 #' @examples
-#' # Generate example data
-#' sce <- exDat()
-#'
-#' # Reduce dimensionality
-#' res <- embedSamples(sce)
-#' d <- findSpectrum(res$eigenvalues, frac=30)
-#' latentSpace(sce) <- res$components[, d]
-#'
-#' # Find and connect states
-#' states(sce) <- findStates(sce, max_pval=1e-3, min_feat=4)
-#' sce <- connectStates(sce, l=15)
-#'
-#' # Align samples to trajectory
-#' sce <- selectTrajectory(sce, component=1)
-#' sce <- fitTrajectory(sce)
+#' # Example data
+#' data(exSCE)
 #'
 #' # Set landmarks
-#' userLandmarks(sce) <- sampleNames(sce)[5:7]
+#' userLandmarks(exSCE) <- colnames(exSCE)[5:7]
 #' @docType methods
 #' @aliases userLandmarks<-,SingleCellExperiment-method
 #' @export
@@ -651,6 +631,7 @@ setMethod("userLandmarks<-", "SingleCellExperiment", function(object, value){
     .trajLandmark(object[, f], type="shape") <- "ellipse"
   }
   #Add new user landmarks
+  ltypes <- .trajLandmark(object, type="type")
   h_or_b <- which(!is.na(ltypes)) #trail heads and branches
   value <- setdiff(value, colnames(object)[h_or_b]) #keep H or B
   uids <- paste0("U", seq_along(value))
@@ -670,11 +651,11 @@ setMethod("userLandmarks<-", "SingleCellExperiment", function(object, value){
 #' trails from a trajectory.
 #' @seealso \code{SingleCellExperiment}
 #' @examples
-#' # Generate example data
-#' sce <- exDat()
+#' # Example data
+#' data(exSCE)
 #'
 #' # Get landmarks
-#' userLandmarks(sce)
+#' userLandmarks(exSCE)
 #' @docType methods
 #' @aliases userLandmarks,SingleCellExperiment-method
 #' @export
@@ -697,11 +678,11 @@ setMethod("userLandmarks", "SingleCellExperiment", function(object){
 #' Landmarks can be used to extract single trails from a trajectory.
 #' @seealso \code{userLandmarks}
 #' @examples
-#' # Generate example data
-#' sce <- exDat()
+#' # Example data
+#' data(exSCE)
 #'
 #' # Get landmarks
-#' landmarks(sce)
+#' landmarks(exSCE)[seq_len(5)]
 #' @docType methods
 #' @aliases landmarks,SingleCellExperiment-method
 #' @export
@@ -736,30 +717,18 @@ setMethod("landmarks", "SingleCellExperiment", function(object){
 #' re-defined.
 #' @seealso \code{fitTrajectory} \code{landmarks} \code{plotMap}
 #' @examples
-#' # Generate example data
-#' sce <- exDat()
-#'
-#' # Reduce dimensionality
-#' res <- embedSamples(sce)
-#' d <- findSpectrum(res$eigenvalues, frac=30)
-#' latentSpace(sce) <- res$components[, d]
-#'
-#' # Find and connect states
-#' states(sce) <- findStates(sce, max_pval=1e-3, min_feat=4)
-#' sce <- connectStates(sce, l=15)
-#'
-#' # Align samples to trajectory
-#' sce <- selectTrajectory(sce, component=1)
-#' sce <- fitTrajectory(sce)
+#' # Example data
+#' data(exSCE)
 #'
 #' # Add trail
-#' sce <- addTrail(sce, "H1", "H2", "myTrail")
-#' trailNames(sce)
-#' phenoNames(sce)
+#' sce <- addTrail(exSCE, "H1", "H2", "Tr1")
+#' trailNames(exSCE)
+#' phenoNames(exSCE)
 #' @docType methods
 #' @aliases addTrail,SingleCellExperiment-method
 #' @importFrom igraph get.shortest.paths distances
-#' @importFrom SummarizedExperiment colData colData<-
+#' @import SingleCellExperiment
+#' @importFrom SummarizedExperiment colData<-
 #' @export
 #' @author Daniel C. Ellwanger
 setGeneric("addTrail", function(sce, from, to, name)
@@ -830,30 +799,14 @@ setMethod("addTrail", "SingleCellExperiment", function(sce, from, to, name){
 #' names can be shown using function \code{trailNames}.
 #' @seealso \code{trailNames} \code{addTrail}
 #' @examples
-#' # Generate example data
-#' sce <- exDat()
-#'
-#' # Reduce dimensionality
-#' res <- embedSamples(sce)
-#' d <- findSpectrum(res$eigenvalues, frac=30)
-#' latentSpace(sce) <- res$components[, d]
-#'
-#' # Find and connect states
-#' states(sce) <- findStates(sce, max_pval=1e-3, min_feat=4)
-#' sce <- connectStates(sce, l=15)
-#'
-#' # Align samples to trajectory
-#' sce <- selectTrajectory(sce, component=1)
-#' sce <- fitTrajectory(sce)
-#'
-#' # Add trail
-#' sce <- addTrail(sce, "H1", "H2", "myTrail")
-#' trailNames(sce)
+#' # Example data
+#' data(exSCE)
 #'
 #' # Remove trail
-#' sce <- removeTrail(sce, "myTrail")
-#' trailNames(sce)
-#'
+#' trailNames(exSCE)
+#' exSCE <- removeTrail(exSCE, "Tr1")
+#' trailNames(exSCE)
+#' @import SingleCellExperiment
 #' @importFrom SummarizedExperiment colData<-
 #' @docType methods
 #' @aliases removeTrail,SingleCellExperiment-method
@@ -885,25 +838,10 @@ setMethod("removeTrail", "SingleCellExperiment", function(sce, name){
 #' @return A \code{character} vector
 #' @seealso \code{addTrail}
 #' @examples
-#' # Generate example data
-#' sce <- exDat()
+#' # Example data
+#' data(exSCE)
 #'
-#' # Reduce dimensionality
-#' res <- embedSamples(sce)
-#' d <- findSpectrum(res$eigenvalues, frac=30)
-#' latentSpace(sce) <- res$components[, d]
-#'
-#' # Find and connect states
-#' states(sce) <- findStates(sce, max_pval=1e-3, min_feat=4)
-#' sce <- connectStates(sce, l=15)
-#'
-#' # Align samples to trajectory
-#' sce <- selectTrajectory(sce, component=1)
-#' sce <- fitTrajectory(sce)
-#'
-#' # Add trail
-#' sce <- addTrail(sce, "H1", "H2", "myTrail")
-#' trailNames(sce)
+#' trailNames(exSCE)
 #' @docType methods
 #' @aliases trailNames,SingleCellExperiment-method
 #' @export
@@ -928,27 +866,13 @@ setMethod("trailNames", "SingleCellExperiment", function(object){
 #' to be unique.
 #' @seealso \code{addTrail}
 #' @examples
-#' # Generate example data
-#' sce <- exDat()
+#' # Example data
+#' data(exSCE)
 #'
-#' # Reduce dimensionality
-#' res <- embedSamples(sce)
-#' d <- findSpectrum(res$eigenvalues, frac=30)
-#' latentSpace(sce) <- res$components[, d]
-#'
-#' # Find and connect states
-#' states(sce) <- findStates(sce, max_pval=1e-3, min_feat=4)
-#' sce <- connectStates(sce, l=15)
-#'
-#' # Align samples to trajectory
-#' sce <- selectTrajectory(sce, component=1)
-#' sce <- fitTrajectory(sce)
-#'
-#' # Add trail
-#' sce <- addTrail(sce, "H1", "H2", "myTrail")
-#' trailNames(sce)
-#' trailNames(sce) <- "ABC"
-#' trailNames
+#' trailNames(exSCE)
+#' trailNames(exSCE) <- c("ABC", "DEF")
+#' trailNames(exSCE)
+#' @import SingleCellExperiment
 #' @importFrom SummarizedExperiment colData<-
 #' @docType methods
 #' @aliases trailNames<-,SingleCellExperiment-method
@@ -979,26 +903,10 @@ setMethod("trailNames<-", "SingleCellExperiment", function(object, value) {
 #' @return A DataFrame with \code{numeric} columns
 #' @seealso \code{addTrail}
 #' @examples
-#' # Generate example data
-#' sce <- exDat()
+#' # Example data
+#' data(exSCE)
 #'
-#' # Reduce dimensionality
-#' res <- embedSamples(sce)
-#' d <- findSpectrum(res$eigenvalues, frac=30)
-#' latentSpace(sce) <- res$components[, d]
-#'
-#' # Find and connect states
-#' states(sce) <- findStates(sce, max_pval=1e-3, min_feat=4)
-#' sce <- connectStates(sce, l=15)
-#'
-#' # Align samples to trajectory
-#' sce <- selectTrajectory(sce, component=1)
-#' sce <- fitTrajectory(sce)
-#'
-#' # Add trail
-#' sce <- addTrail(sce, "H1", "H2", "myTrail")
-#' sce <- addTrail(sce, "H1", "H3", "myTrail2")
-#' trails(sce)
+#' trails(exSCE)
 #' @docType methods
 #' @aliases trails,SingleCellExperiment-method
 #' @export
@@ -1021,16 +929,11 @@ setMethod("trails", "SingleCellExperiment", function(object){
 #' @param value A \code{numeric} matrix with one column per dimension
 #' @return An updated object of class \code{SingleCellExperiment}
 #' @examples
-#' #' # Generate example data
-#' sce <- exDat()
+#' # Example data
+#' data(exSCE)
 #'
-#' # Reduce dimensionality
-#' res <- embedSamples(sce)
-#' d <- findSpectrum(res$eigenvalues, frac=30)
-#' latentSpace(sce) <- res$components[, d]
-#'
-#' gp <- plotManifold(sce, color_by="featureName", name="feature_10")
-#' latentSpaceSNE(sce) <- gp
+#' gp <- plotManifold(exSCE, color_by="featureName", name="feature_10")
+#' latentSpaceSNE(exSCE) <- gp
 #' @docType methods
 #' @aliases latentSpaceSNE<-,SingleCellExperiment-method
 #' @export
@@ -1052,10 +955,10 @@ setMethod("latentSpaceSNE<-", "SingleCellExperiment", function(object, value){
 #' @param object A \code{SingleCellExperiment} object
 #' @return A \code{numeric} vector
 #' @examples
-#' # Generate example data
-#' sce <- exDat()
+#' # Example data
+#' data(exSCE)
 #'
-#' latentSpaceSNE(sce)
+#' latentSpaceSNE(exSCE)[seq_len(5), ]
 #' @docType methods
 #' @aliases latentSpaceSNE,SingleCellExperiment-method
 #' @export
@@ -1091,26 +994,11 @@ setMethod("latentSpaceSNE", "SingleCellExperiment", function(object){
 #' less than 2, or if the row names do not correspond to \code{sampleNames}.
 #' @seealso \code{write.ygraphml} \code{trajSampleNames}
 #' @examples
-#' # Create example data
-#' sce <- exDat()
+#' # Example data
+#' data(exSCE)
+#' tl <- trajLayout(exSCE)
 #'
-#' # Sample embedding and trajectory fit
-#' res <- embedSamples(sce)
-#' d <- findSpectrum(res$eigenvalues, frac=30)
-#' latentSpace(sce) <- res$components[, d]
-#' states(sce) <- findStates(sce, max_pval=1e-3, min_feat=4)
-#' sce <- connectStates(sce, l = 15)
-#' sce <- selectTrajectory(sce, component=1)
-#' sce <- fitTrajectory(sce)
-#'
-#' # For illustration purposes a graphml file for the example dataset
-#' # is contained in this package.
-#' # The function trajLayout allows to set a trajectory layout
-#' # to the object; the parameter adjust='TRUE' adjusts the layout
-#' # to represent the computed pseudotime
-#' fn <- system.file("exdata", "exdat.graphml", package="CellTrails")
-#' tl <- read.ygraphml(fn)
-#' trajLayout(sce, adjust=TRUE) <- tl
+#' trajLayout(exSCE) <- tl
 #' @docType methods
 #' @aliases trajLayout<-,SingleCellExperiment-method
 #' @export
@@ -1152,6 +1040,7 @@ setMethod("trajLayout<-", "SingleCellExperiment", function(object,
   snames <- rownames(value)
 
   # Store coordinates
+  rownames(object@int_colData) <- colnames(object)
   object@int_colData$CellTrails.lytX1 <- as.numeric(rep(NA, ncol(object)))
   object@int_colData$CellTrails.lytX2 <- as.numeric(rep(NA, ncol(object)))
   object[, snames]@int_colData$CellTrails.lytX1 <- X[, 1]
@@ -1177,10 +1066,10 @@ setMethod("trajLayout<-", "SingleCellExperiment", function(object,
 #' @param object A \code{SingleCellExperiment} object
 #' @return A \code{data.frame}
 #' @examples
-#' # Create example data
-#' sce <- exDat()
+#' # Example data
+#' data(exSCE)
 #'
-#' trajLayout(sce)
+#' trajLayout(exSCE)[seq_len(5), ]
 #' @docType methods
 #' @aliases trajLayout,SingleCellExperiment-method
 #' @importFrom BiocGenerics as.data.frame
@@ -1197,5 +1086,32 @@ setMethod("trajLayout", "SingleCellExperiment", function(object){
     df <- as.data.frame(df)
     colnames(df) <- c("D1", "D2")
     df
+  }
+})
+
+#' GET trajectory component states
+#'
+#' Returns states of trajectory components
+#' \code{SingleCellExperiment} object
+#' @param object A \code{SingleCellExperiment} object
+#' @return A \code{character} vector
+#' @examples
+#' # Example data
+#' data(exSCE)
+#'
+#' trajComponents(exSCE)
+#' @docType methods
+#' @aliases trajComponents,SingleCellExperiment-method
+#' @importFrom igraph V
+#' @export
+#' @author Daniel C. Ellwanger
+setGeneric("trajComponents", function(object)
+  standardGeneric("trajComponents"))
+setMethod("trajComponents", "SingleCellExperiment", function(object){
+  comps <- .spanForest(object)
+  if(is.null(comps)){
+    NULL
+  } else {
+    lapply(comps, function(x) V(x)$name)
   }
 })

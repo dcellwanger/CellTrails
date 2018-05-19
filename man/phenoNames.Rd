@@ -21,10 +21,10 @@ Retrieve phenotype names from a \code{SingleCellExperiment} object
 Wrapper for \code{colnames(colData(object))}
 }
 \examples{
-# Generate example data
-sce <- exDat()
+# Example data
+data(exSCE)
 
-phenoNames(sce)
+phenoNames(exSCE)
 }
 \seealso{
 \code{SingleCellExperiment}

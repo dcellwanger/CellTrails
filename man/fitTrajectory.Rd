@@ -46,29 +46,11 @@ computed or selected yet; functions \code{connectStates}
 and \code{selectTrajectory} need to be run first.
 }
 \examples{
-# Generate example data
-sce <- exDat()
-
-# Reduce dimensionality
-res <- embedSamples(sce)
-d <- findSpectrum(res$eigenvalues, frac=30)
-latentSpace(sce) <- res$components[, d]
-
-# Find states
-states(sce) <- findStates(sce, max_pval=1e-3, min_feat=4)
-
-# Connect states
-sce <- connectStates(sce, l=15)
-
-# Select trajectory
-sce <- selectTrajectory(sce, component=1)
+# Example data
+data(exSCE)
 
 # Align samples to trajectory
-sce <- fitTrajectory(sce)
-
-\dontrun{
-plotTrajectoryFit(sce)
-}
+exSCE <- fitTrajectory(exSCE)
 }
 \references{
 Bedall, F.K., and Zimmermann, H. (1979).

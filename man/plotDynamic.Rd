@@ -27,37 +27,13 @@ unknown. The function is case-sensitiv. All available trails can be
 listed by \code{trailNames}, all features with \code{featureNames}.
 }
 \examples{
-# Generate example data
-sce <- exDat()
-
-# Reduce dimensionality
-res <- embedSamples(sce)
-d <- findSpectrum(res$eigenvalues, frac=30)
-latentSpace(sce) <- res$components[, d]
-
-# Fit trajectory
-states(sce) <- findStates(sce, max_pval=1e-3, min_feat=4)
-sce <- connectStates(sce, l=15)
-sce <- selectTrajectory(sce, component=1)
-sce <- fitTrajectory(sce)
-
-# Set layout
-# Please note that the trajectory graph structure can be exported
-# and the layout computed by any graph layout software
-# For illustration purposes the layout for the example dataset
-# is contained in this package
-tl <- read.ygraphml(system.file("exdata",
-                                "exdat.graphml",
-                                package="CellTrails"))
-trajLayout(sce, adjust=TRUE) <- tl
-
-# Define trail
-sce <- addTrail(sce, from = "H1", to = "H2", name = "Tr1")
+# Example data
+data(exSCE)
 
 # Plot dynamic of feature_10
-plotDynamic(sce, trail_name="Tr1", feature_name="feature_1")
+plotDynamic(exSCE, trail_name="Tr1", feature_name="feature_1")
 # Plot dynamic of feature_1 and feature_10
-plotDynamic(sce, trail_name="Tr1",
+plotDynamic(exSCE, trail_name="Tr1",
             feature_name=c("feature_1", "feature_10"))
 }
 \seealso{

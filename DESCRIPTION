@@ -1,11 +1,9 @@
 Package: CellTrails
 Type: Package
 Title: Reconstruction, visualization and analysis of branching trajectories
-Version: 0.99.4
-Author: Daniel Christian Ellwanger [aut,cre,cph]
+Version: 0.99.5
 Authors@R: person(given="Daniel", family="Ellwanger", 
   role=c("aut", "cre", "cph"), email="dc.ellwanger.dev@gmail.com")
-Maintainer: Daniel Christian Ellwanger <dc.ellwanger.dev@gmail.com>
 Description: CellTrails is an unsupervised algorithm for the de novo 
   chronological ordering, visualization and analysis of single-cell expression 
   data. CellTrails makes use of a geometrically motivated concept of 
@@ -16,13 +14,11 @@ Description: CellTrails is an unsupervised algorithm for the de novo
   representation of expression patterns along all branches simultaneously. It 
   allows the user to define and infer the expression dynamics of individual and 
   multiple pathways towards distinct phenotypes.
-License: Artistic-2.0 | file LICENSE
+License: Artistic-2.0
 Encoding: UTF-8
-LazyData: true
 VignetteBuilder: knitr
 Depends: R (>= 3.5), SingleCellExperiment
 Imports:
-  BiocStyle,
   BiocGenerics,
   cba,
   dendextend,
@@ -32,20 +28,20 @@ Imports:
   ggplot2,
   ggrepel,
   grDevices,
-  graphics,
   igraph,
   maptree,
   methods,
   mgcv,
   reshape2,
   Rtsne,
-  SummarizedExperiment,
   stats,
   splines,
+  SummarizedExperiment,
   utils
 Suggests: 
   AnnotationDbi,
   destiny,
+  RUnit,
   scater,
   scran,
   knitr,
@@ -66,8 +62,8 @@ Collate:
     'AllClasses.R'
     'AllGenerics.R'
     'accessor-methods.R'
-    'check-methods.R'
     'cluster-methods.R'
+    'data-sets.R'
     'diffexp-methods.R'
     'dimred-methods.R'
     'export-methods.R'
@@ -79,5 +75,6 @@ Collate:
     'plot-methods.R'
     'show-methods.R'
     'simulation-methods.R'
+    'test-methods.R'
     'trajectory-methods.R'
     'utility-methods.R'

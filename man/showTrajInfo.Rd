@@ -20,11 +20,10 @@ Shows relevant content of a SingleCellExperiment object for a CellTrails
 analysis
 }
 \examples{
-# Generate example data
-dat <- exDat()
+# Example data
+data(exSCE)
 
-# Show content
-showTrajInfo(dat)
+showTrajInfo(exSCE)
 }
 \author{
 Daniel C. Ellwanger

@@ -20,11 +20,11 @@ An updated object of class \code{SingleCellExperiment}
 Function to set trajectory features by name
 }
 \examples{
-# Generate example data
-sce <- exDat()
+# Example data
+data(exSCE)
 
 # Set trajectory features
-trajFeatureNames(sce) <- featureNames(sce)[1:10]
+trajFeatureNames(exSCE) <- rownames(exSCE)[seq_len(5)]
 }
 \author{
 Daniel C. Ellwanger
