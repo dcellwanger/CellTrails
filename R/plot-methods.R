@@ -88,6 +88,7 @@
 #' only the samples
 #' @param setND Indicates if a '0' value should be set to 'ND' in the
 #' figure legend
+#' @param alpha Color param
 #' @return A \code{ggplot} object
 #' @import ggplot2
 #' @importFrom igraph V
@@ -96,7 +97,8 @@
 .plotManifold_def <- function(X, y, name, g=NULL, weights=NULL, axis_label="",
                               colors=c("pretty", "bw"),
                               type=c("raw", "surface.fit", "surface.se"),
-                              samples_only=FALSE, setND=FALSE) {
+                              samples_only=FALSE, setND=FALSE,
+                              alpha=.1) {
 
   if(type=="surface.se") {
     colors <- "bw"
@@ -206,7 +208,7 @@
                                 data=edges, size=0.5, colour="darkred")
       }
       gp <- gp + geom_point(data=X, aes_string(x="D1", y="D2"),
-                            colour="red", size=1.5, alpha=.1) +
+                            colour="red", size=1.5, alpha=alpha) +
         scale_x_continuous(expand = c(0,0)) +
         scale_y_continuous(expand = c(0,0))
     }
@@ -243,7 +245,7 @@
                                 data=edges, size=0.5, colour="darkred")
       }
       gp <- gp + geom_point(data=X, aes_string(x="D1", y="D2"),
-                            colour="red", size=1.5, alpha=.1) +
+                            colour="red", size=1.5, alpha=alpha) +
         scale_x_continuous(expand = c(0,0)) +
         scale_y_continuous(expand = c(0,0))
     }
