@@ -31,17 +31,41 @@
 #' Computes mediancentres
 #' @param x A numeric matrix
 #' @return A numeric vector
-# #' @importFrom depth med
-#' @importFrom ICSNP spatial.median
 #' @keywords internal
 #' @author Daniel C. Ellwanger
-.spatmed <- function(x) {
-  if(is.null(dim(x))) {
-    x
-  } else if(nrow(x) == 1){
-    x[1, ]
+.spatmed <- function (X, maxiter = 500, eps = 1e-06) {
+  X <- na.fail(X)
+  if(is.null(dim(X))) {
+    X
+  } else if(nrow(X) == 1){
+    X[1, ]
   } else {
-    spatial.median(x)
+    Y <- apply(X, 2L, median)
+    i <- 0
+    delta <- Inf
+    while (delta > eps & i < maxiter) {
+      Z <- sweep(x=X, MARGIN=2L, STATS=Y, FUN="-")
+      Zn <- sqrt(apply(Z^2, 1L, sum))
+      non_id <- !apply(Z, 1L, setequal, rep(0, length(Y))) #non identical
+      YT.1 <- 1/(sum(1/Zn[non_id]))
+      YT.2 <- sweep(X[non_id, , drop=FALSE], 1L, Zn[non_id], FUN= "/")
+      YT.2 <- apply(YT.2, 2L, sum)
+      YT <- YT.1 * YT.2
+
+      if(all(non_id)){
+        Yprime <- YT
+      } else {
+        YT <- sweep(Z[non_id, ,drop=FALSE], 1L, Zn[non_id], "/")
+        YT <- apply(YT, 2L, sum)
+        Yr <- sqrt(sum(YT^2))
+        q <- sum(!non_id) / Yr
+        Yprime <- max(c(0, (1 - q))) * YT + min(c(1, q)) * Y
+      }
+      delta <- sqrt(sum((Y - Yprime)^2))
+      i <- i + 1
+      Y <- Yprime
+    }
+    Y
   }
 }
 
