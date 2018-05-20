@@ -32,8 +32,8 @@ if(require("devtools")) {
   stop("Could not load package 'devtools'.")
 }
 ```
-
-**If you are using macOS X**, please note that _CellTrails_ makes use of a library, which depends on _XQuartz_, a version of the X.Org X Window System (X11) that runs on OS X. If your system does not have _XQuartz_ installed yet, you need to download it from http://xquartz.org. Please note, that it also needs to be re-installed when upgrading your macOS to a new major version (https://cran.r-project.org/bin/macosx/).
+<!-- 
+**If you are using macOS X**, please note that _CellTrails_ makes use of a library, which depends on _XQuartz_, a version of the X.Org X Window System (X11) that runs on OS X. If your system does not have _XQuartz_ installed yet, you need to download it from http://xquartz.org. Please note, that it also needs to be re-installed when upgrading your macOS to a new major version (https://cran.r-project.org/bin/macosx/). -->
 
 **We also recommend** to download and install the graph visualization software _yEd_ (http://www.yworks.com/products/yed). It provides great capabilities to visualize and analyze a trajectory graph produced by *CellTrails*.
 
