@@ -816,7 +816,12 @@ setMethod("write.ygraphml", "SingleCellExperiment", function(sce, file,
   col_values <- col_params$values[.useSample(sce)] #filter by traj samples
   lbl_values <- lbl_values[.useSample(sce)]
   X <- trajLayout(sce)
-  rownames(X) <- colnames(sce)
+  if(is.null(X)) {
+    dbl <- double(sum(CellTrails:::.useSample(gio)))
+    X <- data.frame(D1=dbl,
+                    D2=dbl)
+  }
+  rownames(X) <- colnames(sce)[.useSample(sce)]
   shapes <- .trajLandmark(sce, type="shape")[.useSample(sce)]
   .write_ygraphml_def(g=g, X=X, shapes=shapes, file=file,
                       col_values=col_values, lbl_values=lbl_values)
