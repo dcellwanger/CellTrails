@@ -215,39 +215,39 @@ setMethod("trajResiduals", "SingleCellExperiment", function(object){
   object@int_colData$CellTrails.residuals
 })
 
-#' SET tSNE parameters
-#'
-#' Stores tSNE parameters in \code{SingleCellExperiment} object
-#' @param object A \code{SingleCellExperiment} object
-#' @param value A \code{numeric} vector ('seed', 'perplexity')
-#' @return An updated object of class \code{SingleCellExperiment}
-#' @docType methods
-#' @aliases .tsneParams<-,SingleCellExperiment-method
-#' @keywords internal
-#' @author Daniel C. Ellwanger
-setGeneric(".tsneParams<-", function(object, value)
-  standardGeneric(".tsneParams<-"))
-setMethod(".tsneParams<-", "SingleCellExperiment", function(object, value){
-  if(is.null(.tsneParams(object))) {
-    names(value) <- c("seed", "perplexity")
-  }
-  object@int_metadata$CellTrails$tsne_params <- value
-  object})
+# #' SET tSNE parameters
+# #'
+# #' Stores tSNE parameters in \code{SingleCellExperiment} object
+# #' @param object A \code{SingleCellExperiment} object
+# #' @param value A \code{numeric} vector ('seed', 'perplexity')
+# #' @return An updated object of class \code{SingleCellExperiment}
+# #' @docType methods
+# #' @aliases .tsneParams<-,SingleCellExperiment-method
+# #' @keywords internal
+# #' @author Daniel C. Ellwanger
+# setGeneric(".tsneParams<-", function(object, value)
+#   standardGeneric(".tsneParams<-"))
+# setMethod(".tsneParams<-", "SingleCellExperiment", function(object, value){
+#   if(is.null(.tsneParams(object))) {
+#     names(value) <- c("seed", "perplexity")
+#   }
+#   object@int_metadata$CellTrails$tsne_params <- value
+#   object})
 
-#' GET tSNE parameters
-#'
-#' Returns tSNE parameters from \code{SingleCellExperiment} object
-#' @param object A \code{SingleCellExperiment} object
-#' @return A \code{numeric} vector
-#' @docType methods
-#' @aliases .tsneParams,SingleCellExperiment-method
-#' @keywords internal
-#' @author Daniel C. Ellwanger
-setGeneric(".tsneParams", function(object)
-  standardGeneric(".tsneParams"))
-setMethod(".tsneParams", "SingleCellExperiment", function(object){
-  object@int_metadata$CellTrails$tsne_params
-})
+# #' GET tSNE parameters
+# #'
+# #' Returns tSNE parameters from \code{SingleCellExperiment} object
+# #' @param object A \code{SingleCellExperiment} object
+# #' @return A \code{numeric} vector
+# #' @docType methods
+# #' @aliases .tsneParams,SingleCellExperiment-method
+# #' @keywords internal
+# #' @author Daniel C. Ellwanger
+# setGeneric(".tsneParams", function(object)
+#   standardGeneric(".tsneParams"))
+# setMethod(".tsneParams", "SingleCellExperiment", function(object){
+#   object@int_metadata$CellTrails$tsne_params
+# })
 
 #' SET trajectory landmark annotation
 #'
@@ -562,6 +562,14 @@ setGeneric("latentSpace<-", function(object, value)
   standardGeneric("latentSpace<-"))
 setMethod("latentSpace<-", "SingleCellExperiment", function(object, value){
   reducedDim(object, type="CellTrails") <- value
+  message("Calculating approximation of CellTrails manifold ",
+          "for 2D visualization...")
+  tsne_res <- .bhtsne(value)
+  X <- tsne_res$Y
+  if(!is.null(X)){
+    manifold2D(object) <- list(CellTrails.tSNE=X)
+    message("Used tSNE perplexity: ", tsne_res$perplexity)
+  }
   object})
 
 #' GET CellTrails' latent space
@@ -924,9 +932,9 @@ setMethod("trails", "SingleCellExperiment", function(object){
     df
   }})
 
-#' SET tSNE representation
+#' SET 2D manifold representation
 #'
-#' Stores tSNE representation in \code{SingleCellExperiment} object
+#' Stores 2D manifold representation in \code{SingleCellExperiment} object
 #' @param object A \code{SingleCellExperiment} object
 #' @param value A \code{numeric} matrix with one column per dimension
 #' @return An updated object of class \code{SingleCellExperiment}
@@ -934,41 +942,107 @@ setMethod("trails", "SingleCellExperiment", function(object){
 #' # Example data
 #' data(exSCE)
 #'
-#' gp <- plotManifold(exSCE, color_by="featureName", name="feature_10")
-#' latentSpaceSNE(exSCE) <- gp
+#' gp <- plotManifold(exSCE, color_by="featureName", name="feature_10",
+#'                    recalculate=TRUE)
+#' manifold2D(exSCE) <- gp
 #' @docType methods
-#' @aliases latentSpaceSNE<-,SingleCellExperiment-method
+#' @aliases manifold2D<-,SingleCellExperiment-method
 #' @export
 #' @author Daniel C. Ellwanger
-setGeneric("latentSpaceSNE<-", function(object, value)
-  standardGeneric("latentSpaceSNE<-"))
-setMethod("latentSpaceSNE<-", "SingleCellExperiment", function(object, value){
-  if(is.null(value$tsne)) {
-    stop("Wrong input.")
+setGeneric("manifold2D<-", function(object, value)
+  standardGeneric("manifold2D<-"))
+setMethod("manifold2D<-", "SingleCellExperiment", function(object, value){
+  #.tsneParams(object) <- c(value$tsne$seed, value$tsne$perplexity)
+  if(is.null(value$CellTrails.tSNE)) {
+    stop("Plot does not contain proper layout information.")
   }
-  .tsneParams(object) <- c(value$tsne$seed, value$tsne$perplexity)
-  object@int_metadata$CellTrails$tsne <- value$tsne$X
+  #object@int_metadata$CellTrails$manifold2D <- value$CellTrails.tsne
+  reducedDim(object, "CellTrails.tSNE") <- value$CellTrails.tSNE
   object})
 
-#' GET tSNE representation
+#' GET 2D manifold representation
 #'
-#' Returns tSNE representation of latent space from
+#' Returns 2D manifold representation of latent space from
 #' \code{SingleCellExperiment} object
 #' @param object A \code{SingleCellExperiment} object
-#' @return A \code{numeric} vector
+#' @return A \code{numeric} matrix
 #' @examples
 #' # Example data
 #' data(exSCE)
 #'
-#' latentSpaceSNE(exSCE)[seq_len(5), ]
+#' manifold2D(exSCE)[seq_len(5), ]
 #' @docType methods
-#' @aliases latentSpaceSNE,SingleCellExperiment-method
+#' @aliases manifold2D,SingleCellExperiment-method
 #' @export
 #' @author Daniel C. Ellwanger
-setGeneric("latentSpaceSNE", function(object)
-  standardGeneric("latentSpaceSNE"))
-setMethod("latentSpaceSNE", "SingleCellExperiment", function(object){
-  object@int_metadata$CellTrails$tsne
+setGeneric("manifold2D", function(object)
+  standardGeneric("manifold2D"))
+setMethod("manifold2D", "SingleCellExperiment", function(object){
+  #object@int_metadata$CellTrails$manifold2D
+  reducedDim(object, "CellTrails.tSNE")
+})
+
+#' SET state trajectory layout
+#'
+#' Stores layout of state trajectory in \code{SingleCellExperiment} object
+#' @param object A \code{SingleCellExperiment} object
+#' @param value A \code{ggplot} object
+#' @return An updated object of class \code{SingleCellExperiment}
+#' @examples
+#' # Example data
+#' data(exSCE)
+#'
+#' gp <- plotStateTrajectory(exSCE, color_by="featureName",
+#'                           name="feature_10", recalculate=TRUE)
+#' stateTrajLayout(exSCE) <- gp
+#' @docType methods
+#' @aliases stateTrajLayout<-,SingleCellExperiment-method
+#' @export
+#' @author Daniel C. Ellwanger
+setGeneric("stateTrajLayout<-", function(object, value)
+  standardGeneric("stateTrajLayout<-"))
+setMethod("stateTrajLayout<-", "SingleCellExperiment", function(object, value){
+  component <- value$CellTrails.stateTrajComponent
+  lyt <- value$CellTrails.stateTrajLayout
+
+  if(is.null(component)) {
+    stop("No proper layout information detected.")
+  }
+  stl <- object@int_metadata$CellTrails$stateTrajLayout
+  if(is.null(stl) | length(stl) < length(.spanForest(object))) {
+    l <- length(.spanForest(object))
+    object@int_metadata$CellTrails$stateTrajLayout <- vector("list", l)
+  }
+  object@int_metadata$CellTrails$stateTrajLayout[[component]] <- lyt
+  object})
+
+#' GET state trajectory layout
+#'
+#' Gets layout of state trajectory from
+#' \code{SingleCellExperiment} object
+#' @param object A \code{SingleCellExperiment} object
+#' @return A \code{numeric} matrix
+#' @examples
+#' # Example data
+#' data(exSCE)
+#'
+#' stateTrajLayout(exSCE)
+#' @docType methods
+#' @aliases stateTrajLayout,SingleCellExperiment-method
+#' @keywords internal
+#' @author Daniel C. Ellwanger
+setGeneric(".stateTrajLayout", function(object, component)
+  standardGeneric(".stateTrajLayout"))
+setMethod(".stateTrajLayout", "SingleCellExperiment", function(object,
+                                                              component){
+  if(missing(component)) {
+    stop("Please, select a component.")
+  }
+  l <- length(object@int_metadata$CellTrails$stateTrajLayout)
+  if(component > l) {
+    NULL
+  }
+  object@int_metadata$CellTrails$stateTrajLayout[[component]]
 })
 
 #' SET trajectory layout

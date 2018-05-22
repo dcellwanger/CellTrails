@@ -388,6 +388,20 @@ references:
   type: article-journal
   issued:
     year: 2017
+   
+- id: fr
+  title: 'Graph Drawing by Force-directed Placement.'
+  author:
+  - family: Fruchterman
+    given: TMJ.
+  - family: Reingold
+    given: EM.
+  container-title: Software - Practice and Experience
+  volume: 21(11)
+  page: 1129-1164
+  type: article-journal
+  issued:
+    year: 1991   
     
 ---
 
@@ -768,27 +782,29 @@ latentSpace(exAlt) <- destiny:::eigenvectors(dmaps_result)[, d]
 *Please note* that the function `latentSpace<-` accepts any numerical matrix. Therefore, any latent space with an already reduced number of dimensions can be assigned to a *CellTrailsSet* object with this function; eigenvalues are only used to determine the intrinsic dimensionality of the data set. 
 
 ## Visualization
-*CellTrails* allows us to visualize an approximation of the learned lower-dimensional manifold in two dimensions. *CellTrails'* plot function `plotManifold` uses t-distributed stochastic neighbor embedding [@vdmaaten2008] to illustrate the arrangement of the samples in the latent space in a two-dimensional plot. Points denote individual samples, the colorization indicates either a metadata label or expression of a single feature. Empty points denote a missing label or missing expression value (non-detects). The optional parameters `seed` and `perplexity` are passed to the Barnes-Hut implementation of t-distributed stochastic neighbor embedding (tSNE). Available phenotype lables can be listed with the function `phenoNames`, available features with `featureNames`, respectively.
+*CellTrails* allows us to visualize an approximation of the learned lower-dimensional manifold in two dimensions. *CellTrails'* plot function `plotManifold` uses t-distributed stochastic neighbor embedding (tSNE) [@vdmaaten2008] to illustrate the arrangement of the samples in the latent space in a two-dimensional plot. Points denote individual samples, the colorization indicates either a metadata label or expression of a single feature. Empty points denote a missing label or missing expression value (non-detects). Available phenotype lables can be listed with the function `phenoNames`, available features with `featureNames`, respectively.
 
 ```{r, eval=TRUE}
 # Show available phenotype labels
 phenoNames(exBundle)
 
 # Show sample metainformation 'fm143 dye uptake'
-tsne_result <- plotManifold(exBundle, color_by="phenoName", name="fm143")
+plotManifold(exBundle, color_by="phenoName", name="fm143")
 ```
 
-The function `plotManifold` returns a list. It contains a `ggplot` object [@ggplot2] from the `r CRANpkg("ggplot2")` package, which can be adapted by the user's needs and preferences, and the tSNE parameters and result. To lower computational time, a previous tSNE result can be stored and re-used for future manifold visualizations.
+The function `plotManifold` returns a `ggplot` object [@ggplot2] from the `r CRANpkg("ggplot2")` package, which can be adapted by the user's needs and preferences (for details, please refer to the `r CRANpkg("ggplot2")` manual; to save the plot see function `ggsave`). The 2D representation of the latent manifold is by default already stored the the `r Biocpkg("SingleCellExperiment")` object (also accessible via `reducedDims`). However, the `plotManifold` function provides the parameter `recalculate`. For example, if we want to change the `perplexity` parameter of the tSNE calculation, then we set `recalculate=TRUE`. The new tSNE result needs to be set to the `r Biocpkg("SingleCellExperiment")` object using the `manifold2D` function, respectively.
+
 ```{r, eval=TRUE}
+# Show feature expression (e.g., gene TECTA)
+gp <- plotManifold(exBundle, color_by="featureName", name="TECTA", recalculate=TRUE)
+gp
+
 # Store tSNE result
-latentSpaceSNE(exBundle) <- tsne_result
+manifold2D(exBundle) <- gp
 
-# Show feature expression (e.g., genes TECTA and MYO7A)
-plotManifold(exBundle, color_by="featureName", name="TECTA", only_plot=TRUE)
-plotManifold(exBundle, color_by="featureName", name="MYO7A", only_plot=TRUE)
+# Show feature expression (e.g., genes MYO7A)
+plotManifold(exBundle, color_by="featureName", name="MYO7A")
 ```
-
-*Please note* that the parameter `only_plot` is used to indicate that only the plot should be shown and the tSNE results and parameters shouldn't be returned.
 
 <!-- ---------------------------------- -->
 # Clustering
@@ -825,7 +841,7 @@ As before, we can visualize the approximated lower-dimensional manifold and colo
 phenoNames(exBundle)
 
 # Show manifold
-plotManifold(exBundle, color_by="phenoName", name="state", only_plot=TRUE)
+plotManifold(exBundle, color_by="phenoName", name="state")
 ```
 
 The function `plotStateSize` generates a barplot showing the absolute sizes of each state.
@@ -869,19 +885,31 @@ The function `trajComponents` provides us information about the states contained
 trajComponents(exBundle)
 ```
 
-Further, the inferred state trajectory graph can be visualized using `plotStateTrajectory`. If the graph is a forest, the parameter `component` can be used to define which tree should be shown. Let's have a look at the FM1-43 uptake and the _CALB2_ expression in component 1:
+Further, the inferred state trajectory graph can be visualized using `plotStateTrajectory`. If the graph is a forest, the parameter `component` can be used to define which tree should be shown. The optional parameters `point_size` and `label_offset` are useful to adjust the graph layout, the size of the points and the relative position of the point labels, respectively. Let's have a look at the FM1-43 uptake and the _CALB2_ expression in component 1:
 
 ```{r, eval=TRUE}
 # FM1-43 uptake
 plotStateTrajectory(exBundle, color_by="phenoName", name="fm143", 
                     component=1, point_size=1.5, label_offset=4)
 
+```
+
+The `plotStateTrajectory` function uses the Fruchterman-Reingold graph layout algorithm [@fr] for visualization. If the user needs to re-compute the layout, it can be achieved by setting the parameter `recalculate=TRUE`. The new layout should then be stored to the `r Biocpkg("SingleCellExperiment")` object.
+
+```{r, eval=TRUE}
+# FM1-43 uptake
+gp <- plotStateTrajectory(exBundle, color_by="phenoName", name="fm143", 
+                          component=1, point_size=1.5, label_offset=4, 
+                          recalculate=TRUE)
+gp
+
+# Store layout
+stateTrajLayout(exBundle) <- gp
+
 # CALB2 exoression
 plotStateTrajectory(exBundle, color_by="featureName", name="CALB2", 
                     component=1, point_size=5)
 ```
-
-The optional parameters `seed`, `point_size` and `label_offset` are useful to adjust the graph layout, the size of the points and the relative position of the point labels, respectively.  
 
 ## Aligning Samples Onto the Trajectory
 For the sake of simplicity and performance, it makes sense to conduct subsequent steps for each component individually. In this case, we select the tree formed by graph component 1 with 896 samples for our example data analysis.
@@ -1068,7 +1096,7 @@ trails(exBundle)[1:5, ]
 The pseudotime information is automatically stored as sample metadata (see `phenoNames`). For example, we could plot it on the lower-dimensional manifold.
 ```{r, eval=TRUE}
 # Get trail names
-plotManifold(exBundle, color_by="phenoName", name="TrS", only_plot=TRUE)
+plotManifold(exBundle, color_by="phenoName", name="TrS")
 ```
 
 Also, the data is accessible via `colData` of the `r Biocpkg("SingleCellExperiment")` object and can therefore be analyzed using alternative packages. For example, colorizing the trail TrS in a principal component analysis using the `r Biocpkg("scater")` package [@scater].
@@ -1363,11 +1391,12 @@ plotStateExpression(bundle, feature_name="CALB2")
 plotStateExpression(bundle, feature_name="ATP2B2")
 
 # Plot manifold (similar to Figure S4F)
-tsne_result <- plotManifold(bundle, color_by="phenoName", name="state")
-latentSpaceSNE(bundle) <- tsne_result
-plotManifold(bundle, color_by="phenoName", name="fm143", only_plot=TRUE)
-plotManifold(bundle, color_by="featureName", name="OTOA", only_plot=TRUE)
-plotManifold(bundle, color_by="featureName", name="CALB2", only_plot=TRUE)
+set.seed(1101)
+gp <- plotManifold(bundle, color_by="phenoName", name="state")
+manifold2D(bundle) <- gp
+plotManifold(bundle, color_by="phenoName", name="fm143")
+plotManifold(bundle, color_by="featureName", name="OTOA")
+plotManifold(bundle, color_by="featureName", name="CALB2")
 
 # Plot state trajectory graph (similar to Figure 1G)
 plotStateTrajectory(bundle, color_by="phenoName", 
@@ -1501,11 +1530,12 @@ plotStateExpression(p1utricle, feature_name="Atoh1")
 plotStateExpression(p1utricle, feature_name="Sox2")
 
 # Plot manifold
-tsne_result <- plotManifold(p1utricle, color_by="phenoName", name="state")
-latentSpaceSNE(p1utricle) <- tsne_result
-plotManifold(p1utricle, color_by="phenoName", name="gate", only_plot=TRUE)
-plotManifold(p1utricle, color_by="featureName", name="Otoa", only_plot=TRUE)
-plotManifold(p1utricle, color_by="featureName", name="Fscn2", only_plot=TRUE)
+set.seed(1101)
+gp <- plotManifold(p1utricle, color_by="phenoName", name="state")
+manifold2D(p1utricle) <- gp
+plotManifold(p1utricle, color_by="phenoName", name="gate")
+plotManifold(p1utricle, color_by="featureName", name="Otoa")
+plotManifold(p1utricle, color_by="featureName", name="Fscn2")
 
 # Plot state trajectory graph (similar to Figure 1G)
 plotStateTrajectory(p1utricle, color_by="phenoName", 

@@ -311,6 +311,29 @@
   x * sqrt(xvar/rvar)
 }
 
+#' Computes state trajectory graph layout
+#'
+#' Uses the Fruchterman-Reingold layout algorithm
+#' @param g An igraph graph object
+#' @return numerical matrix with the layout coordinates
+#' @importFrom igraph V layout_with_fr
+#' @keywords internal
+#' @author Daniel C. Ellwanger
+.fr_layout <- function(g) {
+  # Vertex names
+  component_sts <- names(V(g))
+  o <- order(as.numeric(substring(component_sts, 2)))
+  vnames <- factor(component_sts, levels=component_sts[o])
+
+  # Layout
+  X <- layout_with_fr(g)
+  X <- matrix(apply(X, 2L, .rescale, ymin = 0, ymax = 1), ncol = 2)
+  #X <- data.frame(X)
+  colnames(X) <- c("X1", "X2")
+  rownames(X) <- vnames
+  X
+}
+
 ###############################################################################
 # Exported
 ###############################################################################
@@ -378,3 +401,7 @@ enrichment.test <- function(sample_true, sample_size,
   }
   res
 }
+
+
+
+

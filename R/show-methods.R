@@ -49,6 +49,7 @@ setMethod("showTrajInfo", "SingleCellExperiment", function(object){
                            " samples, ",
                            ncol(CellTrails::latentSpace(object)),
                            " dimensions"))
+  sts <- .prettyString(levels(states(object)))
 
   out <- paste0("[[ CellTrails ]] \n",
          "logcounts: ", d[1], " features, ", d[2], " samples\n",
@@ -61,6 +62,7 @@ setMethod("showTrajInfo", "SingleCellExperiment", function(object){
          "Trajectory data: \n",
          "  trajFeatureNames: ", .prettyString(trajFeatureNames(object)), "\n",
          "  latentSpace: ", latspec, "\n",
+         "  states: ", sts, "\n",
          "Trajectories: ", trajs, "\n",
          #"  states: ", .prettyString(trajectoryStates(object)), "\n",
          "  trajSampleNames: ", .prettyString(trajSampleNames(object)), "\n",

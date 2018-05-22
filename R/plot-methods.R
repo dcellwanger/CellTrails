@@ -268,6 +268,7 @@
 #'
 #' Visualizes the trajectory spanning all states
 #' of a component
+#' @param X Layout
 #' @param g State trajectory graph (igraph object)
 #' @param y Values; numeric or factor vector
 #' @param all_sts All state assignments
@@ -276,24 +277,24 @@
 #' figure legend
 #' @param point_size Point size paramenter
 #' @param label_offset Label offset parameter
-#' @param seed Makes result reproducible
+# #' @param seed Makes result reproducible
 #' @return A \code{ggplot} object
-#' @importFrom igraph V layout.fruchterman.reingold get.edgelist
+#' @importFrom igraph V get.edgelist
 #' @import ggplot2
 #' @keywords internal
 #' @author Daniel C. Ellwanger
-.plotStateTrajectory_def <- function(g, y, all_sts, name, setND=FALSE,
-                                     point_size=3, label_offset=2, seed=1101) {
+.plotStateTrajectory_def <- function(X, g, y, all_sts, name, setND=FALSE,
+                                     point_size=3, label_offset=2) { #, seed=1101
   # Vertex names
   component_sts <- names(V(g))
   o <- order(as.numeric(substring(component_sts, 2)))
-  vnames <- factor(component_sts, levels = component_sts[o])
+  vnames <- factor(component_sts, levels=component_sts[o])
 
   # Layout
-  set.seed(seed)
+  #set.seed(seed)
   #Y <- data.frame(layout.fruchterman.reingold(g))
-  X <- layout.fruchterman.reingold(g)
-  X <- matrix(apply(X, 2L, .rescale, ymin = 0, ymax = 1), ncol = 2)
+  #X <- layout_with_fr(g)
+  #X <- matrix(apply(X, 2L, .rescale, ymin = 0, ymax = 1), ncol = 2)
   X <- data.frame(X)
 
   colnames(X) <- c("X1", "X2")

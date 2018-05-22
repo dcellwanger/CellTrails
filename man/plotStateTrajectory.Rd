@@ -7,7 +7,8 @@
 \title{Visualize state trajectory graph}
 \usage{
 plotStateTrajectory(sce, color_by = c("phenoName", "featureName"), name,
-  seed = 1101, component = NULL, point_size = 3, label_offset = 2)
+  component = NULL, point_size = 3, label_offset = 2,
+  recalculate = FALSE)
 }
 \arguments{
 \item{sce}{A \code{SingleCellExperiment} object}
@@ -17,14 +18,14 @@ plotStateTrajectory(sce, color_by = c("phenoName", "featureName"), name,
 
 \item{name}{A character string specifying the featureName or phenoName}
 
-\item{seed}{Seed for layout computation (default: 1101)}
-
 \item{component}{Component of trajectory graph that should
 be shown (integer value)}
 
 \item{point_size}{Adjusts the point size of the data points shown}
 
 \item{label_offset}{Adjusts the offset of the data point labels}
+
+\item{recalculate}{If layout should be re-drawn (default: FALSE)}
 }
 \value{
 A \code{ggplot} object
@@ -41,16 +42,21 @@ metadata (arithmetic mean or percentage distribution of categorial values).
 The component is defined by parameter \code{component}. If the trajectory
 graph contains only a single component, then this parameter can be left
 undefined. The points' coloration can be defined via the attributes
-\code{feature_name} or \code{pheno_type}. Missing sample lables are
-recovered using nearest neighbor learning.
+\code{color_by} and \code{name}, respectively. Missing sample lables are
+recovered using nearest neighbor learning. \cr
+If the state trajectory graph layout was set with \code{stateTrajLayout<-}
+then the layout will be reused for visualization.
 }
 \examples{
 # Example data
 data(exSCE)
 
-plotStateTrajectory(exSCE, color_by="phenoName", name="age", component=1)
-plotStateTrajectory(exSCE, color_by="featureName", name="feature_1",
-                    component=1)
+plotStateTrajectory(exSCE, color_by="phenoName", name="age",
+                    component=1, point_size = 1.5, label_offset = 4)
+
+gp <- plotStateTrajectory(exSCE, color_by="featureName", name="feature_1",
+                          component=1, recalculate=TRUE)
+stateTrajLayout(exSCE) <- gp
 }
 \seealso{
 \code{connectStates}

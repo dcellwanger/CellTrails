@@ -601,7 +601,17 @@ setMethod("connectStates", "SingleCellExperiment", function(sce, l){
   #Run
   dmat <- stats::dist(CellTrails::latentSpace(sce))
   cl <- CellTrails::states(sce)
-  .spanForest(sce) <- .connectStates_def(dmat=dmat, cl=cl, l=l)
+  sF <- .connectStates_def(dmat=dmat, cl=cl, l=l)
+  .spanForest(sce) <- sF
+
+  # Compute layouts
+  for(i in seq_along(sF)) {
+    message("Calculating layout of state trajectory graph component ", i,
+            "...")
+    X <- .fr_layout(sF[[i]])
+    stateTrajLayout(sce) <- list(CellTrails.stateTrajComponent=i,
+                                 CellTrails.stateTrajLayout=X)
+  }
   sce
 })
 
@@ -647,8 +657,23 @@ setMethod("selectTrajectory", "SingleCellExperiment", function(sce, component){
          "Please, make sure the right component number was selected.")
   }
   #Run
+  # Re-set layouts
+  l <- list(CellTrails.stateTrajComponent=1,
+            CellTrails.stateTrajLayout=.stateTrajLayout(sce,
+                                                        component=component))
+  stateTrajLayout(sce) <- l
+  len <- length(.spanForest(sce))
+  if(len > 1) {
+    for(i in seq_len(len-1)+1) {
+      l <- list(CellTrails.stateTrajComponent=i,
+                CellTrails.stateTrajLayout=NULL)
+      stateTrajLayout(sce) <- l
+    }
+  }
+  # Re-set span forest
   .spanForest(sce) <- .spanForest(sce)[component]
   vnames <- names(V(.spanForest(sce)[[1]]))
+  # Set samples to use
   .useSample(sce) <- states(sce) %in% vnames
   sce
 })
@@ -817,7 +842,7 @@ setMethod("write.ygraphml", "SingleCellExperiment", function(sce, file,
   lbl_values <- lbl_values[.useSample(sce)]
   X <- trajLayout(sce)
   if(is.null(X)) {
-    dbl <- double(sum(CellTrails:::.useSample(gio)))
+    dbl <- double(sum(.useSample(sce)))
     X <- data.frame(D1=dbl,
                     D2=dbl)
   }
@@ -1048,43 +1073,45 @@ setMethod("plotStateExpression", "SingleCellExperiment",
 #' @param color_by Indicates if nodes are colorized by a feature expression
 #' ('featureName') or phenotype label ('phenoName')
 #' @param name A character string specifying the featureName or phenoName
-#' @param seed Seed for tSNE computation (default: 1101)
+# #' @param seed Seed for tSNE computation (default: 1101)
 #' @param perplexity Perplexity parameter for tSNE computation (default: 30)
-#' @param only_plot Indicates if only plot should be shown or the tSNE result
-#' should be returned (default: FALSE)
-#' @return A \code{ggplot} object or a list with the tSNE results and the plot
+#' @param recalculate Indicates if tSNE should be recalcuated and
+#' results returned (default: FALSE)
+#' @return A \code{ggplot} object
 #' @details Visualizes the learned lower-dimensional manifold in two dimensions
 #' using an approximation obtained by Barnes-Hut implementation of
 #' t-Distributed Stochastic Neighbor Embedding
 #' (tSNE; van der Maaten and Hinton 2008). Each point in this plot represents
 #' a sample. Points can be colorized according
 #' to feature expression or experimental metadata. The points' coloration can
-#' be defined via the attributes \code{feature_name} and \code{name},
-#' respectively. A previously computed tSNE visualization will be reused
-#' (if the parameter settings are identical). The parameters \code{tsne_seed}
-#' and \code{tsne_perplexity} are used for the tSNE calculation.
+#' be defined via the attributes \code{color_by} and \code{name},
+#' respectively. A previously computed tSNE visualization will be reused if it was
+#' set accordingly (see \code{manifold2D<-}). The parameter \code{perplexity}
+#' is used for the tSNE calculation.
 #' @references van der Maaten, L.J.P. & Hinton, G.E., 2008. Visualizing
 #' High-Dimensional Data Using t-SNE. Journal of Machine Learning Research,
 #' 9, pp.2579-2605.
-#' @seealso \code{Rtsne} \code{latentSpace}
+#' @seealso \code{Rtsne} \code{latentSpace} \code{manifold2D}
 #' @examples
 #' # Example data
 #' data(exSCE)
 #'
-#' plotManifold(exSCE, color_by="featureName", name="feature_10", only_plot=TRUE)
-#' plotManifold(exSCE, color_by="phenoName", name="age", only_plot=TRUE)
+#' plotManifold(exSCE, color_by="featureName", name="feature_10")
+#' gp <- plotManifold(exSCE, color_by="phenoName", name="age",
+#'                   recalculate=TRUE)
+#' manifold2D(exSCE) <- gp
 #' @docType methods
 #' @aliases plotManifold,SingleCellExperiment-method
 #' @export
 #' @author Daniel C. Ellwanger
 setGeneric("plotManifold", function(sce,
                                     color_by=c("phenoName", "featureName"),
-                                    name, perplexity=30, seed=1101,
-                                    only_plot=FALSE)
+                                    name, perplexity=30, #seed=1101,
+                                    recalculate=FALSE)
   standardGeneric("plotManifold"))
 setMethod("plotManifold", "SingleCellExperiment",
           function(sce, color_by=c("phenoName", "featureName"),
-                   name, perplexity, seed, only_plot){
+                   name, perplexity, recalculate){ #seed,
   #Fetch plot color data
   dat <- .validatePlotParams(sce, color_by=color_by, name=name)
   #Fetch tSNE data
@@ -1092,21 +1119,25 @@ setMethod("plotManifold", "SingleCellExperiment",
     stop("Please, define CellTrails' latent space first (see function",
          "latentSpace<-).")
   }
-  tsne_params <- c("seed"=seed, "perplexity"=perplexity)
-  if(is.null(latentSpaceSNE(sce)) |
-     any(!tsne_params == .tsneParams(sce))) { #recalc
+  #tsne_params <- c("seed"=seed, "perplexity"=perplexity)
+  #if(is.null(latentSpaceSNE(sce)) |
+  #   any(!tsne_params == .tsneParams(sce))) { #recalc
+  #  message("Calculating 2D approximation of CellTrails manifold...")
+  #  X <- .bhtsne(latentSpace(sce), perplexity=perplexity, seed=seed)$Y
+  recalculate <- is.null(manifold2D(sce)) | recalculate
+  if(recalculate) { #recalc
     message("Calculating 2D approximation of CellTrails manifold...")
-    X <- .bhtsne(latentSpace(sce), perplexity=perplexity, seed=seed)$Y
+    X <- .bhtsne(latentSpace(sce), perplexity=perplexity)$Y
   } else {
-    X <- latentSpaceSNE(sce)
+    X <- manifold2D(sce)
   }
   gp <- .plotManifold_def(X=X, y=dat$values, name=dat$name,
                           axis_label = "CellTrails tSNE",
                           type="raw", setND=(dat$color_by=="featurename"))
-  print(gp)
-  if(!only_plot) {
-    list(tsne=list(X=X, seed=seed, perplexity=perplexity), plot=gp)
+  if(recalculate) {
+    gp$CellTrails.tSNE <- X
   }
+  gp
 })
 
 #' Visualize state trajectory graph
@@ -1121,7 +1152,8 @@ setMethod("plotManifold", "SingleCellExperiment",
 #' be shown (integer value)
 #' @param point_size Adjusts the point size of the data points shown
 #' @param label_offset Adjusts the offset of the data point labels
-#' @param seed Seed for layout computation (default: 1101)
+#' @param recalculate If layout should be re-drawn (default: FALSE)
+# #' @param seed Seed for layout computation (default: 1101)
 #' @return A \code{ggplot} object
 #' @details Shows a single tree component of the computed trajectory graph.
 #' Each point in this plot represents a state and can be colorized
@@ -1130,28 +1162,33 @@ setMethod("plotManifold", "SingleCellExperiment",
 #' The component is defined by parameter \code{component}. If the trajectory
 #' graph contains only a single component, then this parameter can be left
 #' undefined. The points' coloration can be defined via the attributes
-#' \code{feature_name} or \code{pheno_type}. Missing sample lables are
-#' recovered using nearest neighbor learning.
+#' \code{color_by} and \code{name}, respectively. Missing sample lables are
+#' recovered using nearest neighbor learning. \cr
+#' If the state trajectory graph layout was set with \code{stateTrajLayout<-}
+#' then the layout will be reused for visualization.
 #' @seealso \code{connectStates}
 #' @examples
 #' # Example data
 #' data(exSCE)
 #'
-#' plotStateTrajectory(exSCE, color_by="phenoName", name="age", component=1)
-#' plotStateTrajectory(exSCE, color_by="featureName", name="feature_1",
-#'                     component=1)
+#' plotStateTrajectory(exSCE, color_by="phenoName", name="age",
+#'                     component=1, point_size = 1.5, label_offset = 4)
+#'
+#' gp <- plotStateTrajectory(exSCE, color_by="featureName", name="feature_1",
+#'                           component=1, recalculate=TRUE)
+#' stateTrajLayout(exSCE) <- gp
 #' @docType methods
 #' @aliases plotStateTrajectory,SingleCellExperiment-method
 #' @export
 #' @author Daniel C. Ellwanger
 setGeneric("plotStateTrajectory",
            function(sce, color_by=c("phenoName", "featureName"),
-                    name, seed=1101, component=NULL, point_size=3,
-                    label_offset=2)
+                    name, component=NULL, point_size=3, #seed=1101,
+                    label_offset=2, recalculate=FALSE)
              standardGeneric("plotStateTrajectory"))
 setMethod("plotStateTrajectory", "SingleCellExperiment",
-          function(sce, color_by=c("phenoName", "featureName"),
-                   name, seed, component, point_size, label_offset){
+          function(sce, color_by=c("phenoName", "featureName"), #seed,
+                   name, component, point_size, label_offset, recalculate){
   #Pre-flight checks
   if(is.null(.spanForest(sce))) {
     stop("Please, compute the state trajectory graph first.")
@@ -1170,10 +1207,24 @@ setMethod("plotStateTrajectory", "SingleCellExperiment",
   # Plotting data
   dat <- .validatePlotParams(sce, color_by=color_by, name=name)
   g <- .spanForest(sce)[[component]]
+  X <- .stateTrajLayout(sce, component=component)
+  recalculate <- is.null(X) | recalculate
+
+  if(recalculate) { #recalculate
+    message("Calculating layout of state trajectory graph ...")
+    X <- .fr_layout(g)
+  }
   y <- .nn_impute(y=dat$values, D=as.matrix(stats::dist(latentSpace(sce))))
-  .plotStateTrajectory_def(g=g, y=y, name=dat$name, all_sts=states(sce),
-                           point_size=point_size, label_offset=label_offset,
-                           seed=seed, setND=(dat$color_by == "featurename"))
+  gp <- .plotStateTrajectory_def(X=X, g=g, y=y, name=dat$name,
+                                 all_sts=states(sce),
+                                 point_size=point_size,
+                                 label_offset=label_offset, #seed=seed,
+                                 setND=(dat$color_by == "featurename"))
+  if(recalculate) {
+    gp$CellTrails.stateTrajComponent <- component
+    gp$CellTrails.stateTrajLayout <- X
+  }
+  gp
 })
 
 #' Visualize trajectory fit residuals
@@ -1182,15 +1233,10 @@ setMethod("plotStateTrajectory", "SingleCellExperiment",
 #' trajectory backbone.
 #' @param sce A \code{SingleCellExperiment} object
 #' @return A \code{ggplot} object
-#' @details Shows a single tree component of the computed trajectory graph.
-#' Each point in this plot represents a state and can be colorized
-#' according to feature expression (mean expression per state) or experimental
-#' metadata (arithmetic mean or percentage distribution of categorial values).
-#' The component is defined by parameter \code{component}. If the trajectory
-#' graph contains only a single component, then this parameter can be left
-#' undefined. The points' coloration can be defined via the attributes
-#' \code{feature_name} or \code{pheno_type}. Missing sample lables are
-#' recovered using nearest neighbor learning.
+#' @details Shows the trajectory backbone (longest shortest path
+#' between two samples) and the fitting deviations of each sample
+#' indicated by the perpendicular jitter. Data points are colorized
+#' by state.
 #' @seealso \code{fitTrajectory} \code{trajResiduals}
 #' @examples
 #' # Example data

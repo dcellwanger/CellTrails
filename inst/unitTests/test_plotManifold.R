@@ -13,18 +13,18 @@ test_plotManifold <- function() {
                                      color_by="featureName",
                                      name="A", #wrong input
                                      only_plot=TRUE))
-  res <- plotManifold(exSCE,
+  gp <- plotManifold(exSCE,
+                      color_by="featureName",
+                      name=rownames(exSCE)[1])
+  RUnit::checkTrue(length(gp$layers) > 1)
+  RUnit::checkException(manifold2D(exSCE) <- list())
+  RUnit::checkException(manifold2D(exSCE) <- gp) #no recalculation
+  gp <- plotManifold(exSCE,
                       color_by="featureName",
                       name=rownames(exSCE)[1],
-                      only_plot=FALSE)
-
-  RUnit::checkTrue(length(res$plot$layers) > 1)
-  latentSpaceSNE(exSCE) <- res
-  RUnit::checkEquals(latentSpaceSNE(exSCE), res$tsne$X)
-
-  res <- plotManifold(exSCE,
-                      color_by="featureName",
-                      name=rownames(exSCE)[1],
-                      only_plot=FALSE, seed=101)
-  RUnit::checkTrue(!all.equal(latentSpaceSNE(exSCE), res$tsne$X) == TRUE)
+                      recalculate=TRUE) #recalc
+  mold <- manifold2D(exSCE)
+  manifold2D(exSCE) <- gp
+  mnew <- manifold2D(exSCE)
+  RUnit::checkTrue(abs(sum(abs(mold) - abs(mnew))) > 0)
 }

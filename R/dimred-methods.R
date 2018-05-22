@@ -178,28 +178,38 @@
 #' @param theta Speed/accuracy trade-off (increase for less accuracy),
 #' set to 0.0 for exact tSNE (default: .5)
 #' @param max_iter Number of iterations (default: 1000)
-#' @param seed Starting value for pseudorandom number generator. Setting
-#' seed makes result reproducible (default: 1101)
+# #' @param seed Starting value for pseudorandom number generator. Setting
+# #' seed makes result reproducible (default: 1101)
 #' @return A list with the following components:
 #' \describe{
 #'   \item{\code{Y}}{Matrix containing the new representations for the objects}
 #'   \item{\code{perplexity}}{See above}
-#'   \item{\code{seed}}{See above}
+# #'   \item{\code{seed}}{See above}
 #' }
 #' @importFrom Rtsne Rtsne
 #' @keywords internal
 #' @author Daniel C. Ellwanger
-.bhtsne <- function(x, dims=2, perplexity=30, theta=.5, max_iter=1000,
-                    seed=1101){
-
-  if(!is.null(seed)) {
-    set.seed(seed)
-  }
+.bhtsne <- function(x, dims=2, perplexity=30, theta=.5, max_iter=1000){ #seed
+  #if(!is.null(seed)) {
+  #  set.seed(seed)
+  #}
   result <- list()
-  result$Y <- Rtsne(x, dims=dims, pca=FALSE,
-                    perplexity=perplexity, theta=theta, max_iter=max_iter)$Y
-  result$perplexity <- perplexity
-  result$seed <- seed
+  Y <- NULL
+  while(is.null(Y) & perplexity > 1) {
+    Y <- tryCatch({Rtsne(x, dims=dims, pca=FALSE,
+                         perplexity=perplexity, theta=theta,
+                         max_iter=max_iter)$Y}, error = function(err) {NULL})
+    perplexity <- ceiling(perplexity / 2)
+  }
+  if(is.null(Y)){
+    warning("Did not find proper tSNE representation.")
+    result["Y"] <- list(NULL)
+  } else {
+    result$Y <- Y
+  }
+
+  result$perplexity <- perplexity * 2
+  #result$seed <- seed
   result
 }
 

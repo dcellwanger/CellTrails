@@ -19,15 +19,10 @@ Method visualizes the fitting residuals along the
 trajectory backbone.
 }
 \details{
-Shows a single tree component of the computed trajectory graph.
-Each point in this plot represents a state and can be colorized
-according to feature expression (mean expression per state) or experimental
-metadata (arithmetic mean or percentage distribution of categorial values).
-The component is defined by parameter \code{component}. If the trajectory
-graph contains only a single component, then this parameter can be left
-undefined. The points' coloration can be defined via the attributes
-\code{feature_name} or \code{pheno_type}. Missing sample lables are
-recovered using nearest neighbor learning.
+Shows the trajectory backbone (longest shortest path
+between two samples) and the fitting deviations of each sample
+indicated by the perpendicular jitter. Data points are colorized
+by state.
 }
 \examples{
 # Example data

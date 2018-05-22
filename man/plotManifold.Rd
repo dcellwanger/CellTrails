@@ -7,7 +7,7 @@
 \title{Visualize the learned manifold}
 \usage{
 plotManifold(sce, color_by = c("phenoName", "featureName"), name,
-  perplexity = 30, seed = 1101, only_plot = FALSE)
+  perplexity = 30, recalculate = FALSE)
 }
 \arguments{
 \item{sce}{A \code{SingleCellExperiment} object}
@@ -19,13 +19,11 @@ plotManifold(sce, color_by = c("phenoName", "featureName"), name,
 
 \item{perplexity}{Perplexity parameter for tSNE computation (default: 30)}
 
-\item{seed}{Seed for tSNE computation (default: 1101)}
-
-\item{only_plot}{Indicates if only plot should be shown or the tSNE result
-should be returned (default: FALSE)}
+\item{recalculate}{Indicates if tSNE should be recalcuated and
+results returned (default: FALSE)}
 }
 \value{
-A \code{ggplot} object or a list with the tSNE results and the plot
+A \code{ggplot} object
 }
 \description{
 Method visualizes an approximation of the manifold in the latent space
@@ -38,17 +36,19 @@ t-Distributed Stochastic Neighbor Embedding
 (tSNE; van der Maaten and Hinton 2008). Each point in this plot represents
 a sample. Points can be colorized according
 to feature expression or experimental metadata. The points' coloration can
-be defined via the attributes \code{feature_name} and \code{name},
-respectively. A previously computed tSNE visualization will be reused
-(if the parameter settings are identical). The parameters \code{tsne_seed}
-and \code{tsne_perplexity} are used for the tSNE calculation.
+be defined via the attributes \code{color_by} and \code{name},
+respectively. A previously computed tSNE visualization will be reused if it was
+set accordingly (see \code{manifold2D<-}). The parameter \code{perplexity}
+is used for the tSNE calculation.
 }
 \examples{
 # Example data
 data(exSCE)
 
-plotManifold(exSCE, color_by="featureName", name="feature_10", only_plot=TRUE)
-plotManifold(exSCE, color_by="phenoName", name="age", only_plot=TRUE)
+plotManifold(exSCE, color_by="featureName", name="feature_10")
+gp <- plotManifold(exSCE, color_by="phenoName", name="age",
+                  recalculate=TRUE)
+manifold2D(exSCE) <- gp
 }
 \references{
 van der Maaten, L.J.P. & Hinton, G.E., 2008. Visualizing
@@ -56,7 +56,7 @@ High-Dimensional Data Using t-SNE. Journal of Machine Learning Research,
 9, pp.2579-2605.
 }
 \seealso{
-\code{Rtsne} \code{latentSpace}
+\code{Rtsne} \code{latentSpace} \code{manifold2D}
 }
 \author{
 Daniel C. Ellwanger
