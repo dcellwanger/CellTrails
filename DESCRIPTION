@@ -1,7 +1,7 @@
 Package: CellTrails
 Type: Package
 Title: Reconstruction, visualization and analysis of branching trajectories
-Version: 0.99.7
+Version: 0.99.8
 Authors@R: person(given="Daniel", family="Ellwanger", 
   role=c("aut", "cre", "cph"), email="dc.ellwanger.dev@gmail.com")
 Description: CellTrails is an unsupervised algorithm for the de novo 
