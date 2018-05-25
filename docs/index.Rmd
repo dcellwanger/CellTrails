@@ -1,5 +1,5 @@
 ---
-title: "CellTrails: Inference of Temporal Gene Expression Dynamics of Branching Biological Processes from Single-cell Expression Data"
+title: "CellTrails: Reconstruction, Visualization, and Analysis of Branching Trajectories from Single-cell Expression Data"
 shorttitle: "CellTrails: Single-cell Data Analysis"
 author:
 - name: "Daniel Christian Ellwanger"

@@ -37,9 +37,9 @@ t-Distributed Stochastic Neighbor Embedding
 a sample. Points can be colorized according
 to feature expression or experimental metadata. The points' coloration can
 be defined via the attributes \code{color_by} and \code{name},
-respectively. A previously computed tSNE visualization will be reused if it was
-set accordingly (see \code{manifold2D<-}). The parameter \code{perplexity}
-is used for the tSNE calculation.
+respectively. A previously computed tSNE visualization will be reused if
+it was set accordingly (see \code{manifold2D<-}). The parameter
+\code{perplexity} is used for the tSNE calculation.
 }
 \examples{
 # Example data

@@ -1085,9 +1085,9 @@ setMethod("plotStateExpression", "SingleCellExperiment",
 #' a sample. Points can be colorized according
 #' to feature expression or experimental metadata. The points' coloration can
 #' be defined via the attributes \code{color_by} and \code{name},
-#' respectively. A previously computed tSNE visualization will be reused if it was
-#' set accordingly (see \code{manifold2D<-}). The parameter \code{perplexity}
-#' is used for the tSNE calculation.
+#' respectively. A previously computed tSNE visualization will be reused if
+#' it was set accordingly (see \code{manifold2D<-}). The parameter
+#' \code{perplexity} is used for the tSNE calculation.
 #' @references van der Maaten, L.J.P. & Hinton, G.E., 2008. Visualizing
 #' High-Dimensional Data Using t-SNE. Journal of Machine Learning Research,
 #' 9, pp.2579-2605.

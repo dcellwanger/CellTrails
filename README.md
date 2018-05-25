@@ -1,9 +1,19 @@
-## CellTrails: Inference of Temporal Gene Expression Dynamics of Branching Biological Processes from Single-cell Expression Data
+```{r}
+   ____     _ _ _____          _ _
+  / ___|___| | |_   _| __ __ _(_) |___
+ | |   / _ \ | | | || '__/ _` | | / __|
+ | |__|  __/ | | | || | | (_| | | \__ \
+  \____\___|_|_| |_||_|  \__,_|_|_|___/
+  
+  (c) Daniel C. Ellwanger, version 0.99.9, 2018.
+
+  
+```
+### CellTrails: Inference of Temporal Gene Expression Dynamics of Branching Biological Processes from Single-cell Expression Data
+
 _Daniel Christian Ellwanger_
 
 Department of Otolaryngology - Head & Neck Surgery, and Institute for Stem Cell Biology and Regenerative Medicine, Stanford University School of Medicine, Stanford, CA 94305, USA
-
-Package: CellTrails 0.99.8
 
   High-throughput single-cell technologies facilitate the generation of -omic readouts from thousands of cells captured at different cellular maturation stages during development, or other normal or pathological processes with unprecedented resolution. A single snapshot of an asynchronously developing specimen, for example, constitutes a time series in which individual cells represent distinct time points along a continuum. However, recoding of valuable cell-specific information, such as a cell's developmental age, its location in a tissue, or its functional phenotype is limited during sample preparation, and remains hidden in high dimensional cellular expression profiles. This formulates the computational challenge to infer the latent internal time axis of the biological process from the obtained expression matrix alone, while considering common parameters of single-cell measurements, such as noise, dropouts and redundancy. In other words, biological samples need to be placed by means of hidden information onto a non-linear trajectory, which might constitute of branching processes towards distinct functional cell types.
 
@@ -13,16 +23,16 @@ Package: CellTrails 0.99.8
   
   We confirmed that _CellTrails_ can be applied to analysis of single-cell RNA-Seq datasets. We are pleased that you consider using _CellTrails_ in your research. A detailed theoretical description of the algorithm and its application to biological uses has been published in:
   
-  __Ellwanger DC, Scheibinger M, Dumont RA, Barr-Gillespie PG, and Heller S. "Transcriptional dynamics of hair-bundle morphogenesis revealed with CellTrails". _Journal_ Date;Issue.__
+  __Ellwanger DC, Scheibinger M, Dumont RA, Barr-Gillespie PG, and Heller S. "Transcriptional dynamics of hair-bundle morphogenesis revealed with CellTrails". _Cell Reports_, 2018, June 5;(23)__
 
 <!-- ---------------------------------- -->
-## INSTALLATION
+### Installation
 <!-- ---------------------------------- -->
 *CellTrails* is an extension for _R_ (https://www.r-project.org), which is a free software environment for statistical computing and graphics. A simple yet efficient way to work with _R_ consists in writing source code with your favorite text editor and sending it to the _R_ console. It is suggested to use a development environment, such as _Rstudio_ (https://www.rstudio.com/), or a rich text editor with _R_ functionalities, such as _Emacs_ (https://www.gnu.org/software/emacs/), which greatly eases the work. 
 
 The *CellTrails* package can be installed from this repository directly using the `devtools` package within an active _R_ session.
 
-``` 
+```{r} 
 if(!require("devtools")) {
   install.packages("devtools")
 } 
@@ -38,7 +48,7 @@ if(require("devtools")) {
 **We also recommend** to download and install the graph visualization software _yEd_ (http://www.yworks.com/products/yed). It provides great capabilities to visualize and analyze a trajectory graph produced by *CellTrails*.
 
 Before ready to use, the *CellTrails* library must be loaded into the _R_ environment:
-```
+```{r}
 library(CellTrails)
 ```
 

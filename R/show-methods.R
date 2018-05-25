@@ -71,5 +71,5 @@ setMethod("showTrajInfo", "SingleCellExperiment", function(object){
          "  trajLayout: ", ifelse(is.null(trajLayout(object)),
                                   "none", "available"), "\n",
          "Trail data: \n",
-         "  trailNames: ", .prettyString(trailNames(object)))
+         "  trailNames: ", .prettyString(trailNames(object)), "\n")
   cat(out)})

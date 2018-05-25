@@ -1,7 +1,7 @@
 #' DEF: Spectral embedding of samples
 #'
 #' For details see \code{embedSamples}
-#' @param x A \code{SingleCellExperiment} object
+#' @param x A numerical matrix
 #' @param nbins Cubic B-spline discretization is used to compute fuzzy mutual
 #' information between pairs of samples; \code{nbins} defines the number
 #' of intervals used for discretization of expression data. (default: 10)
