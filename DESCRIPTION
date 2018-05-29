@@ -1,7 +1,7 @@
 Package: CellTrails
 Type: Package
 Title: Reconstruction, visualization and analysis of branching trajectories
-Version: 0.99.11
+Version: 0.99.12
 Authors@R: person(given="Daniel", family="Ellwanger", 
   role=c("aut", "cre", "cph"), email="dc.ellwanger.dev@gmail.com")
 Description: CellTrails is an unsupervised algorithm for the de novo 
@@ -17,7 +17,7 @@ Description: CellTrails is an unsupervised algorithm for the de novo
 License: Artistic-2.0
 Encoding: UTF-8
 VignetteBuilder: knitr
-Depends: R (>= 3.4), SingleCellExperiment
+Depends: R (>= 3.5), SingleCellExperiment
 Imports:
   BiocGenerics,
   Biobase,
