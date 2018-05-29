@@ -574,9 +574,13 @@ showTrajInfo(exSim)
 The functions `filterTrajFeaturesByCOV` and `filterTrajFeaturesByFF` allow to define a design matrix to account for systematic bias in the expression data (e.g., batch, gender or cell cycle). It should list the nuisance factors that should be blocked and their values per sample. It is suggested to construct the design matrix with the `model.matrix` function. Please see _Manifold Learning/Blocking Uniformative Substructures_ of this vignette for an example on how to create a proper design matrix.
 
 ## Using Alternative Methods
-The function `trajFeatureNames` allows to designate any set of features as trajectory features. The only requirement is that the names in the set match the stored feature names in the `r Biocpkg("SingleCellExperiment")` object (check with function `featureNames`). For example, one could also use an abundance-dependent variance trend fit, as implemented in the `r Biocpkg("scran")` package [@scran], to indicate trajectory features:
+The function `trajFeatureNames` allows to designate any set of features as trajectory features. The only requirement is that the names in the set match the stored feature names in the `r Biocpkg("SingleCellExperiment")` object (check with function `featureNames`). For example, one could also use an abundance-dependent variance trend fit, as implemented in the `r Biocpkg("scran")` package [@scran], to indicate trajectory features, as shown below. *Please note* that the (Bioconductor) package `r Biocpkg("scran")` is not part of *CellTrails* and may need to be installed first.
 
 ```{r, eval=TRUE}
+## Not run: 
+##library(scran)
+## End(Not run)
+
 # Filter using scran
 var_fit <- scran::trendVar(x=exSim, use.spikes=FALSE)
 var_out <- scran::decomposeVar(x=exSim, fit=var_fit)
@@ -701,6 +705,10 @@ To block the cell cycle effects, *CellTrails* expects a design matrix modeling t
 *Please note* that these packages are not part of *CellTrails* and may needed to be installed first.
 
 ```{r, eval=TRUE, message=FALSE, warning=FALSE}
+## Not run: 
+##library(scran)
+## End(Not run)
+
 # Run cyclone
 mcm <- readRDS(system.file("exdata", "mouse_cycle_markers.rds", 
                            package="scran"))
@@ -761,7 +769,7 @@ The marker gene enrichment is significant (*P*-value < 10^-6^) and the odds rati
 Besides cell cycle, technical confounders may also be relevant to be accounted for. Those can occur, for example, if samples were processed on different plates or if samples were pooled from multiple sequencing runs. In this case, a design matrix with the respective explanatory variables can be constructed and passed to `embedSamples`.
 
 ## Using Alternative Methods
-If the user prefers to use an alternative approach for dimensionality reduction, any latent space can be set to a `r Biocpkg("SingleCellExperiment")` object. The latent space has to be a numerical matrix; rows represent samples and columns the components of the latent space. *CellTrails* uses by default spectral embedding, but the framework also operates well with any other spectral dimensionality reduction method, such as PCA (e.g., available in *CellTrails* via function `pca`) and diffusion maps (e.g., available via the `r Biocpkg("destiny")` package [@destiny]):
+If the user prefers to use an alternative approach for dimensionality reduction, any latent space can be set to a `r Biocpkg("SingleCellExperiment")` object. The latent space has to be a numerical matrix; rows represent samples and columns the components of the latent space. *CellTrails* uses by default spectral embedding, but the framework also operates well with any other spectral dimensionality reduction method, such as PCA (e.g., available in *CellTrails* via function `pca`) and diffusion maps (e.g., available via the `r Biocpkg("destiny")` package [@destiny]; please note this package is not part of *CellTrails* and may needed to be installed first):
 
 ```{r, eval=TRUE}
 # Make copy of example data
@@ -773,6 +781,10 @@ d <- findSpectrum(pca_result$eigenvalues, frac=100)
 latentSpace(exAlt) <- pca_result$components[, d]
 
 # Diffusion maps
+## Not run: 
+##library(destiny)
+## End(Not run)
+
 lcounts <- t(logcounts(exAlt))
 dmaps_result <- destiny::DiffusionMap(lcounts, n_eigs = 101)
 d <- findSpectrum(destiny:::eigenvalues(dmaps_result), frac=100)
@@ -827,9 +839,15 @@ states(exBundle) <- cl
 
 State assignments are stored as sample metainformation and can be either recieved via `colData` or `states`. Since `CellTrails` operates on a `r Biocpkg("SingleCellExperiment")` object, its results can be easily used by other packages. For example, visualizing a principal component analysis with `r Biocpkg("scater")` [@scater]:
 ```{r, eval=TRUE}
+## Not run: 
+##library(scater)
+## End(Not run)
+
 # Plot scater PCA with CellTrails cluster information
 scater::plotPCA(exBundle, colour_by="CellTrails.state")
 ```
+
+Please note that the (Bioconductor) package `r Biocpkg("scater")` is not part of *CellTrails* and may need to be installed first.
 
 ## Using Alternative Methods
 Technically, the function `states<-` allows to set any clustering result to a `r Biocpkg("SingleCellExperiment")` object. Any numeric, character or factor vector containing the cluster assignments for each sample is accepted.
@@ -1102,6 +1120,10 @@ plotManifold(exBundle, color_by="phenoName", name="TrS")
 Also, the data is accessible via `colData` of the `r Biocpkg("SingleCellExperiment")` object and can therefore be analyzed using alternative packages. For example, colorizing the trail TrS in a principal component analysis using the `r Biocpkg("scater")` package [@scater].
 
 ```{r, eval=TRUE}
+## Not run: 
+##library(scater)
+## End(Not run)
+
 # Plot scater PCA with CellTrails pseudotime information
 scater::plotPCA(exBundle, colour_by="CellTrails.TrS")
 ```
