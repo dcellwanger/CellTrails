@@ -292,7 +292,11 @@ setGeneric(".trajLandmark", function(object, type=c("type", "id", "shape"))
 setMethod(".trajLandmark", "SingleCellExperiment", function(object, type){
   type <- .capitalize(type)
   type <- paste0("CellTrails.lndmrk", type)
-  object@int_colData[[type]]
+  if(type %in% colnames(object@int_colData)) {
+    object@int_colData[, type]
+  } else {
+    NULL
+  }
 })
 
 #' GET phenotype values
@@ -302,7 +306,7 @@ setMethod(".trajLandmark", "SingleCellExperiment", function(object, type){
 #' @param object A \code{SingleCellExperiment} object
 #' @param name Name of phenotype
 #' @return A vector of any type
-#' @details Wrapper for colDat(object)[[name]] which also accesses
+#' @details Wrapper for colDat(object)[, name] which also accesses
 #' internal metadata (e.g., landmarks).
 #' @docType methods
 #' @aliases .pheno,SingleCellExperiment-method
@@ -312,16 +316,17 @@ setGeneric(".pheno", function(object, name)
   standardGeneric(".pheno"))
 setMethod(".pheno", "SingleCellExperiment", function(object, name){
   lname <- tolower(name)
+  cname <- paste0("CellTrails.", name)
   if(lname == "state") {
     d <- states(object)
   } else if(lname == "landmark") {
     d <- landmarks(object)
+  } else if(name %in% colnames(colData(object))){
+      d <- colData(object)[, name]
+  } else if(cname %in% colnames(colData(object))){
+    d <- colData(object)[, cname]
   } else {
-    d <- colData(object)[[name]]
-    if(is.null(d)) {
-      name <- paste0("CellTrails.", name)
-      d <- colData(object)[[name]]
-    }
+    d <- NULL
   }
   d})
 
@@ -393,7 +398,7 @@ setMethod("sampleNames", "SingleCellExperiment", function(object){
 setGeneric("phenoNames", function(object)
   standardGeneric("phenoNames"))
 setMethod("phenoNames", "SingleCellExperiment", function(object){
-  nsm <- colnames(colData(object))
+  #nsm <- colnames(colData(object))
   nsm <- gsub(x=colnames(colData(object)), "CellTrails.", "")
   nl <- length(landmarks(object))
   if(nl > 0) {
@@ -770,8 +775,8 @@ setMethod("addTrail", "SingleCellExperiment", function(sce, from, to, name){
 
   if(name %in% trailNames(sce)) { #replace existing trail definition
     warning("A trail with this name already exists and gets replaced.")
-    colData(sce)[[nm]] <- as.numeric(rep(NA, ncol(sce)))
-    colData(sce[, smpls])[[nm]] <- ptime
+    colData(sce)[, nm] <- as.numeric(rep(NA, ncol(sce)))
+    colData(sce[, smpls])[, nm] <- ptime
   } else { #new trail definition
     #tc <- sce@int_metadata$CellTrails$trail_cnt
     tnms <- sce@int_metadata$CellTrails$trail_names
@@ -791,8 +796,8 @@ setMethod("addTrail", "SingleCellExperiment", function(sce, from, to, name){
     #sce@int_metadata$CellTrails$trail_cnt2name <- df
     sce@int_metadata$CellTrails$trail_names <- c(tnms, name)
 
-    colData(sce)[[nm]] <- as.numeric(rep(NA, ncol(sce)))
-    colData(sce[, smpls])[[nm]] <- ptime
+    colData(sce)[, nm] <- as.numeric(NA) #rep(NA, ncol(sce))
+    colData(sce[, smpls])[, nm] <- ptime
   }
   sce})
 
@@ -837,7 +842,7 @@ setMethod("removeTrail", "SingleCellExperiment", function(sce, name){
   tnms <- trailNames(sce)[-f]
   sce@int_metadata$CellTrails$trail_names <- tnms
   #sce@int_metadata$CellTrails$trail_cnt2name <- df
-  colData(sce)[[paste0("CellTrails.", name)]] <- NULL
+  colData(sce)[, paste0("CellTrails.", name)] <- NULL
   sce})
 
 #' GET trail names

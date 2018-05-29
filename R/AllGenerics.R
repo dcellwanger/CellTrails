@@ -900,7 +900,7 @@ setMethod("fitDynamic", "SingleCellExperiment", function(sce, feature_name,
   #Pre-flight check
   .featureNameExists(sce, feature_name)
   .trailNameExists(sce, trail_name)
-  trail <- trails(sce)[[trail_name]]
+  trail <- trails(sce)[, trail_name]
   trail_samples <- !is.na(trail)
   trail_ptime <- trail[trail_samples]
   fit <- .fitDynamic_def(x=trail_ptime / max(trail_ptime),
@@ -1438,7 +1438,7 @@ setMethod("plotDynamic", "SingleCellExperiment",function(sce,
   }
 
   #Fetch data
-  x <- trails(sce[, .useSample(sce)])[[trail_name]]
+  x <- trails(sce[, .useSample(sce)])[, trail_name]
   Y <- .exprs(sce[feature_name, .useSample(sce)])
   weights <- states(sce[, .useSample(sce)])
   .plotDynamic(x=x, Y=Y, feature_name=feature_name,

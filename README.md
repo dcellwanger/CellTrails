@@ -5,7 +5,7 @@
  | |__|  __/ | | | || | | (_| | | \__ \
   \____\___|_|_| |_||_|  \__,_|_|_|___/
   
-  (c) Daniel C. Ellwanger, version 0.99.10, 2018.
+  (c) Daniel C. Ellwanger, version 0.99.11, 2018.
 
   
 ```
