@@ -12,7 +12,7 @@ abstract: |
 
   We are pleased that you consider using _CellTrails_ in your research. A detailed theoretical description of the algorithm and its application to biological uses has been published in:
   
-  __Ellwanger DC, Scheibinger M, Dumont RA, Barr-Gillespie PG, and Heller S. Transcriptional dynamics of hair-bundle morphogenesis revealed with CellTrails. _Cell Reports_ (Date);Issue.__
+  __Ellwanger DC, Scheibinger M, Dumont RA, Barr-Gillespie PG, and Heller S. Transcriptional dynamics of hair-bundle morphogenesis revealed with CellTrails. _Cell Reports_, 2018 Jun 5;23.__
 
 output: 
   BiocStyle::html_document:
@@ -460,7 +460,7 @@ show(exSim)
 
 The second dataset, `exBundle`, contains transcript expression profiles of 183 genes expressed during sensory hair cell bundle maturation and function, which were quantified in the chicken utricle sensory epithelium at embryonic day 15 using multiplex RT-qPCR. Experimental metadata was generated during tissue preparation (cell origin) and cell sorting (uptake of FM1-43 dye indicating cell maturity). This data set is the foundation used for the development of *CellTrails*. If you use this dataset for your research, please cite:
 
-Ellwanger DC, Scheibinger M, Dumont RA, Barr-Gillespie PG, and Heller S. "Transcriptional dynamics of hair-bundle morphogenesis revealed with CellTrails". *Cell Reports* Date;Issue. doi: 
+Ellwanger DC, Scheibinger M, Dumont RA, Barr-Gillespie PG, and Heller S. "Transcriptional dynamics of hair-bundle morphogenesis revealed with CellTrails". *Cell Reports*, 2018 Jun 5;23.
 
 ```{r, eval=TRUE}
 # Load bundle data
@@ -574,7 +574,7 @@ showTrajInfo(exSim)
 The functions `filterTrajFeaturesByCOV` and `filterTrajFeaturesByFF` allow to define a design matrix to account for systematic bias in the expression data (e.g., batch, gender or cell cycle). It should list the nuisance factors that should be blocked and their values per sample. It is suggested to construct the design matrix with the `model.matrix` function. Please see _Manifold Learning/Blocking Uniformative Substructures_ of this vignette for an example on how to create a proper design matrix.
 
 ## Using Alternative Methods
-The function `trajFeatureNames` allows to designate any set of features as trajectory features. The only requirement is that the names in the set match the stored feature names in the `r Biocpkg("SingleCellExperiment")` object (check with function `featureNames`). For example, one could also use an abundance-dependent variance trend fit, as implemented in the `r Biocpkg("scran")` package [@scran], to indicate trajectory features, as shown below. *Please note* that the (Bioconductor) package `r Biocpkg("scran")` is not part of *CellTrails* and may need to be installed first.
+The function `trajFeatureNames` allows to designate any set of features as trajectory features. The only requirement is that the names in the set match the stored feature names in the `r Biocpkg("SingleCellExperiment")` object (check with function `featureNames`). For example, one could also use an abundance-dependent variance trend fit, as implemented in the `r Biocpkg("scran")` package [@scran], to indicate trajectory features, as shown below. *Please note* that the (Bioconductor) package `r Biocpkg("scran")` is not part of *CellTrails* and may be needed to be installed first.
 
 ```{r, eval=TRUE}
 ## Not run: 
@@ -702,7 +702,7 @@ Since the enrichment is not significant (with an odds ratio < 1), we argue that 
 
 To block the cell cycle effects, *CellTrails* expects a design matrix modeling the cell cycle stage as the explanatory factor for each cell. As the cell-cycle stage of each cell is not known in this data set, we need to predict cell cycle phases. In this example, we use the classifier `cyclon` from the `r Biocpkg("scran")` package [@scran]. To be able to run the algrithm properly, gene symbols were translated to Ensembl identifiers using Bioconductors' annotation database interface package `r Biocpkg("AnnotationDbi")` [@annotationdbi] and the mouse annotation data package `r Biocpkg("org.Mm.eg.db")` [@orgmmegdb].
 
-*Please note* that these packages are not part of *CellTrails* and may needed to be installed first.
+*Please note* that these packages are not part of *CellTrails* and may be needed to be installed first.
 
 ```{r, eval=TRUE, message=FALSE, warning=FALSE}
 ## Not run: 
@@ -769,7 +769,7 @@ The marker gene enrichment is significant (*P*-value < 10^-6^) and the odds rati
 Besides cell cycle, technical confounders may also be relevant to be accounted for. Those can occur, for example, if samples were processed on different plates or if samples were pooled from multiple sequencing runs. In this case, a design matrix with the respective explanatory variables can be constructed and passed to `embedSamples`.
 
 ## Using Alternative Methods
-If the user prefers to use an alternative approach for dimensionality reduction, any latent space can be set to a `r Biocpkg("SingleCellExperiment")` object. The latent space has to be a numerical matrix; rows represent samples and columns the components of the latent space. *CellTrails* uses by default spectral embedding, but the framework also operates well with any other spectral dimensionality reduction method, such as PCA (e.g., available in *CellTrails* via function `pca`) and diffusion maps (e.g., available via the `r Biocpkg("destiny")` package [@destiny]; please note this package is not part of *CellTrails* and may needed to be installed first):
+If the user prefers to use an alternative approach for dimensionality reduction, any latent space can be set to a `r Biocpkg("SingleCellExperiment")` object. The latent space has to be a numerical matrix; rows represent samples and columns the components of the latent space. *CellTrails* uses by default spectral embedding, but the framework also operates well with any other spectral dimensionality reduction method, such as PCA (e.g., available in *CellTrails* via function `pca`) and diffusion maps (e.g., available via the `r Biocpkg("destiny")` package [@destiny]; please note this package is not part of *CellTrails* and may be needed to be installed first):
 
 ```{r, eval=TRUE}
 # Make copy of example data
@@ -847,7 +847,7 @@ State assignments are stored as sample metainformation and can be either recieve
 scater::plotPCA(exBundle, colour_by="CellTrails.state")
 ```
 
-Please note that the (Bioconductor) package `r Biocpkg("scater")` is not part of *CellTrails* and may need to be installed first.
+Please note that the (Bioconductor) package `r Biocpkg("scater")` is not part of *CellTrails* and may be needed to be installed first.
 
 ## Using Alternative Methods
 Technically, the function `states<-` allows to set any clustering result to a `r Biocpkg("SingleCellExperiment")` object. Any numeric, character or factor vector containing the cluster assignments for each sample is accepted.

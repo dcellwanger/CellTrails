@@ -16,6 +16,6 @@ citEntry(entry = "Article",
   textVersion  =
   paste("Daniel C. Ellwanger, Mirko Scheibinger, Rachel A. Dumont, Peter G. Barr-Gillespie, and Stefan Heller (2018).",
         "Transcriptional dynamics of hair-bundle morphogenesis revealed with CellTrails.",
-        "Cell Reports",
+        "Cell Reports, 2018 Jun 5;23",
         "doi: doi-TBD")
 )

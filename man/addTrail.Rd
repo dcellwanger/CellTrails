@@ -46,7 +46,7 @@ re-defined.
 data(exSCE)
 
 # Add trail
-sce <- addTrail(exSCE, "H1", "H2", "Tr1")
+exSCE <- addTrail(exSCE, "H1", "H2", "Tr3")
 trailNames(exSCE)
 phenoNames(exSCE)
 }

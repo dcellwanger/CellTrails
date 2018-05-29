@@ -51,7 +51,7 @@ write.ygraphml(exSCE, file="exSCE.graphml", color_by="phenoName", name="state",
 # Reference:
 # Ellwanger DC, Scheibinger M, Dumont RA, Barr-Gillespie PG, and Heller S.
 # Transcriptional dynamics of hair-bundle morphogenesis revealed with
-# CellTrails. Cell Reports, 2018;(23)
+# CellTrails. Cell Reports, 2018 Jun 5;23
 
 ###############################################################################
 # inst/exdata/bundle.graphml
