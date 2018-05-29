@@ -23,7 +23,7 @@ Department of Otolaryngology - Head & Neck Surgery, and Institute for Stem Cell 
   
   We confirmed that _CellTrails_ can be applied to analysis of single-cell RNA-Seq datasets. We are pleased that you consider using _CellTrails_ in your research. A detailed theoretical description of the algorithm and its application to biological uses has been published in:
   
-  __Ellwanger DC, Scheibinger M, Dumont RA, Barr-Gillespie PG, and Heller S. "Transcriptional dynamics of hair-bundle morphogenesis revealed with CellTrails". _Cell Reports_, June 5 2018;(23)__
+  __Ellwanger DC, Scheibinger M, Dumont RA, Barr-Gillespie PG, and Heller S. "Transcriptional dynamics of hair-bundle morphogenesis revealed with CellTrails". _Cell Reports_, June 5 2018;23__
 
 <!-- ---------------------------------- -->
 ### Installation
