@@ -1,0 +1,197 @@
+<html>
+
+<head>
+<style type="text/css">
+.knitr .inline {
+  background-color: #f7f7f7;
+  border:solid 1px #B0B0B0;
+}
+.error {
+	font-weight: bold;
+	color: #FF0000;
+}
+.warning {
+	font-weight: bold;
+}
+.message {
+	font-style: italic;
+}
+.source, .output, .warning, .error, .message {
+	padding: 0 1em;
+  border:solid 1px #F7F7F7;
+}
+.source {
+  background-color: #f5f5f5;
+}
+.rimage .left {
+  text-align: left;
+}
+.rimage .right {
+  text-align: right;
+}
+.rimage .center {
+  text-align: center;
+}
+.hl.num {
+  color: #AF0F91;
+}
+.hl.str {
+  color: #317ECC;
+}
+.hl.com {
+  color: #AD95AF;
+  font-style: italic;
+}
+.hl.opt {
+  color: #000000;
+}
+.hl.std {
+  color: #585858;
+}
+.hl.kwa {
+  color: #295F94;
+  font-weight: bold;
+}
+.hl.kwb {
+  color: #B05A65;
+}
+.hl.kwc {
+  color: #55aa55;
+}
+.hl.kwd {
+  color: #BC5A65;
+  font-weight: bold;
+}
+</style>
+<title>CellTrails</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+$(document).ready(function() {
+    $.ajax({
+        url : "https://raw.githubusercontent.com/dcellwanger/CellTrails/master/NEWS",
+        dataType: "text",
+        success : function (data) {
+            $("#News").html(data.replace(/\r|\n/g,"</br>"));
+        }
+    });
+});
+</script>
+
+<style type="text/css">
+.hl.com {
+  color: #AD95AF;
+  font-style: normal;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="chunk" id="unnamed-chunk-1"><div class="rcode"><div class="source"><pre class="knitr r"><span class="hl com">#   ____     _ _ _____          _ _</span>
+<span class="hl com">#  / ___|___| | |_   _| __ __ _(_) |___</span>
+<span class="hl com"># | |   / _ \ | | | || '__/ _` | | / __|</span>
+<span class="hl com"># | |__|  __/ | | | || | | (_| | | \__ \</span>
+<span class="hl com">#  \____\___|_|_| |_||_|  \__,_|_|_|___/</span>
+<span class="hl com">#</span>
+<span class="hl com">#  (c) Daniel C. Ellwanger, 2018.</span>
+</pre></div>
+</div></div>
+
+<h3>CellTrails: Reconstruction, Visualization, and Analysis of Branching Trajectories from Single-cell Expression Data</h3>
+<em>Software implementation by Daniel Christian Ellwanger</em>
+
+<p>Department of Otolaryngology - Head &amp; Neck Surgery, and Institute for Stem Cell Biology and Regenerative Medicine, Stanford University School of Medicine, Stanford, CA 94305, USA</p>
+
+<p><em>CellTrails</em> is an unsupervised algorithm for the <em>de novo </em>chronological ordering, visualization and analysis of single-cell expression data. <em>CellTrails</em> makes use of a geometrically motivated concept of lower-dimensional manifold learning, which exhibits a multitude of virtues that counteract intrinsic noise of single cell data caused by drop-outs, technical variance, and redundancy of predictive variables. <em>CellTrails </em>enables the reconstruction of branching trajectories and provides an intuitive graphical representation of expression patterns along all branches simultaneously. It allows the user to define and infer the expression dynamics of individual and multiple pathways towards distinct phenotypes.
+
+<table style="width:100%">
+<tr>
+<td>
+<p><em>CellTrails</em> was developed with a 183-dimensional RT-qPCR gene expression panel of 1,008 cells collected from the developing chicken utricle, a balance organ. Key players in the utricle's function are cohorts of sensory hair cells that display mechanosensing organelles, called hair bundles, protruding from their apical surfaces. Bundle growth and maturation is dictated by an orchestration of distinct sequential and overlapping cellular processes. Our goal was to elucidate the temporal expression program of key hair bundle genes in subtypes of hair cells that occur with distinct spatial distribution. We showed that <em>CellTrails</em> faithfully predicted expression patterns of hair cell maturation with unprecedented resolution.</p>
+
+<p>We confirmed that <em>CellTrails</em> can be applied to analysis of single-cell RNA-Seq datasets. We are pleased that you consider using <em>CellTrails</em> in your research. A detailed theoretical description of the algorithm and its application to biological uses has been published in:</p>
+
+<p><b>Ellwanger DC, Scheibinger M, Dumont RA, Barr-Gillespie PG, and Heller S. "Transcriptional dynamics of hair-bundle morphogenesis revealed with CellTrails". <em>Cell Reports</em> 2018 Jun 5;23(10).</b></p>
+</td>
+<td>
+<img class="aligncenter size-full wp-image-2710" src="http://hellerlab.stanford.edu/wp-content/uploads/2018/05/celltrailsmap_ATOH1_animated.gif" alt="" width="256" height="256" />
+</td>
+</tr>
+</table>
+
+<h3>News</h3>
+<div id="News"></div>
+
+<h3>Installation</h3>
+<h4>Prerequisites</h4>
+<p><em>CellTrails</em> is an extension for <em>R</em> (<a href="https://www.r-project.org/" rel="nofollow">https://www.r-project.org</a>), which is a free software environment for statistical computing and graphics. Please note that an installation of <em>R</em> is required for using <em>CellTrails</em>.<p>
+
+<p>A simple yet efficient way to work with <em>R</em> consists in writing source code with your favorite text editor and sending it to the <em>R</em> console. It is suggested to use a development environment, such as <em>Rstudio</em> (<a href="https://www.rstudio.com/" rel="nofollow">https://www.rstudio.com/</a>), or a rich text editor with <em>R</em> functionalities, such as <em>Emacs</em> (<a href="https://www.gnu.org/software/emacs/" rel="nofollow">https://www.gnu.org/software/emacs/</a>), which greatly eases the work.<p>
+
+We also recommend to download and install the graph visualization software <em>yEd</em> (<a href="http://www.yworks.com/products/yed" rel="nofollow">http://www.yworks.com/products/yed</a>). It provides great capabilities to visualize and analyze a trajectory graph produced by <em>CellTrails</em>.
+
+<h4>CellTrails</h4>
+The <em>CellTrails</em> package itself can be installed directly using the <code>devtools</code> package within an active <em>R</em> session.
+
+<div class="chunk" id="unnamed-chunk-2"><div class="rcode"><div class="source"><pre class="knitr r"><span class="hl std">devtools</span><span class="hl opt">::</span><span class="hl kwd">install_github</span><span class="hl std">(</span><span class="hl str">&quot;dcellwanger/CellTrails&quot;</span><span class="hl std">,</span> <span class="hl kwc">build_vignettes</span><span class="hl std">=</span><span class="hl num">TRUE</span><span class="hl std">)</span>
+</pre></div>
+</div></div>
+
+<h3>Load package</h3>
+After its successfull installation, the package can be loaded within an active <em>R</em> session as follows:
+
+<div class="chunk" id="unnamed-chunk-3"><div class="rcode"><div class="source"><pre class="knitr r"><span class="hl kwd">library</span><span class="hl std">(CellTrails)</span>
+</pre></div>
+</div></div>
+
+<h3>User manual</h3>
+<p>Please, refer to the <a href="https://dcellwanger.github.io/CellTrails/" rel="nofollow">vignette</a> for a detailed explanation and instruction on how to use <em>CellTrails</em>.</p>
+
+<h3>Frequently Asked Questions</h3>
+<h4>Error in loadNamespace(name) : there is no package called 'devtools'</h4>
+If this error is shown, then your <em>R</em> distrubution is missing the <em>devtools</em> package. Please install the <em>devtools</em> package as follows:
+<div class="chunk" id="unnamed-chunk-4"><div class="rcode"><div class="source"><pre class="knitr r"><span class="hl kwd">install.packages</span><span class="hl std">(</span><span class="hl str">&quot;devtools&quot;</span><span class="hl std">)</span>
+</pre></div>
+</div></div>
+
+<h4>I still do have issues installing <em>CellTrails</em> with <em>devtools</em>.</h4>
+If the installation with <em>devtools</em> is not successfull, you may need to install <em>CellTrails</em>' dependencies manually.
+<div class="chunk" id="unnamed-chunk-5"><div class="rcode"><div class="source"><pre class="knitr r"><span class="hl kwd">install.packages</span><span class="hl std">(</span><span class="hl str">&quot;cba&quot;</span><span class="hl std">,</span> <span class="hl str">&quot;dendextend&quot;</span><span class="hl std">,</span> <span class="hl str">&quot;dtw&quot;</span><span class="hl std">,</span> <span class="hl str">&quot;EnvStats&quot;</span><span class="hl std">,</span>
+                 <span class="hl str">&quot;ggplot2&quot;</span><span class="hl std">,</span> <span class="hl str">&quot;ggrepel&quot;</span><span class="hl std">,</span> <span class="hl str">&quot;igraph&quot;</span><span class="hl std">,</span> <span class="hl str">&quot;maptree&quot;</span><span class="hl std">,</span> <span class="hl str">&quot;mgcv&quot;</span><span class="hl std">,</span>
+                 <span class="hl str">&quot;reshape2&quot;</span><span class="hl std">,</span> <span class="hl str">&quot;Rtsne&quot;</span><span class="hl std">,</span> <span class="hl str">&quot;rmarkdown&quot;</span><span class="hl std">,</span> <span class="hl str">&quot;knitr&quot;</span><span class="hl std">,</span> <span class="hl str">&quot;RUnit&quot;</span><span class="hl std">)</span>
+
+<span class="hl kwd">source</span><span class="hl std">(</span><span class="hl str">&quot;https://bioconductor.org/biocLite.R&quot;</span><span class="hl std">)</span>
+<span class="hl kwd">biocLite</span><span class="hl std">(</span><span class="hl str">&quot;BiocGenerics&quot;</span><span class="hl std">,</span> <span class="hl str">&quot;SingleCellExperiment&quot;</span><span class="hl std">,</span> <span class="hl str">&quot;Biobase&quot;</span><span class="hl std">,</span>
+         <span class="hl str">&quot;SummarizedExperiment&quot;</span><span class="hl std">,</span> <span class="hl str">&quot;AnnotationDbi&quot;</span><span class="hl std">,</span> <span class="hl str">&quot;destiny&quot;</span><span class="hl std">,</span>
+         <span class="hl str">&quot;scater&quot;</span><span class="hl std">,</span> <span class="hl str">&quot;scran&quot;</span><span class="hl std">,</span> <span class="hl str">&quot;org.Mm.eg.db&quot;</span><span class="hl std">)</span>
+
+<span class="hl std">devtools</span><span class="hl opt">::</span><span class="hl kwd">install_github</span><span class="hl std">(</span><span class="hl str">&quot;dcellwanger/CellTrails&quot;</span><span class="hl std">,</span> <span class="hl kwc">build_vignettes</span><span class="hl std">=</span><span class="hl num">TRUE</span><span class="hl std">)</span>
+</pre></div>
+</div></div>
+
+<h4>Do I need to install <em>Xquartz</em>?</h4>
+<p>If you are using macOS X</strong>, we recommend to install <em>XQuartz</em>, a version of the X.Org X Window
+System (X11) that runs on OS X (<a href="http://xquartz.org/" rel="nofollow">http://xquartz.org</a>). Although <em>CellTrails</em> does not require its installation, it is generally needed if you want to make use of X11
+(including tcltk) in <em>R</em>. Please note, that it also needs to be re-installed when upgrading your macOS to a
+new major version (<a href="https://cran.r-project.org/bin/macosx/" rel="nofollow">https://cran.r-project.org/bi
+/macosx/</a>).</p>
+
+<h4>Do I get notified about updates?</h4>
+<p>Not yet. We recommend to check for updates regularly.</p>
+
+<h4>How can I update the package?</h4>
+<p>The package can be updated by installing the most recent version using <em>devtools</em>.</p>
+
+<h4>Will the package be available at Bioconductor.org?</h4>
+<p>Yes, <em>CellTrails</em> is currently under review at Bioconductor.</p>
+
+<h4>How is <em>CellTrails</em> licensed?</h4>
+<p><em>CellTrails</em> is licensed under Artistic 2.0 and, therefore, free for use.
+
+
+<div w3-include-html="https://raw.githubusercontent.com/dcellwanger/CellTrails/master/NEWS"></div>
+
+
+</body>
+</html>
