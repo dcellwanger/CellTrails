@@ -48,6 +48,6 @@ Before ready to use, the *CellTrails* library must be loaded into the _R_ enviro
 library(CellTrails)
 ```
 
-Additional information on CellTrails can be found at http://hellerlab.stanford.edu/celltrails/
+Additional information can be found at http://hellerlab.stanford.edu/celltrails/
 
 __Please, refer to the [vignette](https://dcellwanger.github.io/CellTrails/) for a detailed explanation and instruction on how to use CellTrails.__
