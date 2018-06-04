@@ -5,15 +5,11 @@
  | |__|  __/ | | | || | | (_| | | \__ \
   \____\___|_|_| |_||_|  \__,_|_|_|___/
   
-  (c) Daniel C. Ellwanger, version 0.99.12, 2018.
+  (c) Daniel C. Ellwanger, 2018.
 
   
 ```
 ### CellTrails: Inference of Temporal Gene Expression Dynamics of Branching Biological Processes from Single-cell Expression Data
-
-_Daniel Christian Ellwanger_
-
-Department of Otolaryngology - Head & Neck Surgery, and Institute for Stem Cell Biology and Regenerative Medicine, Stanford University School of Medicine, Stanford, CA 94305, USA
 
   High-throughput single-cell technologies facilitate the generation of -omic readouts from thousands of cells captured at different cellular maturation stages during development, or other normal or pathological processes with unprecedented resolution. A single snapshot of an asynchronously developing specimen, for example, constitutes a time series in which individual cells represent distinct time points along a continuum. However, recoding of valuable cell-specific information, such as a cell's developmental age, its location in a tissue, or its functional phenotype is limited during sample preparation, and remains hidden in high dimensional cellular expression profiles. This formulates the computational challenge to infer the latent internal time axis of the biological process from the obtained expression matrix alone, while considering common parameters of single-cell measurements, such as noise, dropouts and redundancy. In other words, biological samples need to be placed by means of hidden information onto a non-linear trajectory, which might constitute of branching processes towards distinct functional cell types.
 
@@ -23,7 +19,7 @@ Department of Otolaryngology - Head & Neck Surgery, and Institute for Stem Cell 
   
   We confirmed that _CellTrails_ can be applied to analysis of single-cell RNA-Seq datasets. We are pleased that you consider using _CellTrails_ in your research. A detailed theoretical description of the algorithm and its application to biological uses has been published in:
   
-  __Ellwanger DC, Scheibinger M, Dumont RA, Barr-Gillespie PG, and Heller S. "Transcriptional dynamics of hair-bundle morphogenesis revealed with CellTrails". _Cell Reports_, June 5 2018;23__
+  __Ellwanger DC, Scheibinger M, Dumont RA, Barr-Gillespie PG, and Heller S. "Transcriptional dynamics of hair-bundle morphogenesis revealed with CellTrails". _Cell Reports_, June 5 2018;23(10)__
 
 <!-- ---------------------------------- -->
 ### Installation
@@ -51,5 +47,7 @@ Before ready to use, the *CellTrails* library must be loaded into the _R_ enviro
 ```{r}
 library(CellTrails)
 ```
+
+Additional information on CellTrails can be found at http://hellerlab.stanford.edu/celltrails/
 
 __Please, refer to the [vignette](https://dcellwanger.github.io/CellTrails/) for a detailed explanation and instruction on how to use CellTrails.__
