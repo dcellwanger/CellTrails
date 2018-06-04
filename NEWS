@@ -1,3 +1,5 @@
-Version 1.0.0
-======================================
-+ First public release
+Version 0.99.0 - 0.99.12
+===============================================================================
++ Public pre-release for Bioconductor submission
++ CellTrails is now fully compatible with a `SingleCellExperiment` object
++ Fixed bugs
