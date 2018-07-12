@@ -8,6 +8,8 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
-For your convenience, we updated and extended `CellTrails`' vignette. The manual is now available has handbook!
+
+## New location: https://dcellwanger.github.io/CellTrails-handbook/
+For your convenience, we updated and extended the vignette of the `CellTrails`' package. The manual is now available as handbook!
 
 **Please refer to https://dcellwanger.github.io/CellTrails-handbook/ for detailed information on `CellTrails`' features and how to utilize them.**
