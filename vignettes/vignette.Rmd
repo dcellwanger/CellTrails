@@ -30,5 +30,4 @@ Before ready to use, the `CellTrails` libraries must be loaded into the _R_ envi
 library(CellTrails)
 ```
 
-**Please refer to https://dcellwanger.github.io/CellTrails/ for detailed information on `CellTrails`'s features and how to utilize them.**
-
+**Please refer to https://dcellwanger.github.io/CellTrails-handbook/ for detailed information on `CellTrails`'s features and how to utilize them.**
