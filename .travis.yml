@@ -11,9 +11,8 @@ notifications:
     on_success: change
     on_failure: change
 
-## BiocCheck
-bioc_packages:
-  - BiocCheck
+#bioc_packages:
+#  - BiocCheck
 
-after_success:
-  - R CMD BiocCheck .
+#after_success:
+#  - R CMD BiocCheck .
