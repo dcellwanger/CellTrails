@@ -1,0 +1,19 @@
+language: r
+cache: packages
+
+# R versions to be tested on
+r:
+#  - bioc-release
+  - bioc-devel
+
+notifications:
+  email:
+    on_success: change
+    on_failure: change
+
+## BiocCheck
+bioc_packages:
+  - BiocCheck
+
+after_success:
+  - R CMD BiocCheck .
