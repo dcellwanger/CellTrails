@@ -10,9 +10,9 @@
 .filterTrajFeaturesByDL_def <- function(y, threshold, show_plot=TRUE) {
   threshold <- max(0, threshold) #catch negative values
 
-  if(threshold >= 1){
+  if(threshold >= 1){ #absolute
     pod <- apply(y, 1L, function(i){sum(i > 0)})
-  } else {
+  } else { #relative
     pod <- apply(y, 1L, function(i){mean(i > 0)})
   }
   f <- pod > threshold

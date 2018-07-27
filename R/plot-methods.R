@@ -266,8 +266,7 @@
 
 #' DEF: Visualizing the trajectory graph
 #'
-#' Visualizes the trajectory spanning all states
-#' of a component
+#' Visualizes the trajectory spanning all states of a component
 #' @param X Layout
 #' @param g State trajectory graph (igraph object)
 #' @param y Values; numeric or factor vector

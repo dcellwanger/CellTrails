@@ -17,7 +17,7 @@ test_plotStateTrajectory <- function() {
                                             color_by="featureName",
                                             name=rownames(exSCE)[1],
                                             component=10)) #wrong input
-  exSCE <- connectStates(exSCE, l=10) #two graph components
+  exSCE <- connectStates(exSCE, l=10) #has two graph components
   gp <- plotStateTrajectory(exSCE,
                             color_by="featureName",
                             name=rownames(exSCE)[1],
