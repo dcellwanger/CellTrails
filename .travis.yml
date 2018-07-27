@@ -18,4 +18,4 @@ r:
 #  - R CMD BiocCheck .
 
 #populate cache (if timeout; should be false by default)
-script: true
+#script: true
