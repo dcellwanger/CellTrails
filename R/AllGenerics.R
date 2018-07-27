@@ -452,6 +452,7 @@ setMethod("findStates", "SingleCellExperiment", function(sce, min_size,
   if(min_size < 1) {
     min_size <- round(ncol(sce) * min_size)
   }
+  min_size <- max(1, min_size) #catch min_size < 1
   X <- t(.exprs(sce[.useFeature(sce), ]))
   ordi <- CellTrails::latentSpace(sce)
   .findStates_def(X=X, ordi=ordi, link.method="ward.D2", min.size=min_size,

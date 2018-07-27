@@ -6,8 +6,8 @@ test_findStates <- function(){
   latentSpace(dat) <- se$components[, d]
 
   #TEST
-  RUnit::checkException(findStates(dat, min_size=-1)) #unusual min_size
-  RUnit::checkException(findStates(dat, min_size=0))
+  RUnit::checkEquals(length(findStates(dat, min_size=-1)), ncol(dat)) #unusual min_size
+  RUnit::checkEquals(length(findStates(dat, min_size=0)), ncol(dat))
   RUnit::checkException(findStates(dat, min_size=1000))
   cl <- findStates(dat,
                    min_size=0.01,

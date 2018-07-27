@@ -8,11 +8,12 @@
 #' @keywords internal
 #' @author Daniel C. Ellwanger
 .filterTrajFeaturesByDL_def <- function(y, threshold, show_plot=TRUE) {
-  pod <- apply(y, 1L, function(i){sum(i > 0)})
+  threshold <- max(0, threshold) #catch negative values
 
-  if(threshold >= 1) {
-    threshold <- threshold / max(pod)
-    pod <- pod / max(pod)
+  if(threshold >= 1){
+    pod <- apply(y, 1L, function(i){sum(i > 0)})
+  } else {
+    pod <- apply(y, 1L, function(i){mean(i > 0)})
   }
   f <- pod > threshold
 

@@ -377,10 +377,12 @@
   }
 
   #lbls
-  gp.xrange <- ggplot_build(gp)$layout$panel_ranges[[1]]$x.range
-  gp.yrange <- ggplot_build(gp)$layout$panel_ranges[[1]]$y.range
-  rng_x <- abs(gp.xrange[1] - gp.xrange[2])
-  rng_y <- abs(gp.yrange[1] - gp.yrange[2])
+  #gp.xrange <- ggplot_build(gp)$layout$panel_params[[1]]$x.range
+  #gp.yrange <- ggplot_build(gp)$layout$panel_params[[1]]$y.range
+  #abs(gp.xrange[1] - gp.xrange[2])
+  #abs(gp.yrange[1] - gp.yrange[2])
+  gp.xrange <- gp.yrange <- c(-0.05, 1.05)
+  rng_x <- rng_y <- 1.1
 
   gp <- gp + geom_text(aes_string(x="X1", y="X2", label="vnames"),
                        hjust=0, vjust=0, data=X,

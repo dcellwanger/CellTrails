@@ -1,5 +1,15 @@
+Version 1.0.0
+===============================================================================
++ Public release at Bioconductor
++ Bugfixes:
+  - Filtering. Captured some wrong parameter settings.
+  - Clustering. Parameter settings resulting in a minimum number of samples per
+    initial state <= 1 are captured.
+  - Visualization. Package is compatible with most recent ggplot2
+    release (3.x.x).
+
 Version 0.99.0 - 0.99.12
 ===============================================================================
 + Public pre-release for Bioconductor submission
 + CellTrails is now fully compatible with a `SingleCellExperiment` object
-+ Fixed bugs
++ Bugfixes
