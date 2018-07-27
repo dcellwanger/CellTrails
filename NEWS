@@ -1,7 +1,7 @@
 Version 0.99.14
 ===============================================================================
 + Bugfixes:
-  - Filtering. Captures some wrong parameter settings.
+  - Filtering. Captures invalid user input.
   - Clustering. Parameter settings resulting in a minimum number of samples per
     initial state <= 1 are captured.
 
