@@ -1,3 +1,8 @@
+<!-- STATUS -->
+[![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
+![Build Status](https://travis-ci.com/dcellwanger/CellTrails.svg?branch=master)
+<!-- ------------------------------------------------------------------------------- -->
+
 ```{r}
    ____     _ _ _____          _ _
   / ___|___| | |_   _| __ __ _(_) |___
@@ -7,7 +12,6 @@
   
   (c) Daniel C. Ellwanger, 2018.
 
-  
 ```
 ### CellTrails: Inference of Temporal Gene Expression Dynamics of Branching Biological Processes from Single-cell Expression Data
 

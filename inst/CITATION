@@ -9,13 +9,11 @@ citEntry(entry = "Article",
                    as.person("Stefan Heller")),
   journal      = "Cell Reports",
   year         = "2018",
-  volume       = "23",
-  pages        = "TBD",
-  note         = "doi: TBD",
-
+  volume       = "23(10)",
+  pages        = "2901–14",
+  doi          = "10.1016/j.celrep.2018.05.002",
   textVersion  =
   paste("Daniel C. Ellwanger, Mirko Scheibinger, Rachel A. Dumont, Peter G. Barr-Gillespie, and Stefan Heller (2018).",
         "Transcriptional dynamics of hair-bundle morphogenesis revealed with CellTrails.",
-        "Cell Reports, 2018 Jun 5;23",
-        "doi: doi-TBD")
-)
+        "Cell Reports 2018 Jun 5;23(10):2901-2914",
+        "doi: 10.1016/j.celrep.2018.05.002"))
