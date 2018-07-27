@@ -1,10 +1,13 @@
-Version 1.0.0
+Version 0.99.14
 ===============================================================================
-+ Public release at Bioconductor
 + Bugfixes:
   - Filtering. Captures some wrong parameter settings.
   - Clustering. Parameter settings resulting in a minimum number of samples per
     initial state <= 1 are captured.
+
+Version 0.99.13
+===============================================================================
++ Bugfixes:
   - Visualization. Package is compatible with most recent ggplot2
     release (3.x.x).
 + Updated CITATION
