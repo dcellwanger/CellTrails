@@ -6,7 +6,7 @@ r:
 #  - bioc-release
   - bioc-devel
 
-#notifications:
+##notifications:
 #  email:
 #    on_success: change
 #    on_failure: change
