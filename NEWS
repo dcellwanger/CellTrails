@@ -1,3 +1,8 @@
+Version 0.99.15
+===============================================================================
++ Bugfixes:
+  - Adjusted NAMESPACE for most recent 'SingleCellExperiment' release
+
 Version 0.99.14
 ===============================================================================
 + Bugfixes:
@@ -8,12 +13,12 @@ Version 0.99.14
 Version 0.99.13
 ===============================================================================
 + Bugfixes:
-  - Visualization. Package is compatible with most recent ggplot2
+  - Visualization. Package is compatible with most recent 'ggplot2'
     release (3.x.x).
 + Updated CITATION
 
 Version 0.99.0 - 0.99.12
 ===============================================================================
 + Public pre-release for Bioconductor submission
-+ CellTrails is fully compatible with a `SingleCellExperiment` object
++ CellTrails is fully compatible with a 'SingleCellExperiment' object
 + Bugfixes

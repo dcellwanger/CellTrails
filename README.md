@@ -1,5 +1,6 @@
 <!-- STATUS -->
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
+![Travis CI build status](https://travis-ci.com/dcellwanger/CellTrails.svg?branch=master)
 <!-- ------------------------------------------------------------------------------- -->
 
 ```{r}
