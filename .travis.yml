@@ -1,21 +1,22 @@
 language: r
 cache: packages
 
-# R versions to be tested on
-r:
-#  - bioc-release
-  - bioc-devel
+os:
+  - linux
+#  - osx
+
+r: 
+ - bioc-devel
+#- bioc-release
 
 ##notifications:
 #  email:
 #    on_success: change
 #    on_failure: change
 
-#bioc_packages:
-  - BiocCheck
+bioc_packages: BiocCheck
 
-#after_success:
-  - R CMD BiocCheck .
+after_success: R CMD BiocCheck .
 
 #populate cache (if timeout; should be false by default)
-#script: true
+script: true
