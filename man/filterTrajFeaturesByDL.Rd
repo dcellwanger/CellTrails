@@ -31,7 +31,7 @@ expression value greater than 0 is counted. Features that are expressed in
 a fraction of all samples greater than \code{threshold} remain labeled as
 trajectory feature as listed in the \code{SingleCellExperiment} object,
 otherwise they may be not considered for dimensionality reduction,
-clustering and trajectory reconstruction. If the parameter \code{threshold}
+clustering, and trajectory reconstruction. If the parameter \code{threshold}
 fullfills \code{threshold} \eqn{>= 1} it becomes converted to a relative
 fraction of the total sample count. Please note that spike-in controls
 are ignored and are not listed as trajectory features.

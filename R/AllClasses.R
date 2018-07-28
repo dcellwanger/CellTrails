@@ -1,2 +1,2 @@
-#' @import stats methods
+#' @import methods
 NULL
