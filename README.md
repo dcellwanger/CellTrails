@@ -1,5 +1,7 @@
 <!-- STATUS -->
-[![Project Status: Active.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active) [![License: Artistic-2.0](https://img.shields.io/badge/license-Artistic--2.0-brightgreen.svg)](https://opensource.org/licenses/Artistic-2.0) ![Platforms](https://img.shields.io/badge/platforms-all-brightgreen.svg) [![Travis CI build status](https://img.shields.io/travis/com/dcellwanger/CellTrails/master.svg?logo=travis)](https://travis-ci.com/dcellwanger/CellTrails) [![Coverage](https://codecov.io/gh/dcellwanger/CellTrails/branch/master/graph/badge.svg)](https://codecov.io/gh/dcellwanger/CellTrails)
+[![Project Status: Active.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active) [![License: Artistic-2.0](https://img.shields.io/badge/license-Artistic--2.0-brightgreen.svg)](https://opensource.org/licenses/Artistic-2.0) ![Platforms](https://img.shields.io/badge/platforms-all-brightgreen.svg) [![Travis CI build status](https://img.shields.io/travis/com/dcellwanger/CellTrails/master.svg?logo=travis)](https://travis-ci.com/dcellwanger/CellTrails) 
+[![Coverage](https://img.shields.io/codecov/c/github/dcellwanger/CellTrails/master.svg)](https://codecov.io/gh/dcellwanger/CellTrails)
+<!--[![Coverage](https://codecov.io/gh/dcellwanger/CellTrails/branch/master/graph/badge.svg)](https://codecov.io/gh/dcellwanger/CellTrails)-->
 <!--[![Travis CI build status](https://travis-ci.com/dcellwanger/CellTrails.svg?branch=master)](https://travis-ci.com/dcellwanger/CellTrails)-->
 <!-- ------------------------------------------------------------------------------- -->
 
