@@ -15,9 +15,12 @@ r:
 #    on_success: change
 #    on_failure: change
 
+r_packages: covr
 bioc_packages: BiocCheck
 
-after_success: R CMD BiocCheck .
+after_success:
+  - Rscript -e 'library(covr); codecov(type="all")' 
+  - R CMD BiocCheck .
 
 #to populate cache in case of timeout
 #script: true
