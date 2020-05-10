@@ -6,8 +6,7 @@
 \alias{findStates,SingleCellExperiment-method}
 \title{Identify trajectory states}
 \usage{
-findStates(sce, min_size = 0.01, min_feat = 5, max_pval = 1e-04,
-  min_fc = 2)
+findStates(sce, min_size = 0.01, min_feat = 5, max_pval = 1e-04, min_fc = 2)
 }
 \arguments{
 \item{sce}{A \code{SingleCellExperiment} object}

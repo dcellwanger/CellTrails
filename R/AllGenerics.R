@@ -21,7 +21,7 @@ NULL
 #' fullfills \code{threshold} \eqn{>= 1} it becomes converted to a relative
 #' fraction of the total sample count. Please note that spike-in controls
 #' are ignored and are not listed as trajectory features.
-#' @seealso \code{trajFeatureNames} \code{isSpike}
+#' @seealso \code{trajFeatureNames}
 #' @examples
 #' # Example data
 #' set.seed(1101)
@@ -76,7 +76,7 @@ setMethod("filterTrajFeaturesByDL", "SingleCellExperiment",
 #' learning process. It should list the factors that should be blocked and
 #' their values per sample. It is suggested to construct a design
 #' matrix with \code{model.matrix}.
-#' @seealso \code{trajFeatureNames} \code{isSpike} \code{model.matrix}
+#' @seealso \code{trajFeatureNames} \code{model.matrix}
 #' @examples
 #' # Simulate example data
 #' set.seed(1101)
@@ -136,7 +136,7 @@ setMethod("filterTrajFeaturesByCOV", "SingleCellExperiment",
 #' learning process. It should list the factors that should be blocked and
 #' their values per sample. It is suggested to construct a design matrix
 #' with \code{model.matrix}.
-#' @seealso \code{trajFeatureNames} \code{isSpike} \code{model.matrix}
+#' @seealso \code{trajFeatureNames} \code{model.matrix}
 #' @examples
 #' # Simulate example data
 #' set.seed(1101)
@@ -454,6 +454,7 @@ setMethod("findStates", "SingleCellExperiment", function(sce, min_size,
   }
   min_size <- max(1, min_size) #catch min_size < 1
   X <- t(.exprs(sce[.useFeature(sce), ]))
+  X <- round(x=X, digits=1e12) #machine precision issue
   ordi <- CellTrails::latentSpace(sce)
   .findStates_def(X=X, ordi=ordi, link.method="ward.D2", min.size=min_size,
                  max.pval=max_pval, min.fc=min_fc, min.g=min_feat,
@@ -598,6 +599,9 @@ setMethod("connectStates", "SingleCellExperiment", function(sce, l){
   if(is.null(states(sce))) {
     stop("States have not been defined yet. Please, ",
          "cluster samples first.")
+  }
+  if(l <= 0) {
+    stop("Minimum neighborhood size is 1. Please set l > 0.")
   }
   #Run
   dmat <- stats::dist(CellTrails::latentSpace(sce))

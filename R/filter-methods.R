@@ -1,7 +1,7 @@
 #' DEF: Filter feaures by Detection Level
 #'
 #' For details see \code{filterFeaturesByPOD}
-#' @param y An expression vector
+#' @param y An expression matrix
 #' @param threshold numeric cutoff value
 #' @param show_plot Show plot?
 #' @import ggplot2
@@ -11,9 +11,9 @@
   threshold <- max(0, threshold) #catch negative values
 
   if(threshold >= 1){ #absolute
-    pod <- apply(y, 1L, function(i){sum(i > 0)})
+    pod <- rowSums(y > 0)
   } else { #relative
-    pod <- apply(y, 1L, function(i){mean(i > 0)})
+    pod <- rowMeans(y > 0)
   }
   f <- pod > threshold
 

@@ -6,8 +6,13 @@
 \alias{plotManifold,SingleCellExperiment-method}
 \title{Visualize the learned manifold}
 \usage{
-plotManifold(sce, color_by = c("phenoName", "featureName"), name,
-  perplexity = 30, recalculate = FALSE)
+plotManifold(
+  sce,
+  color_by = c("phenoName", "featureName"),
+  name,
+  perplexity = 30,
+  recalculate = FALSE
+)
 }
 \arguments{
 \item{sce}{A \code{SingleCellExperiment} object}

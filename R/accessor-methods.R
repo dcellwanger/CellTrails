@@ -38,15 +38,16 @@ setMethod(".useFeature<-", "SingleCellExperiment", function(object, value){
 setGeneric(".useFeature", function(object)
   standardGeneric(".useFeature"))
 setMethod(".useFeature", "SingleCellExperiment", function(object){
-  spike <- isSpike(object)
-  if(is.null(spike)){
-    spike <- rep(FALSE, nrow(object))
-  }
+  #spike <- isSpike(object) @defunct
+  #if(is.null(spike)){
+  #  spike <- rep(FALSE, nrow(object))
+  #}
   uF <- object@int_elementMetadata$CellTrails.isSelected
   if(is.null(uF)){
     uF <- rep(TRUE, nrow(object))
   }
-  uF & !spike})
+  #uF & !spike})
+  uF})
 
 #' SET trajectory samples indicator
 #'
@@ -601,7 +602,11 @@ setMethod("latentSpace<-", "SingleCellExperiment", function(object, value){
 #' @author Daniel C. Ellwanger
 setGeneric("latentSpace", function(object) standardGeneric("latentSpace"))
 setMethod("latentSpace", "SingleCellExperiment", function(object){
-  reducedDim(object, type="CellTrails")})
+  if("CellTrails" %in% reducedDimNames(object)) {
+    reducedDim(object, type="CellTrails")
+  } else {
+    NULL
+  }})
 
 #' SET user-defined landmarks
 #'
@@ -1027,13 +1032,8 @@ setMethod("stateTrajLayout<-", "SingleCellExperiment", function(object, value){
 #' \code{SingleCellExperiment} object
 #' @param object A \code{SingleCellExperiment} object
 #' @return A \code{numeric} matrix
-#' @examples
-#' # Example data
-#' data(exSCE)
-#'
-#' stateTrajLayout(exSCE)
 #' @docType methods
-#' @aliases stateTrajLayout,SingleCellExperiment-method
+#' @aliases .stateTrajLayout,SingleCellExperiment-method
 #' @keywords internal
 #' @author Daniel C. Ellwanger
 setGeneric(".stateTrajLayout", function(object, component)

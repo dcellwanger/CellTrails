@@ -70,7 +70,8 @@
   #M <- .exprs(x[.useFeature(x), ]) #select trajectory features
 
   #Pre-flight check
-  ze <- apply(M, 1L, function(x){sum(x > 0)})
+  #ze <- apply(M, 1L, function(x){sum(x > 0)})
+  ze <- rowSums(M>0)
   n_ze <- sum(ze == 0)
   if(n_ze > 0) {
     warning(n_ze, " feature(s) are not expressed in any sample ",
@@ -90,6 +91,7 @@
             "may result in lower accuracy and longer computation time.")
   }
 
+  M <- as.matrix(M)
   if(!is.null(design)) { #block uninteresting factors
     message("Blocking nuisance factors ...")
     M <- apply(M, 1L, .denoiseExpression, design)

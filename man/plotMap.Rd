@@ -6,8 +6,13 @@
 \alias{plotMap,SingleCellExperiment-method}
 \title{Visualize expression maps}
 \usage{
-plotMap(sce, color_by = c("phenoName", "featureName"), name,
-  type = c("surface.fit", "surface.se", "raw"), samples_only = FALSE)
+plotMap(
+  sce,
+  color_by = c("phenoName", "featureName"),
+  name,
+  type = c("surface.fit", "surface.se", "raw"),
+  samples_only = FALSE
+)
 }
 \arguments{
 \item{sce}{A \code{SingleCellExperiment} object}

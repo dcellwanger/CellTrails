@@ -1,3 +1,16 @@
+Version 1.7.1
+===============================================================================
++ Compatible with R 4.0.0
++ Bugfixes:
+  - Removed isSpike
+  - Resolved error with extracting latent space information at 'showTrajInfo'
+  - Resolved inverted color palette for 'plotManifold' and 'plotMaps'
+  - Resolved machine precision issue for 'findStates'
+
+Version 1.0.0
+===============================================================================
++ Package published at Bioconductor
+
 Version 0.99.15
 ===============================================================================
 + Bugfixes:

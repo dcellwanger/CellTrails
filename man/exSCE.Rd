@@ -4,7 +4,9 @@
 \name{exSCE}
 \alias{exSCE}
 \title{Example single-cell expression data}
-\format{An object of class \code{SingleCellExperiment}}
+\format{
+An object of class \code{SingleCellExperiment}
+}
 \usage{
 data(exSCE)
 }
