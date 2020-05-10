@@ -6,8 +6,13 @@
 \alias{write.ygraphml,SingleCellExperiment-method}
 \title{Export trajectory graph}
 \usage{
-write.ygraphml(sce, file, color_by = c("phenoName", "featureName"), name,
-  node_label = "state")
+write.ygraphml(
+  sce,
+  file,
+  color_by = c("phenoName", "featureName"),
+  name,
+  node_label = "state"
+)
 }
 \arguments{
 \item{sce}{A \code{SingleCellExperiment} object}

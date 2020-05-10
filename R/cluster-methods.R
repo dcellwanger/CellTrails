@@ -50,7 +50,7 @@
     }
   }
   message("Initialized ", k, " clusters with a minimum size of ",
-          min.size, " samples each.")
+          min.size, " sample(s) each.")
 
   #quit function if no fragmentation for given params was found
   if(k == 0) {

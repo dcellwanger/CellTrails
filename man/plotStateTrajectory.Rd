@@ -6,9 +6,15 @@
 \alias{plotStateTrajectory,SingleCellExperiment-method}
 \title{Visualize state trajectory graph}
 \usage{
-plotStateTrajectory(sce, color_by = c("phenoName", "featureName"), name,
-  component = NULL, point_size = 3, label_offset = 2,
-  recalculate = FALSE)
+plotStateTrajectory(
+  sce,
+  color_by = c("phenoName", "featureName"),
+  name,
+  component = NULL,
+  point_size = 3,
+  label_offset = 2,
+  recalculate = FALSE
+)
 }
 \arguments{
 \item{sce}{A \code{SingleCellExperiment} object}

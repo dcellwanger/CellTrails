@@ -28,20 +28,23 @@
   if(x$frac <= 1) {
     x$frac <- x$frac * length(x$cs)
   }
+  #df <- data.frame(X=seq_len(x$frac), Y=x$cs[seq(x$frac)])
+  #gp <- ggplot(df, aes(x=X, y=Y)) +
   Y <- x$cs[seq(x$frac)]
   gp <- ggplot()
   gp <- gp + aes(x=seq(x$frac), y=Y) +
-    geom_point(color=c(rep("red", x$n - 1), rep("gray40", x$frac - x$n + 1)))
-  gp <- gp + geom_line(mapping=aes(x=x$fit$x, y=x$fit$y, lty = 'Fit'),
-                       color = "blue")
-  gp <- gp + xlab("Spectrum")
-  gp <- gp + ylab("Total eigengap")
+    geom_point(color=c(rep("red", x$n - 1), rep("gray40", x$frac - x$n + 1))) +
+    geom_line(mapping=aes(x=x$fit$x, y=x$fit$y, lty = 'Fit'),
+                       color = "blue") +
+    xlab("Spectrum") +
+    ylab("Total eigengap")
+
   brks <- sort(c(pretty(seq(x$frac)), x$n - 1))
   gp <- gp + scale_x_continuous(breaks=brks, labels=brks + 1)
   col <- rep("black", length(brks))
   col[brks == x$n - 1] <- "red"
   gp <- gp + theme(axis.line=element_line(colour = "black"),
-                   axis.text.x=element_text(color = col),
+                   axis.text.x=element_text(color = "black"), #col
                    axis.ticks.x=element_line(color = col),
                    legend.title=element_blank())
   #gp <- gp + geom_vline(xintercept = 8)
@@ -108,7 +111,7 @@
 
   f.ggplayout <- function(gp, X, nas, name) {
     gp <- gp + aes(x = X[nas, 1], y = X[nas, 2]) +
-      geom_point(pch = 1, col = "gray40") +
+      geom_point(shape = 1, col = "gray40") +
       labs(fill=name)
     gp
   }
@@ -169,15 +172,16 @@
       gp <- f.ggplayout(gp, X, nas, name) +
         geom_point(data=df,
                    mapping=aes_string(x="D1", y="D2", fill="equalSpace"),
-                   pch=21) +
+                   shape=21) +
         scale_fill_manual(name=name, breaks=breaks, labels=breaks,
-                            values=cRamp(length(brks) - 1),
+                            values=rev(cRamp(length(brks) - 1)),
                             drop=FALSE)
+
     } else {
       nas <- is.na(y)
       gp <- f.ggplayout(gp, X, nas, name) +
         geom_point(mapping=aes(x=X[!nas, 1], y=X[!nas, 2],
-                               fill=factor(y[!nas])), pch=21)
+                               fill=factor(y[!nas])), shape=21)
     }
   } else if(type == "surface.fit") {
     if(samples_only) { #only trajectory
@@ -200,7 +204,7 @@
                            aes_string(x="x1", y="x2", fill="equalSpace")) +
         geom_contour(data=df, aes_string(x="x1", y="x2", z="x3"),
                      color="gray40", alpha=0.5, lty=2, lwd=.5) +
-        scale_fill_manual(values=cRamp(length(brks) - 1),
+        scale_fill_manual(values=rev(cRamp(length(brks) - 1)),
                           name=name, breaks=breaks, labels=breaks)
       if(show_backbone) {
         gp <- gp + geom_segment(aes_string(x="X1", y="Y1",
@@ -236,7 +240,7 @@
                            aes_string(x="x1", y="x2", fill="equalSpace")) +
         geom_contour(data=df, aes_string(x="x1", y="x2", z="x3"),
                      color="gray40", alpha=0.5, lty=2, lwd=.5) +
-        scale_fill_manual(values=cRamp(length(brks) - 1),
+        scale_fill_manual(values=rev(cRamp(length(brks) - 1)),
                           name=paste0(name, "(SE)"),
                           breaks=breaks, labels=breaks)
       if(show_backbone) {
@@ -323,7 +327,7 @@
       #lbls <- gsub(lbls, pattern = "^0", replacement = "nd")
     }
     gp <- gp + aes(x=X[nas, 1], y=X[nas, 2]) +
-      geom_point(pch=1, col="gray40", size=point_size) +
+      geom_point(shape=1, col="gray40", size=point_size) +
       geom_point(aes(X[!nas, 1], X[!nas, 2],
                      color=dat[!nas]), size=point_size) +
       scale_color_gradientn(colours=.prettyColorRamp(5, grayStart=FALSE),
@@ -426,7 +430,7 @@
   nas <- is.na(sts)
   gp <- ggplot() +
     aes(x = Y$ordi.jitter[nas, 1], y = Y$ordi.jitter[nas, 2]) +
-    geom_point(pch=1, col="gray40") +
+    geom_point(shape=1, col="gray40") +
     labs(colour="State") +
     geom_point(mapping=aes(x=Y$ordi.jitter[!nas, 1],
                            y=Y$ordi.jitter[!nas, 2],

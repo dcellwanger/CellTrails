@@ -5,8 +5,13 @@
 \alias{enrichment.test}
 \title{Enrichment test}
 \usage{
-enrichment.test(sample_true, sample_size, pop_true, pop_size,
-  method = c("fisher", "hyper"))
+enrichment.test(
+  sample_true,
+  sample_size,
+  pop_true,
+  pop_size,
+  method = c("fisher", "hyper")
+)
 }
 \arguments{
 \item{sample_true}{Number of hits in sample}

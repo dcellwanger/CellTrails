@@ -6,8 +6,12 @@
 \alias{contrastTrailExpr,SingleCellExperiment-method}
 \title{Differential trail expression analysis}
 \usage{
-contrastTrailExpr(sce, feature_names = featureNames(sce), trail_names,
-  score = "rmsd")
+contrastTrailExpr(
+  sce,
+  feature_names = featureNames(sce),
+  trail_names,
+  score = "rmsd"
+)
 }
 \arguments{
 \item{sce}{A \code{SingleCellExperiment} object}

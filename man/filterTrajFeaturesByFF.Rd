@@ -6,8 +6,13 @@
 \alias{filterTrajFeaturesByFF,SingleCellExperiment-method}
 \title{Filter features by Fano Factor}
 \usage{
-filterTrajFeaturesByFF(sce, threshold = 1.7, min_expr = 0, design = NULL,
-  show_plot = TRUE)
+filterTrajFeaturesByFF(
+  sce,
+  threshold = 1.7,
+  min_expr = 0,
+  design = NULL,
+  show_plot = TRUE
+)
 }
 \arguments{
 \item{sce}{An \code{SingleCellExperiment} object}
@@ -67,7 +72,7 @@ length(trajFeatureNames(sce)) #filtered
 nrow(sce) #total
 }
 \seealso{
-\code{trajFeatureNames} \code{isSpike} \code{model.matrix}
+\code{trajFeatureNames} \code{model.matrix}
 }
 \author{
 Daniel C. Ellwanger

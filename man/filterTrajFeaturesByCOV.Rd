@@ -58,7 +58,7 @@ length(trajFeatureNames(sce)) #filtered
 nrow(sce) #total
 }
 \seealso{
-\code{trajFeatureNames} \code{isSpike} \code{model.matrix}
+\code{trajFeatureNames} \code{model.matrix}
 }
 \author{
 Daniel C. Ellwanger
